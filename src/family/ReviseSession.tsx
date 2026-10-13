@@ -1,4 +1,3 @@
-import {autoSaveCameraPhoto} from './photoDirectory'
 import {useEffect,useRef,useState} from 'react'
 import {ArrowLeft,Camera,RefreshCcw,Save} from 'lucide-react'
 import {CaptureFlow} from '../App'
@@ -38,7 +37,6 @@ export function ReviseSession({session,profile,operation,onSaved,onExit,onBusy,o
     if(alive.current){setChanged(completed);setFailures(failed);setWorking(false);if(completed.length)setCandidate(next);else setError('本次没有完成新的检测，原记录和旧结果完整保留。可以稍后再试。')}
   }
   const live=async(id:'front'|'profile'|'right_profile',file:File,meta?:LiveCaptureMeta,mirror=false)=>{
-    if(meta?.source==='live')void autoSaveCameraPhoto(profile,id,file,meta.capturedAt)
     setCamera(null);if(meta&&localDate(new Date(meta.capturedAt))!==session.recordedOn){setError('这张照片的拍摄日期与原记录不同，请新建一次记录。');return}
     setWorking(true);setError('');setConfirmed(false)
     try{const analysisFile=id==='front'&&mirror?await correctMirroredFrontFile(file):file,result=await readCapture(id==='right_profile'?'profile':id,analysisFile,true);if(!alive.current)return;setExtras(rows=>rows.map(c=>c.id===id?{...c,source:meta?.source??'upload',capturedAt:meta?.capturedAt,cameraFacing:meta?.cameraFacing,mirrorCorrected:id==='front'&&mirror,inputError:undefined,acceptedWithBias:false,fileName:file.name,url:own(result.file),originalUrl:result.straightening?.status==='applied'?own(analysisFile):undefined,quality:result.quality,poseValidation:result.pose,straightening:result.straightening,analysisError:result.analysisError}:c))}catch(e){if(alive.current)setError(storageMessage(e))}finally{if(alive.current)setWorking(false)}

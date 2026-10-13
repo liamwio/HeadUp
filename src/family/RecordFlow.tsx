@@ -1,4 +1,3 @@
-import {autoSaveCameraPhoto} from './photoDirectory'
 import {readPhotoDate,captureDateSummary} from '../lib/photoDate'
 import {useEffect,useRef,useState} from 'react'
 import {Camera,ImagePlus,ArrowLeft,Save} from 'lucide-react'
@@ -32,7 +31,6 @@ export function RecordFlow({cameraRuntime,profile,previousSession,onSaved,onExit
   const take=async(id:RecordView,file:File,meta?:LiveCaptureMeta,mirror=false)=>{
     if(busyNow.current)return;busyNow.current=true;setCameraOpen(false);setWorking(true);setError('')
     try{
-      if(meta?.source==='live')void autoSaveCameraPhoto(profile,id,file,meta.capturedAt)
       const photoDate=meta?.capturedAt?localDate(new Date(meta.capturedAt)):await readPhotoDate(file)
       const original=id==='front'&&mirror?await correctMirroredFrontFile(file):file,result=await readCapture(id==='front'?'front':'profile',original,true)
       if(!alive.current)return
