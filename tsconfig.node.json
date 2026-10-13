@@ -1,0 +1,36 @@
+{
+  "compilerOptions": {
+    "composite": true,
+    "skipLibCheck": true,
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "allowImportingTsExtensions": true,
+    "noEmit": true,
+    "strict": true
+  },
+  "include": [
+    "vite.config.ts",
+    "server/**/*.ts",
+    "src/family/aiContract.ts",
+    "src/family/cloudContract.ts",
+    "src/family/eventDetails.ts",
+    "src/family/shareContract.ts",
+    "src/lib/imageInputPreflight.ts",
+    "src/lib/reportRecordValidation.ts",
+    "src/lib/measurementEvidence.ts",
+    "src/lib/errorEvidence.ts",
+    "src/family/aiReadings.ts",
+    "src/family/comparisonReasons.ts",
+    "src/lib/readingCopy.ts",
+    "src/lib/metricUncertainty.ts",
+    "src/family/participation.ts",
+    "src/family/dates.ts",
+    "src/family/planCompletion.ts",
+    "src/lib/photoQualityAcceptance.ts",
+    "src/lib/captureSelection.ts",
+    "vite.android.config.ts",
+    "src/productMode.ts",
+    "src/family/profileConsent.ts",
+    "vite.ios.config.ts"
+  ]
+}

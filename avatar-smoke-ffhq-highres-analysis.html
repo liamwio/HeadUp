@@ -1,0 +1,919 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>HeadUp 新真人头像质量回归</title>
+    <style>
+      *{box-sizing:border-box}body{margin:0;background:#f4f6f8;color:#17202a;font-family:Inter,"Segoe UI","Microsoft YaHei",sans-serif}
+      main{max-width:1500px;margin:auto;padding:38px}header{background:#102b3f;color:white;border-radius:24px;padding:30px 34px;margin-bottom:24px}
+      h1{font-size:32px;margin:0 0 10px}.lead{margin:0;color:#dce8f0;font-size:17px}.summary{display:flex;gap:12px;margin-top:22px;flex-wrap:wrap}
+      .pill{background:#fff;color:#17364d;border-radius:14px;padding:11px 17px;font-weight:700}.pill.pass{color:#087f5b}.pill.reject{color:#c92a2a}
+      .scope{background:#fff7df;border:1px solid #f4d98b;border-radius:16px;padding:16px 20px;margin-bottom:24px;line-height:1.65}
+      .grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}.card{background:white;border-radius:20px;overflow:hidden;box-shadow:0 8px 28px #17364d16;border:3px solid transparent}
+      .card.pass{border-color:#b7e4c7}.card.reject{border-color:#ffb4ab}.card img{width:100%;height:340px;object-fit:cover;object-position:center 22%;background:#dfe5e8}
+      .body{padding:18px 20px 21px}.status{font-size:20px;font-weight:800;color:#087f5b}.reject .status{color:#c92a2a}h2{font-size:16px;line-height:1.35;margin:8px 0 14px;min-height:43px}
+      dl{margin:0;display:grid;gap:7px}dl div{display:flex;justify-content:space-between;gap:12px;border-top:1px solid #edf0f2;padding-top:7px}dt{color:#64727d}dd{margin:0;text-align:right;font-weight:650}
+      footer{margin-top:22px;color:#5f6e78;font-size:14px} @media(max-width:1000px){.grid{grid-template-columns:repeat(2,1fr)}}
+    </style></head><body><main><header><h1>HeadUp 新真人头像质量回归</h1>
+      <p class="lead">avatar-regression-ffhq-preview-highres · 2026-08-21T04:24:47.448Z · 生产图片质量门</p>
+      <div class="summary"><span class="pill">6名真实人物 / 6张新照片</span><span class="pill pass">通过 55</span><span class="pill reject">拒绝 5</span><span class="pill">分数中位 94</span></div></header>
+      <section class="scope"><strong>结论边界：</strong>本页验证网络下载、来源记录、图片解码和质量门。每人只有一张官方肖像；没有复制成侧貌，因此不验证左右侧貌、关键点或骨性倾向准确率。</section>
+      <section class="grid"><article class="card pass">
+      <img src="/data/face-db-real-research/avatar-smoke/ffhq-highres/images/ffhq-highres-001_front.jpg" alt="ffhq-highres-001-front" />
+      <div class="body">
+        <div class="status">通过 · 质量分 96</div>
+        <h2>FFHQ preview row 0</h2>
+        <dl>
+          <div><dt>输入尺寸</dt><dd>1024 × 1024</dd></div>
+          <div><dt>亮度 / 对比度</dt><dd>113.091 / 48.495</dd></div>
+          <div><dt>清晰度</dt><dd>9.896</dd></div>
+          <div><dt>低清放大风险</dt><dd>1.0239</dd></div>
+          <div><dt>质量提示</dt><dd>无</dd></div>
+          <div><dt>许可证</dt><dd>FFHQ: per-image permissive licenses; dataset CC BY-NC-SA 4.0</dd></div>
+        </dl>
+      </div>
+    </article>
+<article class="card pass">
+      <img src="/data/face-db-real-research/avatar-smoke/ffhq-highres/images/ffhq-highres-002_front.jpg" alt="ffhq-highres-002-front" />
+      <div class="body">
+        <div class="status">通过 · 质量分 95</div>
+        <h2>FFHQ preview row 2</h2>
+        <dl>
+          <div><dt>输入尺寸</dt><dd>1024 × 1024</dd></div>
+          <div><dt>亮度 / 对比度</dt><dd>110.939 / 47.236</dd></div>
+          <div><dt>清晰度</dt><dd>7.427</dd></div>
+          <div><dt>低清放大风险</dt><dd>1.0369</dd></div>
+          <div><dt>质量提示</dt><dd>无</dd></div>
+          <div><dt>许可证</dt><dd>FFHQ: per-image permissive licenses; dataset CC BY-NC-SA 4.0</dd></div>
+        </dl>
+      </div>
+    </article>
+<article class="card pass">
+      <img src="/data/face-db-real-research/avatar-smoke/ffhq-highres/images/ffhq-highres-003_front.jpg" alt="ffhq-highres-003-front" />
+      <div class="body">
+        <div class="status">通过 · 质量分 97</div>
+        <h2>FFHQ preview row 3</h2>
+        <dl>
+          <div><dt>输入尺寸</dt><dd>1024 × 1024</dd></div>
+          <div><dt>亮度 / 对比度</dt><dd>119.961 / 73.986</dd></div>
+          <div><dt>清晰度</dt><dd>10.339</dd></div>
+          <div><dt>低清放大风险</dt><dd>1.0199</dd></div>
+          <div><dt>质量提示</dt><dd>无</dd></div>
+          <div><dt>许可证</dt><dd>FFHQ: per-image permissive licenses; dataset CC BY-NC-SA 4.0</dd></div>
+        </dl>
+      </div>
+    </article>
+<article class="card pass">
+      <img src="/data/face-db-real-research/avatar-smoke/ffhq-highres/images/ffhq-highres-004_front.jpg" alt="ffhq-highres-004-front" />
+      <div class="body">
+        <div class="status">通过 · 质量分 92</div>
+        <h2>FFHQ preview row 5</h2>
+        <dl>
+          <div><dt>输入尺寸</dt><dd>1024 × 1024</dd></div>
+          <div><dt>亮度 / 对比度</dt><dd>94.37 / 60.952</dd></div>
+          <div><dt>清晰度</dt><dd>8.98</dd></div>
+          <div><dt>低清放大风险</dt><dd>1.0382</dd></div>
+          <div><dt>质量提示</dt><dd>无</dd></div>
+          <div><dt>许可证</dt><dd>FFHQ: per-image permissive licenses; dataset CC BY-NC-SA 4.0</dd></div>
+        </dl>
+      </div>
+    </article>
+<article class="card pass">
+      <img src="/data/face-db-real-research/avatar-smoke/ffhq-highres/images/ffhq-highres-005_front.jpg" alt="ffhq-highres-005-front" />
+      <div class="body">
+        <div class="status">通过 · 质量分 86</div>
+        <h2>FFHQ preview row 7</h2>
+        <dl>
+          <div><dt>输入尺寸</dt><dd>1024 × 1024</dd></div>
+          <div><dt>亮度 / 对比度</dt><dd>70.108 / 55.615</dd></div>
+          <div><dt>清晰度</dt><dd>11.505</dd></div>
+          <div><dt>低清放大风险</dt><dd>1.0269</dd></div>
+          <div><dt>质量提示</dt><dd>无</dd></div>
+          <div><dt>许可证</dt><dd>FFHQ: per-image permissive licenses; dataset CC BY-NC-SA 4.0</dd></div>
+        </dl>
+      </div>
+    </article>
+<article class="card pass">
+      <img src="/data/face-db-real-research/avatar-smoke/ffhq-highres/images/ffhq-highres-006_front.jpg" alt="ffhq-highres-006-front" />
+      <div class="body">
+        <div class="status">通过 · 质量分 88</div>
+        <h2>FFHQ preview row 8</h2>
+        <dl>
+          <div><dt>输入尺寸</dt><dd>1024 × 1024</dd></div>
+          <div><dt>亮度 / 对比度</dt><dd>79.009 / 59.77</dd></div>
+          <div><dt>清晰度</dt><dd>9.983</dd></div>
+          <div><dt>低清放大风险</dt><dd>1.0377</dd></div>
+          <div><dt>质量提示</dt><dd>无</dd></div>
+          <div><dt>许可证</dt><dd>FFHQ: per-image permissive licenses; dataset CC BY-NC-SA 4.0</dd></div>
+        </dl>
+      </div>
+    </article>
+<article class="card pass">
+      <img src="/data/face-db-real-research/avatar-smoke/ffhq-highres/images/ffhq-highres-007_front.jpg" alt="ffhq-highres-007-front" />
+      <div class="body">
+        <div class="status">通过 · 质量分 95</div>
+        <h2>FFHQ preview row 10</h2>
+        <dl>
+          <div><dt>输入尺寸</dt><dd>1024 × 1024</dd></div>
+          <div><dt>亮度 / 对比度</dt><dd>108.482 / 62.817</dd></div>
+          <div><dt>清晰度</dt><dd>13.817</dd></div>
+          <div><dt>低清放大风险</dt><dd>1.0278</dd></div>
+          <div><dt>质量提示</dt><dd>无</dd></div>
+          <div><dt>许可证</dt><dd>FFHQ: per-image permissive licenses; dataset CC BY-NC-SA 4.0</dd></div>
+        </dl>
+      </div>
+    </article>
+<article class="card pass">
+      <img src="/data/face-db-real-research/avatar-smoke/ffhq-highres/images/ffhq-highres-008_front.jpg" alt="ffhq-highres-008-front" />
+      <div class="body">
+        <div class="status">通过 · 质量分 96</div>
+        <h2>FFHQ preview row 12</h2>
+        <dl>
+          <div><dt>输入尺寸</dt><dd>1024 × 1024</dd></div>
+          <div><dt>亮度 / 对比度</dt><dd>141.985 / 64.685</dd></div>
+          <div><dt>清晰度</dt><dd>9.819</dd></div>
+          <div><dt>低清放大风险</dt><dd>1.051</dd></div>
+          <div><dt>质量提示</dt><dd>无</dd></div>
+          <div><dt>许可证</dt><dd>FFHQ: per-image permissive licenses; dataset CC BY-NC-SA 4.0</dd></div>
+        </dl>
+      </div>
+    </article>
+<article class="card pass">
+      <img src="/data/face-db-real-research/avatar-smoke/ffhq-highres/images/ffhq-highres-009_front.jpg" alt="ffhq-highres-009-front" />
+      <div class="body">
+        <div class="status">通过 · 质量分 93</div>
+        <h2>FFHQ preview row 13</h2>
+        <dl>
+          <div><dt>输入尺寸</dt><dd>1024 × 1024</dd></div>
+          <div><dt>亮度 / 对比度</dt><dd>102.764 / 61.674</dd></div>
+          <div><dt>清晰度</dt><dd>9.843</dd></div>
+          <div><dt>低清放大风险</dt><dd>1.0207</dd></div>
+          <div><dt>质量提示</dt><dd>无</dd></div>
+          <div><dt>许可证</dt><dd>FFHQ: per-image permissive licenses; dataset CC BY-NC-SA 4.0</dd></div>
+        </dl>
+      </div>
+    </article>
+<article class="card pass">
+      <img src="/data/face-db-real-research/avatar-smoke/ffhq-highres/images/ffhq-highres-010_front.jpg" alt="ffhq-highres-010-front" />
+      <div class="body">
+        <div class="status">通过 · 质量分 94</div>
+        <h2>FFHQ preview row 15</h2>
+        <dl>
+          <div><dt>输入尺寸</dt><dd>1024 × 1024</dd></div>
+          <div><dt>亮度 / 对比度</dt><dd>105.546 / 43.35</dd></div>
+          <div><dt>清晰度</dt><dd>8.825</dd></div>
+          <div><dt>低清放大风险</dt><dd>1.0356</dd></div>
+          <div><dt>质量提示</dt><dd>无</dd></div>
+          <div><dt>许可证</dt><dd>FFHQ: per-image permissive licenses; dataset CC BY-NC-SA 4.0</dd></div>
+        </dl>
+      </div>
+    </article>
+<article class="card reject">
+      <img src="/data/face-db-real-research/avatar-smoke/ffhq-highres/images/ffhq-highres-011_front.jpg" alt="ffhq-highres-011-front" />
+      <div class="body">
+        <div class="status">拒绝 · 质量分 89</div>
+        <h2>FFHQ preview row 17</h2>
+        <dl>
+          <div><dt>输入尺寸</dt><dd>1024 × 1024</dd></div>
+          <div><dt>亮度 / 对比度</dt><dd>126.745 / 82.415</dd></div>
+          <div><dt>清晰度</dt><dd>5.334</dd></div>
+          <div><dt>低清放大风险</dt><dd>1.0366</dd></div>
+          <div><dt>质量提示</dt><dd>画面过曝</dd></div>
+          <div><dt>许可证</dt><dd>FFHQ: per-image permissive licenses; dataset CC BY-NC-SA 4.0</dd></div>
+        </dl>
+      </div>
+    </article>
+<article class="card pass">
+      <img src="/data/face-db-real-research/avatar-smoke/ffhq-highres/images/ffhq-highres-012_front.jpg" alt="ffhq-highres-012-front" />
+      <div class="body">
+        <div class="status">通过 · 质量分 94</div>
+        <h2>FFHQ preview row 18</h2>
+        <dl>
+          <div><dt>输入尺寸</dt><dd>1024 × 1024</dd></div>
+          <div><dt>亮度 / 对比度</dt><dd>107.623 / 61.163</dd></div>
+          <div><dt>清晰度</dt><dd>11.83</dd></div>
+          <div><dt>低清放大风险</dt><dd>1.0209</dd></div>
+          <div><dt>质量提示</dt><dd>无</dd></div>
+          <div><dt>许可证</dt><dd>FFHQ: per-image permissive licenses; dataset CC BY-NC-SA 4.0</dd></div>
+        </dl>
+      </div>
+    </article>
+<article class="card pass">
+      <img src="/data/face-db-real-research/avatar-smoke/ffhq-highres/images/ffhq-highres-013_front.jpg" alt="ffhq-highres-013-front" />
+      <div class="body">
+        <div class="status">通过 · 质量分 89</div>
+        <h2>FFHQ preview row 20</h2>
+        <dl>
+          <div><dt>输入尺寸</dt><dd>1024 × 1024</dd></div>
+          <div><dt>亮度 / 对比度</dt><dd>83.326 / 58.05</dd></div>
+          <div><dt>清晰度</dt><dd>10.007</dd></div>
+          <div><dt>低清放大风险</dt><dd>1.0364</dd></div>
+          <div><dt>质量提示</dt><dd>无</dd></div>
+          <div><dt>许可证</dt><dd>FFHQ: per-image permissive licenses; dataset CC BY-NC-SA 4.0</dd></div>
+        </dl>
+      </div>
+    </article>
+<article class="card pass">
+      <img src="/data/face-db-real-research/avatar-smoke/ffhq-highres/images/ffhq-highres-014_front.jpg" alt="ffhq-highres-014-front" />
+      <div class="body">
+        <div class="status">通过 · 质量分 94</div>
+        <h2>FFHQ preview row 22</h2>
+        <dl>
+          <div><dt>输入尺寸</dt><dd>1024 × 1024</dd></div>
+          <div><dt>亮度 / 对比度</dt><dd>106.645 / 52.809</dd></div>
+          <div><dt>清晰度</dt><dd>15.946</dd></div>
+          <div><dt>低清放大风险</dt><dd>1.0251</dd></div>
+          <div><dt>质量提示</dt><dd>无</dd></div>
+          <div><dt>许可证</dt><dd>FFHQ: per-image permissive licenses; dataset CC BY-NC-SA 4.0</dd></div>
+        </dl>
+      </div>
+    </article>
+<article class="card pass">
+      <img src="/data/face-db-real-research/avatar-smoke/ffhq-highres/images/ffhq-highres-015_front.jpg" alt="ffhq-highres-015-front" />
+      <div class="body">
+        <div class="status">通过 · 质量分 89</div>
+        <h2>FFHQ preview row 23</h2>
+        <dl>
+          <div><dt>输入尺寸</dt><dd>1024 × 1024</dd></div>
+          <div><dt>亮度 / 对比度</dt><dd>84.316 / 44.619</dd></div>
+          <div><dt>清晰度</dt><dd>10.487</dd></div>
+          <div><dt>低清放大风险</dt><dd>1.0425</dd></div>
+          <div><dt>质量提示</dt><dd>无</dd></div>
+          <div><dt>许可证</dt><dd>FFHQ: per-image permissive licenses; dataset CC BY-NC-SA 4.0</dd></div>
+        </dl>
+      </div>
+    </article>
+<article class="card pass">
+      <img src="/data/face-db-real-research/avatar-smoke/ffhq-highres/images/ffhq-highres-016_front.jpg" alt="ffhq-highres-016-front" />
+      <div class="body">
+        <div class="status">通过 · 质量分 98</div>
+        <h2>FFHQ preview row 25</h2>
+        <dl>
+          <div><dt>输入尺寸</dt><dd>1024 × 1024</dd></div>
+          <div><dt>亮度 / 对比度</dt><dd>122.966 / 67.415</dd></div>
+          <div><dt>清晰度</dt><dd>15.572</dd></div>
+          <div><dt>低清放大风险</dt><dd>1.0283</dd></div>
+          <div><dt>质量提示</dt><dd>无</dd></div>
+          <div><dt>许可证</dt><dd>FFHQ: per-image permissive licenses; dataset CC BY-NC-SA 4.0</dd></div>
+        </dl>
+      </div>
+    </article>
+<article class="card pass">
+      <img src="/data/face-db-real-research/avatar-smoke/ffhq-highres/images/ffhq-highres-017_front.jpg" alt="ffhq-highres-017-front" />
+      <div class="body">
+        <div class="status">通过 · 质量分 92</div>
+        <h2>FFHQ preview row 27</h2>
+        <dl>
+          <div><dt>输入尺寸</dt><dd>1024 × 1024</dd></div>
+          <div><dt>亮度 / 对比度</dt><dd>94.122 / 51.787</dd></div>
+          <div><dt>清晰度</dt><dd>14.48</dd></div>
+          <div><dt>低清放大风险</dt><dd>1.0255</dd></div>
+          <div><dt>质量提示</dt><dd>无</dd></div>
+          <div><dt>许可证</dt><dd>FFHQ: per-image permissive licenses; dataset CC BY-NC-SA 4.0</dd></div>
+        </dl>
+      </div>
+    </article>
+<article class="card pass">
+      <img src="/data/face-db-real-research/avatar-smoke/ffhq-highres/images/ffhq-highres-018_front.jpg" alt="ffhq-highres-018-front" />
+      <div class="body">
+        <div class="status">通过 · 质量分 96</div>
+        <h2>FFHQ preview row 29</h2>
+        <dl>
+          <div><dt>输入尺寸</dt><dd>1024 × 1024</dd></div>
+          <div><dt>亮度 / 对比度</dt><dd>139.191 / 46.364</dd></div>
+          <div><dt>清晰度</dt><dd>8.37</dd></div>
+          <div><dt>低清放大风险</dt><dd>1.0159</dd></div>
+          <div><dt>质量提示</dt><dd>无</dd></div>
+          <div><dt>许可证</dt><dd>FFHQ: per-image permissive licenses; dataset CC BY-NC-SA 4.0</dd></div>
+        </dl>
+      </div>
+    </article>
+<article class="card pass">
+      <img src="/data/face-db-real-research/avatar-smoke/ffhq-highres/images/ffhq-highres-019_front.jpg" alt="ffhq-highres-019-front" />
+      <div class="body">
+        <div class="status">通过 · 质量分 85</div>
+        <h2>FFHQ preview row 30</h2>
+        <dl>
+          <div><dt>输入尺寸</dt><dd>1024 × 1024</dd></div>
+          <div><dt>亮度 / 对比度</dt><dd>65.33 / 61.855</dd></div>
+          <div><dt>清晰度</dt><dd>7.616</dd></div>
+          <div><dt>低清放大风险</dt><dd>1.0566</dd></div>
+          <div><dt>质量提示</dt><dd>无</dd></div>
+          <div><dt>许可证</dt><dd>FFHQ: per-image permissive licenses; dataset CC BY-NC-SA 4.0</dd></div>
+        </dl>
+      </div>
+    </article>
+<article class="card reject">
+      <img src="/data/face-db-real-research/avatar-smoke/ffhq-highres/images/ffhq-highres-020_front.jpg" alt="ffhq-highres-020-front" />
+      <div class="body">
+        <div class="status">拒绝 · 质量分 92</div>
+        <h2>FFHQ preview row 32</h2>
+        <dl>
+          <div><dt>输入尺寸</dt><dd>1024 × 1024</dd></div>
+          <div><dt>亮度 / 对比度</dt><dd>160.047 / 72.754</dd></div>
+          <div><dt>清晰度</dt><dd>11.061</dd></div>
+          <div><dt>低清放大风险</dt><dd>1.0272</dd></div>
+          <div><dt>质量提示</dt><dd>画面过曝</dd></div>
+          <div><dt>许可证</dt><dd>FFHQ: per-image permissive licenses; dataset CC BY-NC-SA 4.0</dd></div>
+        </dl>
+      </div>
+    </article>
+<article class="card reject">
+      <img src="/data/face-db-real-research/avatar-smoke/ffhq-highres/images/ffhq-highres-021_front.jpg" alt="ffhq-highres-021-front" />
+      <div class="body">
+        <div class="status">拒绝 · 质量分 84</div>
+        <h2>FFHQ preview row 34</h2>
+        <dl>
+          <div><dt>输入尺寸</dt><dd>1024 × 1024</dd></div>
+          <div><dt>亮度 / 对比度</dt><dd>57.988 / 40.713</dd></div>
+          <div><dt>清晰度</dt><dd>7.596</dd></div>
+          <div><dt>低清放大风险</dt><dd>1.0391</dd></div>
+          <div><dt>质量提示</dt><dd>光线不足</dd></div>
+          <div><dt>许可证</dt><dd>FFHQ: per-image permissive licenses; dataset CC BY-NC-SA 4.0</dd></div>
+        </dl>
+      </div>
+    </article>
+<article class="card reject">
+      <img src="/data/face-db-real-research/avatar-smoke/ffhq-highres/images/ffhq-highres-022_front.jpg" alt="ffhq-highres-022-front" />
+      <div class="body">
+        <div class="status">拒绝 · 质量分 85</div>
+        <h2>FFHQ preview row 35</h2>
+        <dl>
+          <div><dt>输入尺寸</dt><dd>1024 × 1024</dd></div>
+          <div><dt>亮度 / 对比度</dt><dd>192.531 / 61.437</dd></div>
+          <div><dt>清晰度</dt><dd>7.501</dd></div>
+          <div><dt>低清放大风险</dt><dd>1.0227</dd></div>
+          <div><dt>质量提示</dt><dd>画面过曝</dd></div>
+          <div><dt>许可证</dt><dd>FFHQ: per-image permissive licenses; dataset CC BY-NC-SA 4.0</dd></div>
+        </dl>
+      </div>
+    </article>
+<article class="card pass">
+      <img src="/data/face-db-real-research/avatar-smoke/ffhq-highres/images/ffhq-highres-023_front.jpg" alt="ffhq-highres-023-front" />
+      <div class="body">
+        <div class="status">通过 · 质量分 97</div>
+        <h2>FFHQ preview row 37</h2>
+        <dl>
+          <div><dt>输入尺寸</dt><dd>1024 × 1024</dd></div>
+          <div><dt>亮度 / 对比度</dt><dd>138.263 / 56.215</dd></div>
+          <div><dt>清晰度</dt><dd>8.358</dd></div>
+          <div><dt>低清放大风险</dt><dd>1.0343</dd></div>
+          <div><dt>质量提示</dt><dd>无</dd></div>
+          <div><dt>许可证</dt><dd>FFHQ: per-image permissive licenses; dataset CC BY-NC-SA 4.0</dd></div>
+        </dl>
+      </div>
+    </article>
+<article class="card pass">
+      <img src="/data/face-db-real-research/avatar-smoke/ffhq-highres/images/ffhq-highres-024_front.jpg" alt="ffhq-highres-024-front" />
+      <div class="body">
+        <div class="status">通过 · 质量分 98</div>
+        <h2>FFHQ preview row 39</h2>
+        <dl>
+          <div><dt>输入尺寸</dt><dd>1024 × 1024</dd></div>
+          <div><dt>亮度 / 对比度</dt><dd>124.717 / 48.287</dd></div>
+          <div><dt>清晰度</dt><dd>11.287</dd></div>
+          <div><dt>低清放大风险</dt><dd>1.039</dd></div>
+          <div><dt>质量提示</dt><dd>无</dd></div>
+          <div><dt>许可证</dt><dd>FFHQ: per-image permissive licenses; dataset CC BY-NC-SA 4.0</dd></div>
+        </dl>
+      </div>
+    </article>
+<article class="card pass">
+      <img src="/data/face-db-real-research/avatar-smoke/ffhq-highres/images/ffhq-highres-025_front.jpg" alt="ffhq-highres-025-front" />
+      <div class="body">
+        <div class="status">通过 · 质量分 91</div>
+        <h2>FFHQ preview row 40</h2>
+        <dl>
+          <div><dt>输入尺寸</dt><dd>1024 × 1024</dd></div>
+          <div><dt>亮度 / 对比度</dt><dd>91.848 / 55.464</dd></div>
+          <div><dt>清晰度</dt><dd>12.518</dd></div>
+          <div><dt>低清放大风险</dt><dd>1.0278</dd></div>
+          <div><dt>质量提示</dt><dd>无</dd></div>
+          <div><dt>许可证</dt><dd>FFHQ: per-image permissive licenses; dataset CC BY-NC-SA 4.0</dd></div>
+        </dl>
+      </div>
+    </article>
+<article class="card pass">
+      <img src="/data/face-db-real-research/avatar-smoke/ffhq-highres/images/ffhq-highres-026_front.jpg" alt="ffhq-highres-026-front" />
+      <div class="body">
+        <div class="status">通过 · 质量分 95</div>
+        <h2>FFHQ preview row 42</h2>
+        <dl>
+          <div><dt>输入尺寸</dt><dd>1024 × 1024</dd></div>
+          <div><dt>亮度 / 对比度</dt><dd>109.959 / 48.166</dd></div>
+          <div><dt>清晰度</dt><dd>8.999</dd></div>
+          <div><dt>低清放大风险</dt><dd>1.0227</dd></div>
+          <div><dt>质量提示</dt><dd>无</dd></div>
+          <div><dt>许可证</dt><dd>FFHQ: per-image permissive licenses; dataset CC BY-NC-SA 4.0</dd></div>
+        </dl>
+      </div>
+    </article>
+<article class="card pass">
+      <img src="/data/face-db-real-research/avatar-smoke/ffhq-highres/images/ffhq-highres-027_front.jpg" alt="ffhq-highres-027-front" />
+      <div class="body">
+        <div class="status">通过 · 质量分 94</div>
+        <h2>FFHQ preview row 44</h2>
+        <dl>
+          <div><dt>输入尺寸</dt><dd>1024 × 1024</dd></div>
+          <div><dt>亮度 / 对比度</dt><dd>106.853 / 62.052</dd></div>
+          <div><dt>清晰度</dt><dd>10.104</dd></div>
+          <div><dt>低清放大风险</dt><dd>1.0387</dd></div>
+          <div><dt>质量提示</dt><dd>无</dd></div>
+          <div><dt>许可证</dt><dd>FFHQ: per-image permissive licenses; dataset CC BY-NC-SA 4.0</dd></div>
+        </dl>
+      </div>
+    </article>
+<article class="card pass">
+      <img src="/data/face-db-real-research/avatar-smoke/ffhq-highres/images/ffhq-highres-028_front.jpg" alt="ffhq-highres-028-front" />
+      <div class="body">
+        <div class="status">通过 · 质量分 94</div>
+        <h2>FFHQ preview row 45</h2>
+        <dl>
+          <div><dt>输入尺寸</dt><dd>1024 × 1024</dd></div>
+          <div><dt>亮度 / 对比度</dt><dd>104.946 / 50.563</dd></div>
+          <div><dt>清晰度</dt><dd>9.615</dd></div>
+          <div><dt>低清放大风险</dt><dd>1.0247</dd></div>
+          <div><dt>质量提示</dt><dd>无</dd></div>
+          <div><dt>许可证</dt><dd>FFHQ: per-image permissive licenses; dataset CC BY-NC-SA 4.0</dd></div>
+        </dl>
+      </div>
+    </article>
+<article class="card pass">
+      <img src="/data/face-db-real-research/avatar-smoke/ffhq-highres/images/ffhq-highres-029_front.jpg" alt="ffhq-highres-029-front" />
+      <div class="body">
+        <div class="status">通过 · 质量分 91</div>
+        <h2>FFHQ preview row 47</h2>
+        <dl>
+          <div><dt>输入尺寸</dt><dd>1024 × 1024</dd></div>
+          <div><dt>亮度 / 对比度</dt><dd>91.003 / 75.361</dd></div>
+          <div><dt>清晰度</dt><dd>15.599</dd></div>
+          <div><dt>低清放大风险</dt><dd>1.0463</dd></div>
+          <div><dt>质量提示</dt><dd>无</dd></div>
+          <div><dt>许可证</dt><dd>FFHQ: per-image permissive licenses; dataset CC BY-NC-SA 4.0</dd></div>
+        </dl>
+      </div>
+    </article>
+<article class="card pass">
+      <img src="/data/face-db-real-research/avatar-smoke/ffhq-highres/images/ffhq-highres-030_front.jpg" alt="ffhq-highres-030-front" />
+      <div class="body">
+        <div class="status">通过 · 质量分 96</div>
+        <h2>FFHQ preview row 49</h2>
+        <dl>
+          <div><dt>输入尺寸</dt><dd>1024 × 1024</dd></div>
+          <div><dt>亮度 / 对比度</dt><dd>140.184 / 60.21</dd></div>
+          <div><dt>清晰度</dt><dd>10.203</dd></div>
+          <div><dt>低清放大风险</dt><dd>1.0534</dd></div>
+          <div><dt>质量提示</dt><dd>无</dd></div>
+          <div><dt>许可证</dt><dd>FFHQ: per-image permissive licenses; dataset CC BY-NC-SA 4.0</dd></div>
+        </dl>
+      </div>
+    </article>
+<article class="card pass">
+      <img src="/data/face-db-real-research/avatar-smoke/ffhq-highres/images/ffhq-highres-031_front.jpg" alt="ffhq-highres-031-front" />
+      <div class="body">
+        <div class="status">通过 · 质量分 92</div>
+        <h2>FFHQ preview row 50</h2>
+        <dl>
+          <div><dt>输入尺寸</dt><dd>1024 × 1024</dd></div>
+          <div><dt>亮度 / 对比度</dt><dd>157.447 / 64.208</dd></div>
+          <div><dt>清晰度</dt><dd>9.194</dd></div>
+          <div><dt>低清放大风险</dt><dd>1.0357</dd></div>
+          <div><dt>质量提示</dt><dd>无</dd></div>
+          <div><dt>许可证</dt><dd>FFHQ: per-image permissive licenses; dataset CC BY-NC-SA 4.0</dd></div>
+        </dl>
+      </div>
+    </article>
+<article class="card pass">
+      <img src="/data/face-db-real-research/avatar-smoke/ffhq-highres/images/ffhq-highres-032_front.jpg" alt="ffhq-highres-032-front" />
+      <div class="body">
+        <div class="status">通过 · 质量分 96</div>
+        <h2>FFHQ preview row 52</h2>
+        <dl>
+          <div><dt>输入尺寸</dt><dd>1024 × 1024</dd></div>
+          <div><dt>亮度 / 对比度</dt><dd>114.376 / 60.932</dd></div>
+          <div><dt>清晰度</dt><dd>12.155</dd></div>
+          <div><dt>低清放大风险</dt><dd>1.0395</dd></div>
+          <div><dt>质量提示</dt><dd>无</dd></div>
+          <div><dt>许可证</dt><dd>FFHQ: per-image permissive licenses; dataset CC BY-NC-SA 4.0</dd></div>
+        </dl>
+      </div>
+    </article>
+<article class="card pass">
+      <img src="/data/face-db-real-research/avatar-smoke/ffhq-highres/images/ffhq-highres-033_front.jpg" alt="ffhq-highres-033-front" />
+      <div class="body">
+        <div class="status">通过 · 质量分 87</div>
+        <h2>FFHQ preview row 54</h2>
+        <dl>
+          <div><dt>输入尺寸</dt><dd>1024 × 1024</dd></div>
+          <div><dt>亮度 / 对比度</dt><dd>182.737 / 70.694</dd></div>
+          <div><dt>清晰度</dt><dd>9.593</dd></div>
+          <div><dt>低清放大风险</dt><dd>1.0577</dd></div>
+          <div><dt>质量提示</dt><dd>无</dd></div>
+          <div><dt>许可证</dt><dd>FFHQ: per-image permissive licenses; dataset CC BY-NC-SA 4.0</dd></div>
+        </dl>
+      </div>
+    </article>
+<article class="card pass">
+      <img src="/data/face-db-real-research/avatar-smoke/ffhq-highres/images/ffhq-highres-034_front.jpg" alt="ffhq-highres-034-front" />
+      <div class="body">
+        <div class="status">通过 · 质量分 95</div>
+        <h2>FFHQ preview row 55</h2>
+        <dl>
+          <div><dt>输入尺寸</dt><dd>1024 × 1024</dd></div>
+          <div><dt>亮度 / 对比度</dt><dd>108.685 / 97.318</dd></div>
+          <div><dt>清晰度</dt><dd>9.453</dd></div>
+          <div><dt>低清放大风险</dt><dd>1.0262</dd></div>
+          <div><dt>质量提示</dt><dd>无</dd></div>
+          <div><dt>许可证</dt><dd>FFHQ: per-image permissive licenses; dataset CC BY-NC-SA 4.0</dd></div>
+        </dl>
+      </div>
+    </article>
+<article class="card pass">
+      <img src="/data/face-db-real-research/avatar-smoke/ffhq-highres/images/ffhq-highres-035_front.jpg" alt="ffhq-highres-035-front" />
+      <div class="body">
+        <div class="status">通过 · 质量分 94</div>
+        <h2>FFHQ preview row 57</h2>
+        <dl>
+          <div><dt>输入尺寸</dt><dd>1024 × 1024</dd></div>
+          <div><dt>亮度 / 对比度</dt><dd>104.704 / 63.485</dd></div>
+          <div><dt>清晰度</dt><dd>13.53</dd></div>
+          <div><dt>低清放大风险</dt><dd>1.0654</dd></div>
+          <div><dt>质量提示</dt><dd>无</dd></div>
+          <div><dt>许可证</dt><dd>FFHQ: per-image permissive licenses; dataset CC BY-NC-SA 4.0</dd></div>
+        </dl>
+      </div>
+    </article>
+<article class="card pass">
+      <img src="/data/face-db-real-research/avatar-smoke/ffhq-highres/images/ffhq-highres-036_front.jpg" alt="ffhq-highres-036-front" />
+      <div class="body">
+        <div class="status">通过 · 质量分 98</div>
+        <h2>FFHQ preview row 59</h2>
+        <dl>
+          <div><dt>输入尺寸</dt><dd>1024 × 1024</dd></div>
+          <div><dt>亮度 / 对比度</dt><dd>125.741 / 59.511</dd></div>
+          <div><dt>清晰度</dt><dd>15.36</dd></div>
+          <div><dt>低清放大风险</dt><dd>1.0313</dd></div>
+          <div><dt>质量提示</dt><dd>无</dd></div>
+          <div><dt>许可证</dt><dd>FFHQ: per-image permissive licenses; dataset CC BY-NC-SA 4.0</dd></div>
+        </dl>
+      </div>
+    </article>
+<article class="card reject">
+      <img src="/data/face-db-real-research/avatar-smoke/ffhq-highres/images/ffhq-highres-037_front.jpg" alt="ffhq-highres-037-front" />
+      <div class="body">
+        <div class="status">拒绝 · 质量分 82</div>
+        <h2>FFHQ preview row 60</h2>
+        <dl>
+          <div><dt>输入尺寸</dt><dd>1024 × 1024</dd></div>
+          <div><dt>亮度 / 对比度</dt><dd>50.291 / 53.857</dd></div>
+          <div><dt>清晰度</dt><dd>8.673</dd></div>
+          <div><dt>低清放大风险</dt><dd>1.0323</dd></div>
+          <div><dt>质量提示</dt><dd>光线不足</dd></div>
+          <div><dt>许可证</dt><dd>FFHQ: per-image permissive licenses; dataset CC BY-NC-SA 4.0</dd></div>
+        </dl>
+      </div>
+    </article>
+<article class="card pass">
+      <img src="/data/face-db-real-research/avatar-smoke/ffhq-highres/images/ffhq-highres-038_front.jpg" alt="ffhq-highres-038-front" />
+      <div class="body">
+        <div class="status">通过 · 质量分 97</div>
+        <h2>FFHQ preview row 62</h2>
+        <dl>
+          <div><dt>输入尺寸</dt><dd>1024 × 1024</dd></div>
+          <div><dt>亮度 / 对比度</dt><dd>121.163 / 55.067</dd></div>
+          <div><dt>清晰度</dt><dd>12.626</dd></div>
+          <div><dt>低清放大风险</dt><dd>1.0314</dd></div>
+          <div><dt>质量提示</dt><dd>无</dd></div>
+          <div><dt>许可证</dt><dd>FFHQ: per-image permissive licenses; dataset CC BY-NC-SA 4.0</dd></div>
+        </dl>
+      </div>
+    </article>
+<article class="card pass">
+      <img src="/data/face-db-real-research/avatar-smoke/ffhq-highres/images/ffhq-highres-039_front.jpg" alt="ffhq-highres-039-front" />
+      <div class="body">
+        <div class="status">通过 · 质量分 90</div>
+        <h2>FFHQ preview row 64</h2>
+        <dl>
+          <div><dt>输入尺寸</dt><dd>1024 × 1024</dd></div>
+          <div><dt>亮度 / 对比度</dt><dd>168.815 / 84.727</dd></div>
+          <div><dt>清晰度</dt><dd>10.436</dd></div>
+          <div><dt>低清放大风险</dt><dd>1.0668</dd></div>
+          <div><dt>质量提示</dt><dd>无</dd></div>
+          <div><dt>许可证</dt><dd>FFHQ: per-image permissive licenses; dataset CC BY-NC-SA 4.0</dd></div>
+        </dl>
+      </div>
+    </article>
+<article class="card pass">
+      <img src="/data/face-db-real-research/avatar-smoke/ffhq-highres/images/ffhq-highres-040_front.jpg" alt="ffhq-highres-040-front" />
+      <div class="body">
+        <div class="status">通过 · 质量分 98</div>
+        <h2>FFHQ preview row 65</h2>
+        <dl>
+          <div><dt>输入尺寸</dt><dd>1024 × 1024</dd></div>
+          <div><dt>亮度 / 对比度</dt><dd>131.952 / 61.469</dd></div>
+          <div><dt>清晰度</dt><dd>10.956</dd></div>
+          <div><dt>低清放大风险</dt><dd>1.0234</dd></div>
+          <div><dt>质量提示</dt><dd>无</dd></div>
+          <div><dt>许可证</dt><dd>FFHQ: per-image permissive licenses; dataset CC BY-NC-SA 4.0</dd></div>
+        </dl>
+      </div>
+    </article>
+<article class="card pass">
+      <img src="/data/face-db-real-research/avatar-smoke/ffhq-highres/images/ffhq-highres-041_front.jpg" alt="ffhq-highres-041-front" />
+      <div class="body">
+        <div class="status">通过 · 质量分 95</div>
+        <h2>FFHQ preview row 67</h2>
+        <dl>
+          <div><dt>输入尺寸</dt><dd>1024 × 1024</dd></div>
+          <div><dt>亮度 / 对比度</dt><dd>111.393 / 66.126</dd></div>
+          <div><dt>清晰度</dt><dd>9.037</dd></div>
+          <div><dt>低清放大风险</dt><dd>1.0218</dd></div>
+          <div><dt>质量提示</dt><dd>无</dd></div>
+          <div><dt>许可证</dt><dd>FFHQ: per-image permissive licenses; dataset CC BY-NC-SA 4.0</dd></div>
+        </dl>
+      </div>
+    </article>
+<article class="card pass">
+      <img src="/data/face-db-real-research/avatar-smoke/ffhq-highres/images/ffhq-highres-042_front.jpg" alt="ffhq-highres-042-front" />
+      <div class="body">
+        <div class="status">通过 · 质量分 94</div>
+        <h2>FFHQ preview row 69</h2>
+        <dl>
+          <div><dt>输入尺寸</dt><dd>1024 × 1024</dd></div>
+          <div><dt>亮度 / 对比度</dt><dd>148.02 / 66.721</dd></div>
+          <div><dt>清晰度</dt><dd>14.396</dd></div>
+          <div><dt>低清放大风险</dt><dd>1.0418</dd></div>
+          <div><dt>质量提示</dt><dd>无</dd></div>
+          <div><dt>许可证</dt><dd>FFHQ: per-image permissive licenses; dataset CC BY-NC-SA 4.0</dd></div>
+        </dl>
+      </div>
+    </article>
+<article class="card pass">
+      <img src="/data/face-db-real-research/avatar-smoke/ffhq-highres/images/ffhq-highres-043_front.jpg" alt="ffhq-highres-043-front" />
+      <div class="body">
+        <div class="status">通过 · 质量分 95</div>
+        <h2>FFHQ preview row 70</h2>
+        <dl>
+          <div><dt>输入尺寸</dt><dd>1024 × 1024</dd></div>
+          <div><dt>亮度 / 对比度</dt><dd>111.317 / 56.534</dd></div>
+          <div><dt>清晰度</dt><dd>10.253</dd></div>
+          <div><dt>低清放大风险</dt><dd>1.0402</dd></div>
+          <div><dt>质量提示</dt><dd>无</dd></div>
+          <div><dt>许可证</dt><dd>FFHQ: per-image permissive licenses; dataset CC BY-NC-SA 4.0</dd></div>
+        </dl>
+      </div>
+    </article>
+<article class="card pass">
+      <img src="/data/face-db-real-research/avatar-smoke/ffhq-highres/images/ffhq-highres-044_front.jpg" alt="ffhq-highres-044-front" />
+      <div class="body">
+        <div class="status">通过 · 质量分 95</div>
+        <h2>FFHQ preview row 72</h2>
+        <dl>
+          <div><dt>输入尺寸</dt><dd>1024 × 1024</dd></div>
+          <div><dt>亮度 / 对比度</dt><dd>112.221 / 42.399</dd></div>
+          <div><dt>清晰度</dt><dd>7.706</dd></div>
+          <div><dt>低清放大风险</dt><dd>1.0286</dd></div>
+          <div><dt>质量提示</dt><dd>无</dd></div>
+          <div><dt>许可证</dt><dd>FFHQ: per-image permissive licenses; dataset CC BY-NC-SA 4.0</dd></div>
+        </dl>
+      </div>
+    </article>
+<article class="card pass">
+      <img src="/data/face-db-real-research/avatar-smoke/ffhq-highres/images/ffhq-highres-045_front.jpg" alt="ffhq-highres-045-front" />
+      <div class="body">
+        <div class="status">通过 · 质量分 99</div>
+        <h2>FFHQ preview row 74</h2>
+        <dl>
+          <div><dt>输入尺寸</dt><dd>1024 × 1024</dd></div>
+          <div><dt>亮度 / 对比度</dt><dd>128.118 / 64.423</dd></div>
+          <div><dt>清晰度</dt><dd>12.594</dd></div>
+          <div><dt>低清放大风险</dt><dd>1.031</dd></div>
+          <div><dt>质量提示</dt><dd>无</dd></div>
+          <div><dt>许可证</dt><dd>FFHQ: per-image permissive licenses; dataset CC BY-NC-SA 4.0</dd></div>
+        </dl>
+      </div>
+    </article>
+<article class="card pass">
+      <img src="/data/face-db-real-research/avatar-smoke/ffhq-highres/images/ffhq-highres-046_front.jpg" alt="ffhq-highres-046-front" />
+      <div class="body">
+        <div class="status">通过 · 质量分 97</div>
+        <h2>FFHQ preview row 76</h2>
+        <dl>
+          <div><dt>输入尺寸</dt><dd>1024 × 1024</dd></div>
+          <div><dt>亮度 / 对比度</dt><dd>135.651 / 52.294</dd></div>
+          <div><dt>清晰度</dt><dd>8.516</dd></div>
+          <div><dt>低清放大风险</dt><dd>1.0409</dd></div>
+          <div><dt>质量提示</dt><dd>无</dd></div>
+          <div><dt>许可证</dt><dd>FFHQ: per-image permissive licenses; dataset CC BY-NC-SA 4.0</dd></div>
+        </dl>
+      </div>
+    </article>
+<article class="card pass">
+      <img src="/data/face-db-real-research/avatar-smoke/ffhq-highres/images/ffhq-highres-047_front.jpg" alt="ffhq-highres-047-front" />
+      <div class="body">
+        <div class="status">通过 · 质量分 95</div>
+        <h2>FFHQ preview row 77</h2>
+        <dl>
+          <div><dt>输入尺寸</dt><dd>1024 × 1024</dd></div>
+          <div><dt>亮度 / 对比度</dt><dd>110.779 / 69.858</dd></div>
+          <div><dt>清晰度</dt><dd>8.108</dd></div>
+          <div><dt>低清放大风险</dt><dd>1.0426</dd></div>
+          <div><dt>质量提示</dt><dd>无</dd></div>
+          <div><dt>许可证</dt><dd>FFHQ: per-image permissive licenses; dataset CC BY-NC-SA 4.0</dd></div>
+        </dl>
+      </div>
+    </article>
+<article class="card pass">
+      <img src="/data/face-db-real-research/avatar-smoke/ffhq-highres/images/ffhq-highres-048_front.jpg" alt="ffhq-highres-048-front" />
+      <div class="body">
+        <div class="status">通过 · 质量分 97</div>
+        <h2>FFHQ preview row 79</h2>
+        <dl>
+          <div><dt>输入尺寸</dt><dd>1024 × 1024</dd></div>
+          <div><dt>亮度 / 对比度</dt><dd>119.678 / 69.337</dd></div>
+          <div><dt>清晰度</dt><dd>17.807</dd></div>
+          <div><dt>低清放大风险</dt><dd>1.0337</dd></div>
+          <div><dt>质量提示</dt><dd>无</dd></div>
+          <div><dt>许可证</dt><dd>FFHQ: per-image permissive licenses; dataset CC BY-NC-SA 4.0</dd></div>
+        </dl>
+      </div>
+    </article>
+<article class="card pass">
+      <img src="/data/face-db-real-research/avatar-smoke/ffhq-highres/images/ffhq-highres-049_front.jpg" alt="ffhq-highres-049-front" />
+      <div class="body">
+        <div class="status">通过 · 质量分 91</div>
+        <h2>FFHQ preview row 81</h2>
+        <dl>
+          <div><dt>输入尺寸</dt><dd>1024 × 1024</dd></div>
+          <div><dt>亮度 / 对比度</dt><dd>163.761 / 81.513</dd></div>
+          <div><dt>清晰度</dt><dd>8.965</dd></div>
+          <div><dt>低清放大风险</dt><dd>1.0477</dd></div>
+          <div><dt>质量提示</dt><dd>无</dd></div>
+          <div><dt>许可证</dt><dd>FFHQ: per-image permissive licenses; dataset CC BY-NC-SA 4.0</dd></div>
+        </dl>
+      </div>
+    </article>
+<article class="card pass">
+      <img src="/data/face-db-real-research/avatar-smoke/ffhq-highres/images/ffhq-highres-050_front.jpg" alt="ffhq-highres-050-front" />
+      <div class="body">
+        <div class="status">通过 · 质量分 98</div>
+        <h2>FFHQ preview row 82</h2>
+        <dl>
+          <div><dt>输入尺寸</dt><dd>1024 × 1024</dd></div>
+          <div><dt>亮度 / 对比度</dt><dd>129.614 / 42.53</dd></div>
+          <div><dt>清晰度</dt><dd>9.568</dd></div>
+          <div><dt>低清放大风险</dt><dd>1.0358</dd></div>
+          <div><dt>质量提示</dt><dd>无</dd></div>
+          <div><dt>许可证</dt><dd>FFHQ: per-image permissive licenses; dataset CC BY-NC-SA 4.0</dd></div>
+        </dl>
+      </div>
+    </article>
+<article class="card pass">
+      <img src="/data/face-db-real-research/avatar-smoke/ffhq-highres/images/ffhq-highres-051_front.jpg" alt="ffhq-highres-051-front" />
+      <div class="body">
+        <div class="status">通过 · 质量分 94</div>
+        <h2>FFHQ preview row 84</h2>
+        <dl>
+          <div><dt>输入尺寸</dt><dd>1024 × 1024</dd></div>
+          <div><dt>亮度 / 对比度</dt><dd>105.831 / 77.905</dd></div>
+          <div><dt>清晰度</dt><dd>10.57</dd></div>
+          <div><dt>低清放大风险</dt><dd>1.029</dd></div>
+          <div><dt>质量提示</dt><dd>无</dd></div>
+          <div><dt>许可证</dt><dd>FFHQ: per-image permissive licenses; dataset CC BY-NC-SA 4.0</dd></div>
+        </dl>
+      </div>
+    </article>
+<article class="card pass">
+      <img src="/data/face-db-real-research/avatar-smoke/ffhq-highres/images/ffhq-highres-052_front.jpg" alt="ffhq-highres-052-front" />
+      <div class="body">
+        <div class="status">通过 · 质量分 91</div>
+        <h2>FFHQ preview row 86</h2>
+        <dl>
+          <div><dt>输入尺寸</dt><dd>1024 × 1024</dd></div>
+          <div><dt>亮度 / 对比度</dt><dd>164.86 / 59.405</dd></div>
+          <div><dt>清晰度</dt><dd>7.525</dd></div>
+          <div><dt>低清放大风险</dt><dd>1.0545</dd></div>
+          <div><dt>质量提示</dt><dd>无</dd></div>
+          <div><dt>许可证</dt><dd>FFHQ: per-image permissive licenses; dataset CC BY-NC-SA 4.0</dd></div>
+        </dl>
+      </div>
+    </article>
+<article class="card pass">
+      <img src="/data/face-db-real-research/avatar-smoke/ffhq-highres/images/ffhq-highres-053_front.jpg" alt="ffhq-highres-053-front" />
+      <div class="body">
+        <div class="status">通过 · 质量分 94</div>
+        <h2>FFHQ preview row 87</h2>
+        <dl>
+          <div><dt>输入尺寸</dt><dd>1024 × 1024</dd></div>
+          <div><dt>亮度 / 对比度</dt><dd>105.572 / 71.079</dd></div>
+          <div><dt>清晰度</dt><dd>17.858</dd></div>
+          <div><dt>低清放大风险</dt><dd>1.0265</dd></div>
+          <div><dt>质量提示</dt><dd>无</dd></div>
+          <div><dt>许可证</dt><dd>FFHQ: per-image permissive licenses; dataset CC BY-NC-SA 4.0</dd></div>
+        </dl>
+      </div>
+    </article>
+<article class="card pass">
+      <img src="/data/face-db-real-research/avatar-smoke/ffhq-highres/images/ffhq-highres-054_front.jpg" alt="ffhq-highres-054-front" />
+      <div class="body">
+        <div class="status">通过 · 质量分 93</div>
+        <h2>FFHQ preview row 89</h2>
+        <dl>
+          <div><dt>输入尺寸</dt><dd>1024 × 1024</dd></div>
+          <div><dt>亮度 / 对比度</dt><dd>114.092 / 52.577</dd></div>
+          <div><dt>清晰度</dt><dd>6.414</dd></div>
+          <div><dt>低清放大风险</dt><dd>1.0238</dd></div>
+          <div><dt>质量提示</dt><dd>无</dd></div>
+          <div><dt>许可证</dt><dd>FFHQ: per-image permissive licenses; dataset CC BY-NC-SA 4.0</dd></div>
+        </dl>
+      </div>
+    </article>
+<article class="card pass">
+      <img src="/data/face-db-real-research/avatar-smoke/ffhq-highres/images/ffhq-highres-055_front.jpg" alt="ffhq-highres-055-front" />
+      <div class="body">
+        <div class="status">通过 · 质量分 97</div>
+        <h2>FFHQ preview row 91</h2>
+        <dl>
+          <div><dt>输入尺寸</dt><dd>1024 × 1024</dd></div>
+          <div><dt>亮度 / 对比度</dt><dd>120.194 / 77.849</dd></div>
+          <div><dt>清晰度</dt><dd>10.041</dd></div>
+          <div><dt>低清放大风险</dt><dd>1.0246</dd></div>
+          <div><dt>质量提示</dt><dd>无</dd></div>
+          <div><dt>许可证</dt><dd>FFHQ: per-image permissive licenses; dataset CC BY-NC-SA 4.0</dd></div>
+        </dl>
+      </div>
+    </article>
+<article class="card pass">
+      <img src="/data/face-db-real-research/avatar-smoke/ffhq-highres/images/ffhq-highres-056_front.jpg" alt="ffhq-highres-056-front" />
+      <div class="body">
+        <div class="status">通过 · 质量分 90</div>
+        <h2>FFHQ preview row 92</h2>
+        <dl>
+          <div><dt>输入尺寸</dt><dd>1024 × 1024</dd></div>
+          <div><dt>亮度 / 对比度</dt><dd>87.764 / 54.219</dd></div>
+          <div><dt>清晰度</dt><dd>15.193</dd></div>
+          <div><dt>低清放大风险</dt><dd>1.0452</dd></div>
+          <div><dt>质量提示</dt><dd>无</dd></div>
+          <div><dt>许可证</dt><dd>FFHQ: per-image permissive licenses; dataset CC BY-NC-SA 4.0</dd></div>
+        </dl>
+      </div>
+    </article>
+<article class="card pass">
+      <img src="/data/face-db-real-research/avatar-smoke/ffhq-highres/images/ffhq-highres-057_front.jpg" alt="ffhq-highres-057-front" />
+      <div class="body">
+        <div class="status">通过 · 质量分 94</div>
+        <h2>FFHQ preview row 94</h2>
+        <dl>
+          <div><dt>输入尺寸</dt><dd>1024 × 1024</dd></div>
+          <div><dt>亮度 / 对比度</dt><dd>105.305 / 61.481</dd></div>
+          <div><dt>清晰度</dt><dd>13.139</dd></div>
+          <div><dt>低清放大风险</dt><dd>1.0558</dd></div>
+          <div><dt>质量提示</dt><dd>无</dd></div>
+          <div><dt>许可证</dt><dd>FFHQ: per-image permissive licenses; dataset CC BY-NC-SA 4.0</dd></div>
+        </dl>
+      </div>
+    </article>
+<article class="card pass">
+      <img src="/data/face-db-real-research/avatar-smoke/ffhq-highres/images/ffhq-highres-058_front.jpg" alt="ffhq-highres-058-front" />
+      <div class="body">
+        <div class="status">通过 · 质量分 87</div>
+        <h2>FFHQ preview row 96</h2>
+        <dl>
+          <div><dt>输入尺寸</dt><dd>1024 × 1024</dd></div>
+          <div><dt>亮度 / 对比度</dt><dd>72.997 / 66.831</dd></div>
+          <div><dt>清晰度</dt><dd>8.453</dd></div>
+          <div><dt>低清放大风险</dt><dd>1.0364</dd></div>
+          <div><dt>质量提示</dt><dd>无</dd></div>
+          <div><dt>许可证</dt><dd>FFHQ: per-image permissive licenses; dataset CC BY-NC-SA 4.0</dd></div>
+        </dl>
+      </div>
+    </article>
+<article class="card pass">
+      <img src="/data/face-db-real-research/avatar-smoke/ffhq-highres/images/ffhq-highres-059_front.jpg" alt="ffhq-highres-059-front" />
+      <div class="body">
+        <div class="status">通过 · 质量分 91</div>
+        <h2>FFHQ preview row 97</h2>
+        <dl>
+          <div><dt>输入尺寸</dt><dd>1024 × 1024</dd></div>
+          <div><dt>亮度 / 对比度</dt><dd>92.926 / 57.115</dd></div>
+          <div><dt>清晰度</dt><dd>11.524</dd></div>
+          <div><dt>低清放大风险</dt><dd>1.026</dd></div>
+          <div><dt>质量提示</dt><dd>无</dd></div>
+          <div><dt>许可证</dt><dd>FFHQ: per-image permissive licenses; dataset CC BY-NC-SA 4.0</dd></div>
+        </dl>
+      </div>
+    </article>
+<article class="card pass">
+      <img src="/data/face-db-real-research/avatar-smoke/ffhq-highres/images/ffhq-highres-060_front.jpg" alt="ffhq-highres-060-front" />
+      <div class="body">
+        <div class="status">通过 · 质量分 93</div>
+        <h2>FFHQ preview row 99</h2>
+        <dl>
+          <div><dt>输入尺寸</dt><dd>1024 × 1024</dd></div>
+          <div><dt>亮度 / 对比度</dt><dd>100.819 / 64.98</dd></div>
+          <div><dt>清晰度</dt><dd>9.801</dd></div>
+          <div><dt>低清放大风险</dt><dd>1.0527</dd></div>
+          <div><dt>质量提示</dt><dd>无</dd></div>
+          <div><dt>许可证</dt><dd>FFHQ: per-image permissive licenses; dataset CC BY-NC-SA 4.0</dd></div>
+        </dl>
+      </div>
+    </article></section><footer>来源：NASA Image and Video Library。仅用于本地教育/信息性研究测试；NASA不认可或背书HeadUp。</footer>
+    </main></body></html>

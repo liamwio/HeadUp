@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HeadUp 新真人头像完整管线回归</title>
+    <style>
+      *{box-sizing:border-box}body{margin:0;background:#f3f6f8;color:#142331;font-family:"Segoe UI","Microsoft YaHei",sans-serif}
+      main{max-width:1420px;margin:auto;padding:28px}.hero{background:#102f45;color:#fff;border-radius:22px;padding:25px 30px;margin-bottom:18px}
+      h1{margin:0 0 8px;font-size:29px}.hero p{margin:5px 0;color:#dbe7ee}.summary{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}.pill{background:#fff;color:#18364b;padding:9px 14px;border-radius:12px;font-weight:700}
+      .boundary{background:#fff5d8;border:1px solid #eed690;border-radius:15px;padding:14px 18px;margin-bottom:18px;line-height:1.6}
+      #cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}.card{background:#fff;border:2px solid #dce4e8;border-radius:18px;overflow:hidden;box-shadow:0 6px 20px #18364b14}.card.pass{border-color:#8fd5b5}.card.reject{border-color:#ffaaa3}
+      .photo{position:relative;height:310px;background:#dfe6ea}.photo img{width:100%;height:100%;object-fit:cover;object-position:center 18%}.body{padding:16px 18px}.state{font-size:19px;font-weight:800;color:#087f5b}.reject .state{color:#c92a2a}
+      h2{font-size:15px;margin:6px 0 13px}.metrics{display:grid;grid-template-columns:1fr 1fr;gap:7px 12px;font-size:13px}.metrics div{display:flex;justify-content:space-between;border-top:1px solid #edf0f2;padding-top:6px}.metrics span{color:#687680}.metrics strong{text-align:right}
+      .flags{margin:13px 0 0;padding:10px 12px;border-radius:10px;background:#fff0ee;color:#9f2020;font-weight:700;min-height:40px}.pass .flags{background:#eaf8f1;color:#087f5b}.measurements{margin:12px 0 0;padding-left:19px;font-size:12px;columns:2;column-gap:20px}.measurements li{margin:3px 0;break-inside:avoid}
+      footer{padding:18px 3px;color:#60707c;font-size:13px}pre{display:none}@media(max-width:950px){#cards{grid-template-columns:repeat(2,1fr)}}
+    </style>
+  </head>
+  <body><main>
+    <section class="hero"><h1>HeadUp 新真人头像完整管线回归</h1><p id="status">准备中</p><div id="summary" class="summary"></div></section>
+    <section class="boundary"><strong>测试路径：</strong>输入预检 → 图片质量 → 单人脸与取景 → yaw/pitch/roll → 478关键点 → 遮挡 → 12项正面测量。质量合格不等于适合标准正面分析；任何拒绝都必须给出可操作原因，且不得生成测量值。</section>
+    <section id="cards"></section><footer>测试照片仅在本机浏览器内分析；原始下载图在结果和截图固化后清理。结果不构成人群覆盖或骨性倾向准确率证据。</footer>
+    <pre id="result"></pre>
+    <script type="module" src="/research/benchmark-avatar-full-pipeline.ts"></script>
+  </main></body>
+</html>

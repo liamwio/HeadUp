@@ -1,0 +1,16 @@
+export const singleFilePages = [
+  'index.html',
+  'research-progress.html',
+  'research-active-challenge.html',
+  'research-local-occlusion.html',
+  'research-local-retake.html',
+  'research-menton-annotation.html',
+  'research-profile-region-annotation.html',
+  'research-profile-assisted-review.html',
+  'research-profile-neck-aesthetic-rating.html',
+  'front-profile-visual-regression.html',
+  'research-profile-geometry-crosscheck.html',
+  'wikimedia-profile-regression.html',
+  'wikimedia-profile-manual-review.html',
+  'research-fei-yaw-threshold.html',
+]

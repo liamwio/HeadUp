@@ -1,0 +1,28 @@
+{
+  "policyVersion": "HEADUP-PROFILE-NECK-LINE-RUNTIME-1.0",
+  "trainedFrom": "HEADUP-PROFILE-NECK-LINE-PROXY-TRAINING-1.0",
+  "coefficients": [
+    {
+      "a": -0.06869647552068929,
+      "b": 0.14543870130260902
+    },
+    {
+      "a": -0.23279674084835092,
+      "b": 0.26372569833279785
+    },
+    {
+      "a": -0.4406169941990863,
+      "b": 0.3492823143485829
+    }
+  ],
+  "uncertainty": {
+    "neckPathP95VisibleProfileHeightRatio": 0.10662471758190646,
+    "jawNeckAngleP95Degrees": 14.35448815624138
+  },
+  "allowedUse": "experimental visible soft-tissue neck-line overlay and raw jaw-neck photo angle",
+  "prohibitedUse": [
+    "aesthetic direction",
+    "skeletal angle",
+    "medical diagnosis"
+  ]
+}

@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">HeadUp 成长记录</string>
+    <string name="title_activity_main">HeadUp 成长记录</string>
+    <string name="package_name">com.headup.growth</string>
+    <string name="custom_url_scheme">com.headup.growth</string>
+</resources>

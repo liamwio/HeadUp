@@ -1,0 +1,11 @@
+import {localArchiveNotice} from '../lib/appPlatform'
+import {useRef,useState} from 'react'
+import {useDraftGuard} from './DraftGuard'
+import {createPersonalProfile,type FamilyProfile} from './model'
+export function ProfileForm({existing,onSave,onCancel}:{existing?:FamilyProfile;cloudFamilyName?:string;onSave:(p:FamilyProfile,cloudConsent?:boolean,expected?:FamilyProfile|null)=>Promise<void>;onCancel?:()=>void;onAccount?:()=>void}){
+  const baseline=useRef(existing??null),[nickname,setNickname]=useState(existing?.nickname??''),[year,setYear]=useState(existing?.birthYear?.toString()??''),[busy,setBusy]=useState(false),[error,setError]=useState('')
+  const currentYear=new Date().getFullYear(),recentYears=Array.from({length:25},(_,i)=>currentYear-i),years=existing?.birthYear&&!recentYears.includes(existing.birthYear)?[...recentYears,existing.birthYear]:recentYears
+  useDraftGuard(nickname!==(baseline.current?.nickname??'')||year!==(baseline.current?.birthYear?.toString()??''))
+  const save=async()=>{if(busy)return;setBusy(true);setError('');try{const next=createPersonalProfile({nickname,birthYear:year?Number(year):undefined});await onSave(existing?{...existing,nickname:next.nickname,birthYear:next.birthYear,updatedAt:next.updatedAt}:next,false,baseline.current)}catch(e){setError(e instanceof Error?e.message:'保存未完成，请重试')}finally{setBusy(false)}}
+  return <section className="personal-profile-form"><div className="family-page-heading"><div><span className="family-eyebrow">HEADUP · 个人记录</span><h1>{existing?'编辑档案':'创建档案'}</h1><p>填写名称并选择出生年份，即可开始记录。</p></div></div><form className="family-form" onSubmit={e=>{e.preventDefault();void save()}}><label>名称<input required maxLength={40} value={nickname} onChange={e=>setNickname(e.target.value)} autoComplete="off" placeholder="输入档案名称"/></label><label>出生年份<select value={year} onChange={e=>setYear(e.target.value)}><option value="">暂不填写</option>{years.map(value=><option key={value} value={value}>{value}年</option>)}</select></label><p className="family-muted">{localArchiveNotice()}</p>{error&&<p role="alert" className="family-error">{error}</p>}<div className="family-actions"><button className="family-primary" disabled={busy}>{busy?'正在保存…':existing?'保存修改':'创建档案'}</button>{onCancel&&<button type="button" disabled={busy} onClick={onCancel}>返回</button>}</div></form></section>
+}

@@ -1,0 +1,966 @@
+<title>骨相工具技术方案</title>
+<style>
+  :root {
+    --ground: #EDEFEE; --surface: #F7F9F8; --surface-2: #E4E8E6;
+    --ink: #16211F; --ink-2: #55605D; --ink-3: #7E8987;
+    --rule: #C9D0CD; --rule-soft: #DCE2E0;
+    --accent: #0F6E5C; --accent-soft: #DCEAE5;
+    --signal: #B4531A; --signal-soft: #F2E3D6;
+    --critical: #9B2226; --critical-soft: #F2DCDC;
+    --code-bg: #E9EDEB;
+    --shadow: 0 1px 2px rgba(22,33,31,.05), 0 8px 24px -18px rgba(22,33,31,.30);
+    --font-display: "Palatino Linotype", "Book Antiqua", Palatino, "Iowan Old Style", Georgia, "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", STSong, SimSun, serif;
+    --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI Variable Text", "Segoe UI", "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", system-ui, sans-serif;
+    --font-mono: "Cascadia Code", "SF Mono", ui-monospace, Consolas, "DejaVu Sans Mono", monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #0F1413; --surface: #171D1B; --surface-2: #202826;
+      --ink: #E3E9E7; --ink-2: #98A3A0; --ink-3: #77827F;
+      --rule: #2B3533; --rule-soft: #212B29;
+      --accent: #4FBB9C; --accent-soft: #16302A;
+      --signal: #E29155; --signal-soft: #33241A;
+      --critical: #E07070; --critical-soft: #331E1E;
+      --code-bg: #101615;
+      --shadow: 0 1px 2px rgba(0,0,0,.30), 0 8px 24px -18px rgba(0,0,0,.70);
+    }
+  }
+  :root[data-theme="dark"] {
+    --ground: #0F1413; --surface: #171D1B; --surface-2: #202826;
+    --ink: #E3E9E7; --ink-2: #98A3A0; --ink-3: #77827F;
+    --rule: #2B3533; --rule-soft: #212B29;
+    --accent: #4FBB9C; --accent-soft: #16302A;
+    --signal: #E29155; --signal-soft: #33241A;
+    --critical: #E07070; --critical-soft: #331E1E;
+    --code-bg: #101615;
+    --shadow: 0 1px 2px rgba(0,0,0,.30), 0 8px 24px -18px rgba(0,0,0,.70);
+  }
+  * { box-sizing: border-box; }
+  body { background: var(--ground); color: var(--ink); font-family: var(--font-body); font-size: 16px; line-height: 1.75; margin: 0; padding: 0 24px 120px; -webkit-font-smoothing: antialiased; }
+  .doc { max-width: 1080px; margin-inline: auto; }
+  a { color: var(--accent); text-underline-offset: 3px; text-decoration-thickness: 1px; }
+  a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 2px; }
+
+  .masthead { padding: 72px 0 40px; border-bottom: 1px solid var(--ink); }
+  .stamp { font-family: var(--font-mono); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); display: flex; flex-wrap: wrap; gap: 18px; margin-bottom: 26px; }
+  .stamp span { display: inline-flex; align-items: center; gap: 7px; }
+  .stamp span::before { content: ""; width: 5px; height: 5px; border-radius: 50%; background: var(--accent); flex: none; }
+  h1 { font-family: var(--font-display); font-weight: 400; font-size: clamp(38px, 6.4vw, 62px); line-height: 1.12; margin: 0 0 22px; text-wrap: balance; }
+  .thesis { font-family: var(--font-display); font-size: clamp(18px, 2.4vw, 22px); line-height: 1.62; color: var(--ink-2); max-width: 32em; margin: 0; }
+  .thesis em { color: var(--ink); font-style: normal; border-bottom: 1px solid var(--accent); padding-bottom: 1px; }
+  .meta-row { display: flex; flex-wrap: wrap; gap: 8px 28px; margin-top: 34px; font-family: var(--font-mono); font-size: 12px; color: var(--ink-3); font-variant-numeric: tabular-nums; }
+  .meta-row b { color: var(--ink-2); font-weight: 400; }
+
+  section { display: grid; grid-template-columns: 116px minmax(0,1fr); gap: 44px; padding-top: 60px; }
+  .rail { position: sticky; top: 24px; align-self: start; height: fit-content; padding-top: 6px; }
+  .rail-label { font-family: var(--font-mono); font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: var(--ink-3); display: block; }
+  .rail-tick { display: block; width: 44px; height: 1px; background: var(--rule); margin: 12px 0 0; position: relative; }
+  .rail-tick::before { content: ""; position: absolute; left: 0; top: -2px; width: 5px; height: 5px; border-radius: 50%; background: var(--accent); }
+  .col { display: flex; flex-direction: column; gap: 22px; min-width: 0; }
+
+  h2 { font-family: var(--font-display); font-weight: 400; font-size: clamp(26px, 3.4vw, 34px); line-height: 1.25; margin: 0; text-wrap: balance; }
+  h3 { font-size: 16px; font-weight: 700; margin: 12px 0 -8px; }
+  h3::before { content: ""; display: inline-block; width: 14px; height: 1px; background: var(--accent); vertical-align: middle; margin-right: 10px; margin-bottom: 3px; }
+  h4 { font-family: var(--font-mono); font-size: 11px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-3); margin: 6px 0 -12px; }
+  p { margin: 0; max-width: 42em; }
+  .col > ul, .col > ol { margin: -4px 0 0; padding-left: 20px; max-width: 42em; display: flex; flex-direction: column; gap: 7px; }
+  li::marker { color: var(--ink-3); }
+  .u { border-bottom: 1.5px solid var(--accent-soft); padding-bottom: 1px; }
+  .mono { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+
+  pre { background: var(--code-bg); border: 1px solid var(--rule-soft); border-radius: 3px; padding: 16px 18px; overflow-x: auto; margin: 0; font-family: var(--font-mono); font-size: 13px; line-height: 1.65; color: var(--ink); }
+  pre .c { color: var(--ink-3); }
+  pre .k { color: var(--accent); }
+  code { font-family: var(--font-mono); font-size: .9em; background: var(--code-bg); padding: 1px 5px; border-radius: 2px; }
+  pre code { background: none; padding: 0; font-size: inherit; }
+
+  .card { background: var(--surface); border: 1px solid var(--rule-soft); border-radius: 3px; padding: 22px 24px; display: flex; flex-direction: column; gap: 12px; box-shadow: var(--shadow); }
+  .card p, .card ul, .card ol { max-width: none; }
+  .card ul, .card ol { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 6px; }
+  .verdict { border-left: 2px solid var(--accent); background: var(--accent-soft); border-radius: 0 3px 3px 0; padding: 18px 22px; display: flex; flex-direction: column; gap: 10px; }
+  .verdict p, .verdict ul, .verdict ol { max-width: none; }
+  .verdict ul, .verdict ol { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 6px; }
+  .verdict .lede { font-family: var(--font-display); font-size: 19px; line-height: 1.6; }
+  .warn { border-left: 2px solid var(--signal); background: var(--signal-soft); border-radius: 0 3px 3px 0; padding: 18px 22px; display: flex; flex-direction: column; gap: 10px; }
+  .warn p, .warn ul, .warn ol { max-width: none; }
+  .warn ul, .warn ol { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 6px; }
+  .kill { border-left: 2px solid var(--critical); background: var(--critical-soft); border-radius: 0 3px 3px 0; padding: 18px 22px; display: flex; flex-direction: column; gap: 10px; }
+  .kill p, .kill ul, .kill ol { max-width: none; }
+  .kill ul, .kill ol { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 6px; }
+  .tag { font-family: var(--font-mono); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; font-weight: 600; }
+  .tag-a { color: var(--accent); } .tag-s { color: var(--signal); } .tag-c { color: var(--critical); }
+
+  .scroll { overflow-x: auto; }
+  .wide { width: 100%; }
+  @media (min-width: 1060px) { .wide { width: calc(100% + 116px); margin-left: -116px; } }
+  table { border-collapse: collapse; width: 100%; min-width: 540px; font-size: 14px; line-height: 1.6; }
+  caption { caption-side: top; text-align: left; font-family: var(--font-mono); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-3); padding-bottom: 10px; }
+  th, td { text-align: left; padding: 11px 16px 11px 0; border-bottom: 1px solid var(--rule-soft); vertical-align: top; }
+  th { font-family: var(--font-mono); font-size: 11px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-2); border-bottom: 1px solid var(--rule); white-space: nowrap; }
+  tbody tr:last-child td { border-bottom: 1px solid var(--rule); }
+  td.num, th.num { font-family: var(--font-mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  td.k { font-weight: 600; }
+  td.mn { font-family: var(--font-mono); font-size: 13px; }
+  .pill { display: inline-block; font-family: var(--font-mono); font-size: 10px; letter-spacing: .08em; text-transform: uppercase; padding: 2px 7px; border-radius: 2px; white-space: nowrap; }
+  .p-hi { background: var(--critical-soft); color: var(--critical); }
+  .p-md { background: var(--signal-soft); color: var(--signal); }
+  .p-lo { background: var(--accent-soft); color: var(--accent); }
+  .p-n { background: var(--surface-2); color: var(--ink-2); }
+
+  .toc { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px,1fr)); gap: 1px; background: var(--rule-soft); border: 1px solid var(--rule-soft); border-radius: 3px; overflow: hidden; }
+  .toc a { background: var(--surface); padding: 13px 16px; text-decoration: none; display: flex; flex-direction: column; gap: 3px; color: var(--ink); }
+  .toc a:hover { background: var(--accent-soft); }
+  .toc .n { font-family: var(--font-mono); font-size: 10px; letter-spacing: .14em; color: var(--ink-3); }
+  .toc .t { font-size: 14px; font-weight: 600; }
+
+  .flow { display: flex; flex-direction: column; gap: 1px; background: var(--rule-soft); border: 1px solid var(--rule-soft); border-radius: 3px; overflow: hidden; }
+  .fl { background: var(--surface); padding: 15px 20px; display: grid; grid-template-columns: 30px minmax(0,1fr) 96px; gap: 16px; align-items: start; }
+  .fl .n { font-family: var(--font-mono); font-size: 12px; font-weight: 700; color: var(--accent); padding-top: 2px; }
+  .fl .b { display: flex; flex-direction: column; gap: 4px; }
+  .fl .b b { font-size: 15px; }
+  .fl .b span { font-size: 14px; color: var(--ink-2); }
+  .fl .where { font-family: var(--font-mono); font-size: 10px; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-3); text-align: right; padding-top: 4px; }
+  @media (max-width: 760px) { .fl { grid-template-columns: 26px minmax(0,1fr); } .fl .where { grid-column: 2; text-align: left; padding-top: 0; } }
+
+  hr.div { border: none; height: 1px; background: var(--rule); margin: 6px 0; position: relative; }
+  hr.div::before { content: ""; position: absolute; left: 0; top: -2px; width: 5px; height: 5px; border-radius: 50%; background: var(--accent); }
+  footer { margin-top: 76px; padding-top: 26px; border-top: 1px solid var(--ink); font-family: var(--font-mono); font-size: 11px; letter-spacing: .08em; color: var(--ink-3); display: flex; flex-wrap: wrap; gap: 8px 28px; }
+
+  @media (max-width: 760px) {
+    body { padding: 0 18px 80px; font-size: 15px; }
+    section { grid-template-columns: 1fr; gap: 14px; padding-top: 46px; }
+    .rail { position: static; display: flex; align-items: center; gap: 12px; }
+    .rail-tick { margin: 0; width: 28px; }
+    .masthead { padding: 46px 0 30px; }
+  }
+  @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+</style>
+
+<div class="doc">
+
+  <header class="masthead">
+    <div class="stamp"><span>技术方案 V1.0</span><span>微信小程序</span><span>2026-08</span></div>
+    <h1>骨相工具技术方案</h1>
+    <p class="thesis">从一张正面照到一个类型名，中间要解决四件事：<em>尺度归一化、姿态污染、量感与线条的可计算定义、以及阈值从哪来</em>。本文给出可实现的答案。</p>
+    <div class="meta-row">
+      <span><b>验收指标</b> 主型重测一致性 ≥ 90%</span>
+      <span><b>推理</b> 小程序服务端 / App 端侧</span>
+      <span><b>留存</b> 原图内存内处理，不落盘</span>
+      <span><b>分类</b> 规则引擎 + 滞后带</span>
+    </div>
+  </header>
+
+  <section id="s0">
+    <div class="rail"><span class="rail-label">要点</span><span class="rail-tick"></span></div>
+    <div class="col">
+      <h2>四个技术决定</h2>
+
+      <div class="verdict">
+        <span class="tag tag-a">决定一 · 所有指标都是比值</span>
+        <p class="lede">不需要知道照片的真实尺度，因为没有一个指标是长度。</p>
+        <p>每个指标都是<strong>同一张图内两个量的比</strong>（长度比、面积比、角度）。尺度在分子分母里自动约掉——这消灭了单目视觉最麻烦的标定问题，也是本方案不需要参照物、不需要深度传感器的根本原因。</p>
+      </div>
+
+      <div class="verdict">
+        <span class="tag tag-a">决定二 · 双轨推理，原图不落盘</span>
+        <p class="lede">小程序走服务端推理；App 走端侧推理。两条轨道共用同一套特征与分类代码。</p>
+        <p>小程序端侧 ML 的机型覆盖不可依赖，因此<strong>小程序路径直接采用服务端推理</strong>，不为端侧方案赌运气。代价是原图必须上传——用<span class="u">内存内处理、全程不落盘、算完即弃</span>把代价压到最小：服务端计算完成后只保留 ~40 个无量纲数字，原图不写磁盘、不入对象存储、不留备份。</p>
+        <p>需要真正端侧闭环的用户走 App 版（后续阶段），同一套算法本地跑，照片不离开设备——这是 App 版唯一但足够的差异化理由。</p>
+      </div>
+
+      <div class="verdict">
+        <span class="tag tag-a">决定三 · 姿态是一等公民，不是预处理</span>
+        <p class="lede">头位偏转污染比例轴，表情污染线条轴，光照污染量感轴——三者各毁一个类型轴。</p>
+        <p>所以姿态估计不是「清洗一下」，是<strong>采集阶段的准入门</strong>：不合格直接拒收重拍，绝不「尽力算一个」。见 <a href="#s4">§04</a>。</p>
+      </div>
+
+      <div class="verdict">
+        <span class="tag tag-a">决定四 · 阈值是标定出来的，不是设计出来的</span>
+        <p class="lede">本文档不给任何一个类型分界的具体数值。</p>
+        <p>三轴的分界点是<strong>标定集分布的分位数</strong>，再用人工标签校正；滞后带宽度 δ 是<strong>让重测一致性达到 90% 所需的最小值</strong>，由重测数据反解得出。<span class="u">它们是标定流程的输出，不是输入。</span>见 <a href="#s7">§07</a>。</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="toc">
+    <div class="rail"><span class="rail-label">导航</span><span class="rail-tick"></span></div>
+    <div class="col">
+      <div class="toc">
+        <a href="#s1"><span class="n">01</span><span class="t">技术指标</span></a>
+        <a href="#s2"><span class="n">02</span><span class="t">系统架构</span></a>
+        <a href="#s3"><span class="n">03</span><span class="t">关键点与解剖锚</span></a>
+        <a href="#s4"><span class="n">04</span><span class="t">采集协议</span></a>
+        <a href="#s5"><span class="n">05</span><span class="t">归一化</span></a>
+        <a href="#s6"><span class="n">06</span><span class="t">特征管线 A–F</span></a>
+        <a href="#s7"><span class="n">07</span><span class="t">分类引擎与滞后</span></a>
+        <a href="#s8"><span class="n">08</span><span class="t">标定方法学</span></a>
+        <a href="#s9"><span class="n">09</span><span class="t">重测一致性验证</span></a>
+        <a href="#s10"><span class="n">10</span><span class="t">侧面照与 D 组</span></a>
+        <a href="#s11"><span class="n">11</span><span class="t">数据与隐私</span></a>
+        <a href="#s12"><span class="n">12</span><span class="t">工程实现</span></a>
+        <a href="#s13"><span class="n">13</span><span class="t">测试计划</span></a>
+        <a href="#s14"><span class="n">14</span><span class="t">风险与未决项</span></a>
+      </div>
+    </div>
+  </section>
+
+  <section id="s1">
+    <div class="rail"><span class="rail-label">指标</span><span class="rail-tick"></span></div>
+    <div class="col">
+      <h2>技术指标</h2>
+
+      <div class="scroll wide">
+        <table>
+          <caption>验收标准</caption>
+          <thead><tr><th style="width:24%">指标</th><th style="width:16%">目标</th><th style="width:14%">门</th><th>测法</th></tr></thead>
+          <tbody>
+            <tr><td class="k">主型重测一致性</td><td class="num">≥ 90%</td><td class="num">W8</td><td>30 人 × 3 次独立会话，两两配对同型率（<a href="#s9">§09</a>）</td></tr>
+            <tr><td class="k">全名重测一致性</td><td class="num">≥ 80%</td><td class="num">W8</td><td>同上，12 型口径。低于主型是预期的，凝/舒轴最不稳</td></tr>
+            <tr><td class="k">采集一次通过率</td><td class="num">≥ 70%</td><td class="num">W8</td><td>用户首次拍摄通过门限的比例。过低说明门限太严，体验会崩</td></tr>
+            <tr><td class="k">端侧单次耗时</td><td class="num">≤ 2.5 s</td><td class="num">W8</td><td>从快门到出类型，中端安卓机（骁龙 6 系或等价）</td></tr>
+            <tr><td class="k">关键点检测成功率</td><td class="num">≥ 98%</td><td class="num">W6</td><td>通过采集门限的图中，成功输出 468 点的比例</td></tr>
+            <tr><td class="k">首次加载增量</td><td class="num">≤ 4 MB</td><td class="num">W6</td><td>模型走分包/云端资源下载，不进主包</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="warn">
+        <span class="tag tag-s">采集一次通过率与重测一致性是一对反向指标</span>
+        <p>门限收紧 → 一致性升、通过率降；门限放松 → 反之。<strong>不要单独优化任何一个。</strong>标定的目标是找到同时满足 <span class="mono">一致性 ≥ 90%</span> 且 <span class="mono">通过率 ≥ 70%</span> 的门限组合；若找不到，说明<span class="u">该轴的判据选错了</span>——去改判据，不要去调门限。</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="s2">
+    <div class="rail"><span class="rail-label">架构</span><span class="rail-tick"></span></div>
+    <div class="col">
+      <h2>系统架构</h2>
+
+      <div class="flow">
+        <div class="fl"><span class="n">1</span><div class="b"><b>采集</b><span>相机流 + 实时引导框；姿态/表情/光照三门实时判定，不合格不允许快门</span></div><span class="where">端侧</span></div>
+        <div class="fl"><span class="n">2</span><div class="b"><b>端侧压缩</b><span>长边缩到 1024 px、JPEG q≈0.85 → 通常 150–400 KB。<strong>压缩是成本与延迟的主控制点，不可省</strong></span></div><span class="where">端侧</span></div>
+        <div class="fl"><span class="n">3</span><div class="b"><b>上传 + 关键点检测</b><span>468 点 Face Mesh 推理。<span class="u">图像仅存在于函数内存，不写磁盘、不入对象存储</span></span></div><span class="where">云函数</span></div>
+        <div class="fl"><span class="n">4</span><div class="b"><b>姿态精算</b><span>PnP 求 yaw/pitch/roll，二次校验；不过门则返回拒收原因，<strong>同样不留图</strong></span></div><span class="where">云函数</span></div>
+        <div class="fl"><span class="n">5</span><div class="b"><b>特征计算</b><span>归一化 → A/B/C/E/F 五组共 ~40 个无量纲指标</span></div><span class="where">云函数</span></div>
+        <div class="fl"><span class="n">6</span><div class="b"><b>丢弃原图</b><span>函数返回前显式释放；<strong>此后系统内不存在该用户的任何面部图像</strong></span></div><span class="where">云函数</span></div>
+        <div class="fl"><span class="n">7</span><div class="b"><b>分类</b><span>三轴打分 → 滞后带判定 → 类型 + 置信标记（可在云或端，端上更省一次往返）</span></div><span class="where">端 / 云</span></div>
+        <div class="fl"><span class="n">8</span><div class="b"><b>类型卡渲染</b><span>Canvas 端侧绘制，可直接分享</span></div><span class="where">端侧</span></div>
+        <div class="fl"><span class="n">9</span><div class="b"><b>报告组装</b><span>付费后触发；由已存的指标向量生成，<span class="u">无需再次上传照片</span></span></div><span class="where">云函数</span></div>
+        <div class="fl"><span class="n">10</span><div class="b"><b>AI 造型图</b><span>独立加购、独立同意；<strong>唯一需要留存原图的分支</strong>，出图后按策略删除</span></div><span class="where">云 + API</span></div>
+      </div>
+
+      <div class="verdict">
+        <span class="tag tag-a">服务端推理的成本，比直觉低一个量级</span>
+        <p>Face Mesh 是轻量模型，服务端单次推理约 <span class="mono">10–30 ms</span>，加解码与预处理按 <span class="mono">0.3 s</span> 估。在目标规模（月 28,000 次扫描，对应月收入 5 万）下：</p>
+        <pre>计算 ≈ 28,000 × 0.3 s × 0.5 GB ≈ 4,200 GBs   <span class="c">// 通常在云开发免费额度内</span>
+带宽 ≈ 28,000 × 300 KB ≈ 8.4 GB/月
+合计 ≈ 数十元至低百元 / 月                    <span class="c">// 相对收入可忽略</span></pre>
+        <p><strong>结论：「零边际成本」这条支柱基本保住</strong>——不是零，但小到不影响商业模型。</p>
+        <p class="mono" style="font-size:13px;color:var(--ink-3)">前提是端侧压缩到位。若上传未压缩原图（3–8 MB），带宽与解码成本上升一个量级，且延迟不可接受。压缩步骤是硬性要求，不是优化项。</p>
+      </div>
+
+      <div class="warn">
+        <span class="tag tag-s">双轨的工程约束：一套算法，两个宿主</span>
+        <p>特征计算与分类必须<strong>写成与宿主无关的纯函数模块</strong>（输入 468 点坐标数组，输出指标向量与类型），才能在云函数与 App 端复用同一份实现。</p>
+        <p>若两轨各写一遍，会出现<span class="u">同一张脸在小程序和 App 上得到不同类型</span>——这比任何精度问题都致命。<strong>纯函数模块 + 共享测试向量（黄金样本的输入输出对）是硬性要求</strong>，两轨必须对同一组测试向量给出逐位一致的结果。</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="s3">
+    <div class="rail"><span class="rail-label">锚点</span><span class="rail-tick"></span></div>
+    <div class="col">
+      <h2>关键点与解剖锚</h2>
+
+      <div class="kill">
+        <span class="tag tag-c">索引必须核对，不要照抄</span>
+        <p>下表中<strong>单点锚</strong>是常用且稳定的索引，但<strong>轮廓链</strong>（下颌线、面部外轮廓、眉弓）请以 MediaPipe 官方拓扑常量为准——<code>FACEMESH_FACE_OVAL</code> / <code>FACEMESH_LIPS</code> / <code>FACEMESH_LEFT_EYEBROW</code> 等，见 <code>face_mesh_connections.py</code> 与 <code>canonical_face_model.obj</code>。</p>
+        <p><span class="u">W5 第一项任务：把全部索引在真实输出上可视化验证一遍，钉进常量表。</span>用错一个轮廓点，整条曲率链就是错的，而且错得不明显。</p>
+      </div>
+
+      <div class="scroll wide">
+        <table>
+          <caption>解剖锚 → 关键点</caption>
+          <thead><tr><th style="width:20%">解剖名</th><th style="width:16%">用途</th><th style="width:16%">索引</th><th>说明</th></tr></thead>
+          <tbody>
+            <tr><td class="k">眉间 Glabella</td><td>纵向基准上端</td><td class="mn">~9 / 168 区</td><td>取两眉头中点的上方投影更稳，避免直接用单点</td></tr>
+            <tr><td class="k">鼻下点 Subnasale</td><td>中庭/下庭分界</td><td class="mn">2 区</td><td>鼻小柱基部</td></tr>
+            <tr><td class="k">颏下点 Menton</td><td>纵向基准下端</td><td class="mn">152</td><td>面部最下点，稳定</td></tr>
+            <tr><td class="k">外眦 L / R</td><td>roll 估计、眼裂宽</td><td class="mn">263 / 33</td><td>稳定</td></tr>
+            <tr><td class="k">内眦 L / R</td><td>眼间距</td><td class="mn">362 / 133</td><td>稳定</td></tr>
+            <tr><td class="k">鼻尖 Pronasale</td><td>yaw 对称性判据</td><td class="mn">1</td><td>稳定</td></tr>
+            <tr><td class="k">鼻翼 L / R</td><td>鼻宽</td><td class="mn">358 / 129 区</td><td>需核对</td></tr>
+            <tr><td class="k">口角 L / R</td><td>口宽、口角高低差</td><td class="mn">291 / 61</td><td>受表情影响大，见 <a href="#s4">§04</a></td></tr>
+            <tr><td class="k">面部最宽点</td><td>颧宽</td><td class="mn">454 / 234</td><td>用外轮廓链上 x 极值点更稳，不要固定用这两点</td></tr>
+            <tr><td class="k">下颌轮廓链</td><td>线条轴主判据</td><td class="mn">FACE_OVAL 下半段</td><td><strong>必须按官方拓扑取链</strong>，重采样为等距 N 点</td></tr>
+            <tr><td class="k">眉弓链 L / R</td><td>眉曲率</td><td class="mn">EYEBROW 常量</td><td>同上</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="warn">
+        <span class="tag tag-s">发际线不可用</span>
+        <p>Face Mesh <strong>不提供可靠的发际线</strong>（点 10 是额顶而非 trichion，且受发型遮挡影响）。因此本方案<span class="u">不计算传统「三庭」</span>，改用不依赖发际线的等价量：</p>
+        <pre><span class="c">// 全部以 glabella→menton 为纵向单位，跳过上庭</span>
+midfaceRatio = dist(glabella, subnasale) / dist(glabella, menton)
+lowerRatio   = dist(subnasale, menton)   / dist(glabella, menton)
+faceIndex    = dist(glabella, menton)    / bizygomaticWidth</pre>
+        <p>这既避免了最大的一个不稳定源，也让指标对发型完全免疫——<strong>而发型恰恰是用户会改变的东西</strong>，若指标随发型漂移，重测一致性直接崩。</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="s4">
+    <div class="rail"><span class="rail-label">采集</span><span class="rail-tick"></span></div>
+    <div class="col">
+      <h2>采集协议</h2>
+      <p>目标不是精度，是<strong>防止类型跳变</strong>。三个污染源各自对应一个类型轴，因此三道门缺一不可。</p>
+
+      <div class="scroll wide">
+        <table>
+          <caption>正面照 · 三门</caption>
+          <thead><tr><th style="width:12%">门</th><th style="width:24%">判据</th><th style="width:16%">阈值</th><th style="width:14%">污染谁</th><th>实现</th></tr></thead>
+          <tbody>
+            <tr>
+              <td class="k">姿态</td>
+              <td>yaw / pitch / roll</td>
+              <td class="num">各 ≤ 3°</td>
+              <td class="num">比例轴 P</td>
+              <td>PnP 求解（下方）；实时用轻量代理，快门后精算</td>
+            </tr>
+            <tr>
+              <td class="k">表情</td>
+              <td>口部开合比、口角上扬、眼裂开合</td>
+              <td class="num">中性带内</td>
+              <td class="num">线条轴 L</td>
+              <td>口内高/口宽 ≤ 阈值；口角连线相对水平倾角 ≤ 阈值；眼裂高/宽在正常睁眼带内</td>
+            </tr>
+            <tr>
+              <td class="k">光照</td>
+              <td>左右半脸亮度差、整体过曝/欠曝、面部对比度</td>
+              <td class="num">标定得出</td>
+              <td class="num">量感轴 W</td>
+              <td>面部掩膜内直方图统计；侧光会伪造骨点显露度</td>
+            </tr>
+            <tr>
+              <td class="k">距离</td>
+              <td>面高占画幅比</td>
+              <td class="num">区间约束</td>
+              <td class="num">全部</td>
+              <td>太近有透视畸变，太远点位噪声大</td>
+            </tr>
+            <tr>
+              <td class="k">妆容</td>
+              <td>浓度估计</td>
+              <td class="num"><strong>不设门</strong></td>
+              <td class="num">线条轴 L</td>
+              <td><span class="pill p-n">提醒不拦截</span> 见下方专节</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>姿态求解</h3>
+      <pre><span class="c">// 精算：canonical_face_model 的 3D 点 + 检测到的 2D 点</span>
+<span class="k">solvePnP</span>(objectPoints_3D, imagePoints_2D, K, dist) → rvec
+<span class="k">Rodrigues</span>(rvec) → R  →  Euler(yaw, pitch, roll)
+
+<span class="c">// K 未知时用近似：fx = fy = imageWidth, 主点取图像中心，dist = 0</span>
+<span class="c">// 对 ±3° 量级的判定，这个近似足够；不要为此引入相机标定</span>
+
+<span class="c">// 实时粗筛（每帧跑，代价低）</span>
+roll  ≈ atan2(dy, dx) of (outerCanthus_L → outerCanthus_R)
+yaw   ≈ 由 |noseTip→oval_L| / |noseTip→oval_R| 偏离 1 的程度估计
+pitch ≈ 由 midfaceRatio 偏离个体基线的程度估计  <span class="c">// 最弱的一维</span></pre>
+
+      <div class="warn">
+        <span class="tag tag-s">pitch 是最难的一维</span>
+        <p>单目 2D 对俯仰最不敏感，而俯仰恰好直接改变纵向比例（P 轴）。两条缓解：</p>
+        <ol>
+          <li><strong>用 PnP 精算而非几何代理做最终判定</strong>——代理只用于实时引导。</li>
+          <li><strong>引导设计上物理约束俯仰</strong>：屏幕给水平参考线，要求双眼与耳屏连线对齐；配合「手机与视线等高」的文案提示。<span class="u">物理约束比算法校正可靠。</span></li>
+        </ol>
+      </div>
+
+      <h3>妆容：提醒，不打断</h3>
+      <div class="verdict">
+        <span class="tag tag-a">妆容与姿态是两类问题，处理方式必须不同</span>
+        <p>头位超限产生的是<strong>垃圾数据</strong>，必须拒收；妆容不是——它是这个人真实的呈现方式，而且是绝大多数目标用户的常态。<span class="u">对妆容设门会直接杀死漏斗。</span></p>
+        <p>因此：<strong>采集页给一句静态提示，结果页给一条条件提示，推理全程不中断。</strong></p>
+      </div>
+      <pre><span class="c">// 1. 采集页（常驻，不判定）</span>
+提示文案 = "素颜或淡妆，结果更准"
+
+<span class="c">// 2. 结果页（仅在检测到浓妆时出现）</span>
+if makeupIntensity > 阈值:
+    注记 = "检测到较明显妆容，线条判定已自动侧重下颌轮廓"
+    <span class="c">// 不降级、不拒绝、不要求重拍</span>
+
+<span class="c">// 3. 算法侧：L 轴自适应加权（关键）</span>
+<span class="c">//   眉形 / 唇峰 / 眼型 → 妆容可大幅改变</span>
+<span class="c">//   下颌轮廓         → 修容只能改明暗，改不了轮廓关键点位置</span>
+if makeupIntensity > 阈值:
+    L_score = w_jaw' · z(jawSharpness) + …     <span class="c">// 提高 jaw 权重</span>
+else:
+    L_score = 标准权重</pre>
+      <p><strong>下颌轮廓基本免疫妆容</strong>——修容改变的是阴影，不是轮廓关键点的几何位置。所以 L 轴在浓妆下可以优雅降级：牺牲一点分辨率，换取判定不崩。</p>
+      <p class="mono" style="font-size:13px;color:var(--ink-3)">makeupIntensity 的估计方式与阈值在 S1 标定时确定（同人素颜/化妆对照组）。若对照组显示妆容对 L 轴影响小于预期，可退化为仅保留采集页提示，不做自适应加权。</p>
+
+      <h3>拒收逻辑</h3>
+      <ul>
+        <li>实时门不过 → 快门置灰 + 指向性提示（「下巴略收」「向左转一点」「光线偏右侧，请正对光源」）</li>
+        <li>精算门不过 → 拒收并说明原因，返回取景，<strong>不保留该次结果</strong></li>
+        <li><strong>绝不做「尽力算一个」</strong>——一次勉强的结果会污染重测一致性，也会让用户拿到一个她会分享出去的错误类型</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="s5">
+    <div class="rail"><span class="rail-label">归一</span><span class="rail-tick"></span></div>
+    <div class="col">
+      <h2>归一化</h2>
+
+      <pre><span class="c">// 步骤 1：去 roll —— 绕图像中心旋转，使双外眦连线水平</span>
+θ = atan2(P263.y - P33.y, P263.x - P33.x)
+L' = Rot(-θ) · (L - centroid)
+
+<span class="c">// 步骤 2：定义两个基准量（同图内，单位任意）</span>
+W_zyg = 面部外轮廓链上的最大水平跨度        <span class="c">// 颧宽，量感与横向指标的分母</span>
+H_gm  = dist(glabella, menton)              <span class="c">// 纵向基准，比例指标的分母</span>
+
+<span class="c">// 步骤 3：所有指标 = 比值 / 角度 / 面积比  →  尺度自动约掉</span>
+<span class="c">// 不做绝对长度归一化，不需要参照物，不需要相机标定</span></pre>
+
+      <div class="verdict">
+        <span class="tag tag-a">为什么用外轮廓极值而不是固定点求颧宽</span>
+        <p>固定用 <code>234 / 454</code> 会在不同脸型上落到不同解剖位置——脸型偏长的人最宽处在颧弓，偏方的人可能在下颌角。<strong>取轮廓链的 x 极值</strong>才是真正的「面部最宽处」，且顺带给出一个免费信息：<span class="u">最宽处的纵向位置</span>——它是「颧骨高位 vs 下颌宽」的判别量，直接喂给量感轴。</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="s6">
+    <div class="rail"><span class="rail-label">特征</span><span class="rail-tick"></span></div>
+    <div class="col">
+      <h2>特征管线 A–F</h2>
+      <p>共 ~40 个指标。以下给出定义与算法；<strong>所有分界阈值见 <a href="#s8">§08</a>，此处不出现任何数值。</strong></p>
+
+      <h3>A · 比例</h3>
+      <pre>midfaceRatio  = |glabella→subnasale| / H_gm
+lowerRatio    = |subnasale→menton|   / H_gm
+faceIndex     = H_gm / W_zyg                      <span class="c">// 面长宽比</span>
+fiveEyeRatio  = eyeFissureWidth_mean / W_zyg      <span class="c">// 五眼比</span>
+interocular   = |innerCanthus_L→R| / W_zyg
+lipChinRatio  = |stomion→menton| / |subnasale→menton|</pre>
+
+      <h3>B · 量感</h3>
+      <p>三个分量，标准化后加权合成。</p>
+      <pre><span class="c">// B1 五官面积占比（多边形面积用 shoelace）</span>
+featureAreaRatio = (A_eyes + A_brows + A_nose + A_lips) / A_faceOval
+
+<span class="c">// B2 五官尺度指数（四个横向比的均值）</span>
+featureScaleIdx = mean(
+  eyeFissureWidth / W_zyg,
+  alarWidth       / W_zyg,
+  mouthWidth      / W_zyg,
+  browLength      / W_zyg )
+
+<span class="c">// B3 骨点显露度（2D 代理，三项）</span>
+zygoGonialRatio = W_zyg / W_gonial              <span class="c">// 颧宽 / 下颌角宽</span>
+maxWidthHeight  = (y_maxWidth - y_glabella) / H_gm   <span class="c">// 最宽处的纵向位置</span>
+jawSharpness    = 见 C 组                        <span class="c">// 复用</span>
+
+W_score = w1·z(B1) + w2·z(B2) + w3·z(B3)         <span class="c">// z = 标定集 z-score</span></pre>
+
+      <div class="warn">
+        <span class="tag tag-s">B3 是全表最弱的一项</span>
+        <p>「骨点显露度」本质是三维信息，2D 代理必然有限，且<strong>对光照高度敏感</strong>——侧光会伪造出骨感。这是光照门存在的唯一理由。</p>
+        <p>标定时若发现 B3 与人工标签相关性显著低于 B1/B2，<span class="u">降低 w3 甚至归零</span>，用 B1+B2 撑量感轴。<strong>宁可少一个弱信号，不要引入一个噪声源。</strong></p>
+      </div>
+
+      <h3>C · 线条</h3>
+      <p>核心是下颌轮廓的曲率分布——「有明确转折」还是「均匀圆弧」。</p>
+      <pre><span class="c">// 1. 取 FACE_OVAL 下半段（左下颌角 → 颏 → 右下颌角），等弧长重采样为 N 点</span>
+<span class="c">// 2. 离散曲率：用三点外角</span>
+for i in 1..N-2:
+    v1 = P[i]   - P[i-1]
+    v2 = P[i+1] - P[i]
+    κ[i] = angleBetween(v1, v2) / (|v1| + |v2|) * 2
+
+<span class="c">// 3. 尖锐度 = 曲率的集中程度，而非曲率大小本身</span>
+jawSharpness = max(κ_gonialRegion) / mean(κ_all)
+<span class="c">//   高 → 曲率集中在下颌角 = 有明确转折 = 直</span>
+<span class="c">//   低 → 曲率均匀铺开     = 圆弧过渡   = 曲</span>
+
+<span class="c">// 4. 辅助项</span>
+browCurvature = |a| of 二次拟合 y = ax² + bx + c  (眉弓链，归一化后)
+eyeTilt       = 内外眦连线相对水平的角度
+eyeAspect     = eyeFissureHeight / eyeFissureWidth
+cupidSharp    = 唇峰点处的外角
+
+L_score = w1·z(jawSharpness) + w2·z(browCurvature⁻) + w3·z(cupidSharp) + …
+<span class="c">// 浓妆时切换到 jaw 主导的权重组，见 §04</span></pre>
+
+      <div class="verdict">
+        <span class="tag tag-a">为什么用「曲率集中度」而不是「曲率最大值」</span>
+        <p>曲率最大值会被脸的大小和轮廓采样密度污染。<strong>比值形式（局部最大 / 全局均值）是无量纲的，且直接对应「有没有一个角」这个感知问题</strong>——一个圆脸和一个方脸的绝对曲率可能接近，但分布形态完全不同。<span class="u">这是 C 组能否成立的关键设计。</span></p>
+      </div>
+
+      <h3>E · 对称性</h3>
+      <pre>midline = 由 glabella、subnasale、menton 拟合的中轴线
+for each 成对特征:
+    asym = |d_left - d_right| / (d_left + d_right)    <span class="c">// 归一化差异</span>
+
+eyeHeightAsym, eyeSizeAsym, nasalDeviation,
+mouthCornerAsym, jawContourAsym  →  取加权合成 + 各项单列</pre>
+      <p class="mono" style="font-size:13px;color:var(--ink-3)">E 组不进类型轴，仅作报告读数。<strong>展示时必须给人群参考区间</strong>——几乎所有人都有轻度不对称，报告绝不能出现「异常」类判定措辞。</p>
+
+      <h3>F · 分区平衡</h3>
+      <p>差异化最强的一组，且实现成本最低——它是 A/B/C 的二次计算。</p>
+      <pre><span class="c">// 纵向量感一致性：分别算上/中/下三区的局部量感，取离散度</span>
+W_upper = 眉眼区特征面积 / 该区面部面积
+W_mid   = 鼻颧区特征面积 / 该区面部面积
+W_lower = 唇颏区特征面积 / 该区面部面积
+regionalWeightSpread = std(W_upper, W_mid, W_lower) / mean(...)
+
+<span class="c">// 线条一致性：上半脸线条语言 vs 下半脸</span>
+L_upper = f(browCurvature, eyeAspect, eyeTilt)
+L_lower = f(jawSharpness, cupidSharp)
+lineCoherence = |z(L_upper) - z(L_lower)|
+
+<span class="c">// 输出三个可直接驱动建议的标签</span>
+balanceType ∈ { 上重下轻, 均衡, 上轻下重 }
+lineConflict ∈ { 一致, 轻度冲突, 明显冲突 }</pre>
+
+      <div class="verdict">
+        <span class="tag tag-a">F 组的工程价值</span>
+        <p>它把「说不上哪里不对」变成两个离散标签，而每个标签直接映射到一条明确建议（发型补下半部体积 / 顶区蓬松 / 妆容统一线条语言）。<strong>零新增采集、零新增模型、复用已有指标</strong>——投入产出比全表最高。</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="s7">
+    <div class="rail"><span class="rail-label">分类</span><span class="rail-tick"></span></div>
+    <div class="col">
+      <h2>分类引擎与滞后</h2>
+
+      <pre><span class="c">// 三轴各得一个连续分，映射到 [0,1]</span>
+W_score → 量感   分 3 档：轻 / 中 / 重   （2 个分界 t_W1, t_W2）
+L_score → 线条   分 2 档：直 / 曲        （1 个分界 t_L）
+P_score → 比例   分 2 档：凝 / 舒        （1 个分界 t_P）
+
+主型 = f(量感档, 线条档)   → 疏影 云绡 修竹 春山 墨玉 琥珀
+全名 = 主型 + 比例档       → ·凝 / ·舒</pre>
+
+      <div class="scroll">
+        <table>
+          <caption>主型映射</caption>
+          <thead><tr><th style="width:16%"></th><th style="width:28%">直</th><th>曲</th></tr></thead>
+          <tbody>
+            <tr><td class="k">轻</td><td>疏影</td><td>云绡</td></tr>
+            <tr><td class="k">中</td><td>修竹</td><td>春山</td></tr>
+            <tr><td class="k">重</td><td>墨玉</td><td>琥珀</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>滞后带：稳定性的全部来源</h3>
+      <pre><span class="c">// 每个分界 t 配一个死区 ±δ</span>
+if |score - t| > δ:
+    档位 = 硬判定
+    confidence = "clear"
+else:
+    <span class="c">// 落在死区 → 两级处理</span>
+    if 存在该用户历史结果:
+        档位 = 沿用历史档位              <span class="c">// 粘滞，直接消灭跳变</span>
+        confidence = "sticky"
+    else:
+        档位 = 就近判定
+        confidence = "borderline"
+        输出措辞 = "偏{邻档}的{本档}型"   <span class="c">// 不硬分</span></pre>
+
+      <div class="verdict">
+        <span class="tag tag-a">三条设计要点</span>
+        <ul>
+          <li><strong>粘滞是最便宜的一致性来源。</strong>同一 openid 的历史结果做锚，边界附近直接沿用——这一条几乎白送几个百分点的重测一致性，成本是一次数据库读。</li>
+          <li><strong>「偏 X 的 Y 型」不是妥协，是产品特性。</strong>它比硬分更真实，用户也更容易接受；同时它把边界样本从「错误」重新框定为「过渡态」。</li>
+          <li><strong>δ 不是拍脑袋定的</strong>——它是让重测一致性达标的最小值，从 <a href="#s9">§09</a> 的重测数据反解。δ 越大越稳但越模糊，取<span class="u">刚好达到 90% 的那个值</span>。</li>
+        </ul>
+      </div>
+
+      <div class="warn">
+        <span class="tag tag-s">如果 12 型撑不住</span>
+        <p>凝/舒轴（比例）最容易受 pitch 残差污染，是三轴中最不稳的一个。若 W8 全名一致性低于 80% 且无法通过收紧 pitch 门解决：</p>
+        <p><strong>降级方案——把凝/舒从类型名里拿掉，降为报告读数。</strong>对外只做 6 主型。这个降级不损伤传播（本来对外就只用 6 个名字），只损失一点报告精度。<span class="u">宁可粗但稳。</span></p>
+      </div>
+    </div>
+  </section>
+
+  <section id="s8">
+    <div class="rail"><span class="rail-label">标定</span><span class="rail-tick"></span></div>
+    <div class="col">
+      <h2>标定方法学</h2>
+
+      <div class="kill">
+        <span class="tag tag-c">阈值不能设计，只能标定</span>
+        <p>任何在这份文档里出现的具体分界数值都会是编造的。三轴分界 <code>t_W1 t_W2 t_L t_P</code> 与死区 <code>δ</code> 必须从数据得出，流程如下。</p>
+      </div>
+
+      <div class="scroll wide">
+        <table>
+          <caption>三阶段标定</caption>
+          <thead><tr><th style="width:12%">阶段</th><th style="width:14%">样本量</th><th style="width:14%">时点</th><th style="width:26%">产出</th><th>方法</th></tr></thead>
+          <tbody>
+            <tr>
+              <td class="k">S1 维度验证</td><td class="num">30–50</td><td class="num">W3–4</td>
+              <td>确认三轴能否分开真实人脸</td>
+              <td>人工标注 → 看每轴的类间可分性。<strong>这一步验证的不是数字，是维度选对没有</strong></td>
+            </tr>
+            <tr>
+              <td class="k">S2 初始阈值</td><td class="num">150–300</td><td class="num">W5–7</td>
+              <td>t_W1 t_W2 t_L t_P 初值</td>
+              <td>分位数起步（量感取三分位、线条与比例取中位），再用人工标签做一维搜索最大化一致率</td>
+            </tr>
+            <tr>
+              <td class="k">S3 死区求解</td><td class="num">30 人 × 3 次</td><td class="num">W8</td>
+              <td>δ</td>
+              <td>在重测集上扫 δ，取<span class="u">满足一致性 ≥ 90% 的最小值</span></td>
+            </tr>
+            <tr>
+              <td class="k">S4 线上重标</td><td class="num">≥ 1000</td><td class="num">上线后</td>
+              <td>用真实分布替换标定集分布</td>
+              <td>用真实用户指标分布重算分位数。<strong>换阈值前必须评估存量用户类型变更的影响</strong></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="warn">
+        <span class="tag tag-s">30–50 张不足以定阈值</span>
+        <p>12 个类别、30–50 个样本 = 每类 2–4 个，<strong>定不出稳定阈值</strong>。业务手册里 W3–4 那道门的真实作用是<span class="u">验证维度</span>——若反复出现「这张说不清是修竹还是春山」，要改的是判据不是分界线，而且必须在写代码之前改。</p>
+        <p>阈值需要 S2 的 150–300 张。标注由你自己做（标注者内部一致性比人数重要）。</p>
+      </div>
+
+      <h3>标定集从哪来</h3>
+      <div class="verdict">
+        <span class="tag tag-a">首选：用自己的内容账号招募</span>
+        <p class="lede">W3–4 你已经有一个正在涨粉的小红书账号。它就是标定集的最佳来源。</p>
+        <p>「参与内测，免费获得完整报告」——成本为零，且这条路径<strong>在技术上优于任何外部图源</strong>：</p>
+        <ul>
+          <li><strong>分布正确。</strong>阈值是分位数，分位数只在<span class="u">与真实用户同分布的样本上</span>才有意义。你的关注者就是你的用户；网上随机人脸不是。用错分布标定的阈值，上线当天就要重标。</li>
+          <li><strong>可控采集。</strong>你能要求按 <a href="#s4">§04</a> 的门限拍——姿态、光照、中性表情、素颜/化妆对照组。外部图源做不到，而不合门限的照片对标定毫无价值。</li>
+          <li><strong>可复访。</strong>同一批人还能直接用于 <a href="#s9">§09</a> 的重测研究（30 人 × 3 次本来就要招募真人），两件事一次招募解决。</li>
+          <li><strong>顺带是内容素材与首批种子用户。</strong></li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h4>补充来源（按可用性排序）</h4>
+        <ol>
+          <li><strong>合成人脸</strong>——生成式模型产出的非真实人物face，无肖像与同意问题，可按需要的量与人群特征批量生成。适合把样本量从 150 补到 300+，用于分布形状而非绝对定标。<span class="mono" style="color:var(--ink-3)">注意：生成模型有向训练分布回归的倾向，可能压缩极端量感样本——只用于填充中段，两端仍靠真人。</span></li>
+          <li><strong>明确授权可商用的人像数据集</strong>——逐个核对许可条款，注意多数学术人脸数据集<em>仅限研究用途</em>，不覆盖商业产品标定。</li>
+          <li><strong>线下有偿招募</strong>——签拍摄同意书，单价可控，适合补齐稀缺档位（重量感样本通常最少）。</li>
+        </ol>
+      </div>
+
+      <div class="kill">
+        <span class="tag tag-c">抓取网络人脸这条路我不做，也建议你不做</span>
+        <p>不是许可证技术性问题。人脸属<strong>敏感个人信息</strong>，采集须取得单独同意，抓取真实可识别个人的面部图像用于商业产品标定，在 PIPL 下没有可用的合法性基础——这正是 Clearview AI 在多个法域被处罚的行为类型。</p>
+        <p>更要命的是位置：<span class="u">标定集是产品的地基</span>。全部阈值都从它导出，事后无法「删掉重来」——只要它在，整个产品的每一个判定都长在它上面。而这个项目的全部商业逻辑（<a href="#s11">§11</a> 的隐私卖点、不做医美导流、不碰未成年人）建立在合规干净上，在地基里埋这个东西，是拿最大的一件事换最省的一星期。</p>
+        <p><strong>而且它在技术上也不划算</strong>：网络随机人脸与你的目标人群不同分布，姿态光照不可控，无法做素颜/化妆对照——用它标定出的阈值，上线后照样要用真实用户数据重标一遍。省下的那一星期最终还是要还。</p>
+      </div>
+
+
+      <div class="kill">
+        <span class="tag tag-c">S4 的陷阱：改阈值会改变已发出的类型</span>
+        <p>用户已经把「我是琥珀」发到社交平台了。线上重标若让她变成「墨玉」，那是<strong>产品级信任事故</strong>。</p>
+        <p><strong>处理规则</strong>：已生成的报告与类型<span class="u">永久锁定其生成时的阈值版本</span>（报告记录 <code>calibVersion</code>），新阈值只作用于新测。除非发现严重错误，否则不做历史回溯重算。</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="s9">
+    <div class="rail"><span class="rail-label">验证</span><span class="rail-tick"></span></div>
+    <div class="col">
+      <h2>重测一致性验证</h2>
+      <p>这是唯一的硬性验收，也是 W8 那道门。</p>
+
+      <h3>协议</h3>
+      <ul>
+        <li><strong>N = 30 人</strong>，覆盖三档量感（每档 ≥ 8 人），否则测不出边界行为</li>
+        <li>每人 <strong>3 次独立会话</strong>，间隔 ≥ 1 天，<span class="u">每次重新取景、换环境光、允许换发型与妆容</span>——这正是真实使用条件</li>
+        <li>每人产生 3 个配对（1-2, 1-3, 2-3），共 90 对</li>
+      </ul>
+
+      <pre>主型一致性 = (同主型的配对数) / 90        <span class="c">// 目标 ≥ 90%</span>
+全名一致性 = (同全名的配对数) / 90        <span class="c">// 目标 ≥ 80%</span>
+
+<span class="c">// 关键：必须分轴统计，否则不知道该修哪里</span>
+量感轴一致性 = 同档配对 / 90
+线条轴一致性 = 同档配对 / 90
+比例轴一致性 = 同档配对 / 90</pre>
+
+      <div class="verdict">
+        <span class="tag tag-a">分轴统计是这一节的核心</span>
+        <p>总体一致性只告诉你「不达标」，<strong>分轴一致性告诉你哪一轴在漏</strong>，而每一轴对应一个明确的修法：</p>
+        <ul>
+          <li><strong>量感轴漏</strong> → 光照门太松，或 B3 骨点显露度在制造噪声（考虑降权/归零）</li>
+          <li><strong>线条轴漏</strong> → 表情门太松（口角与唇峰对表情极敏感），或轮廓链取点有误</li>
+          <li><strong>比例轴漏</strong> → pitch 残差，收紧俯仰门或强化物理引导；仍不行则执行 <a href="#s7">§07</a> 的降级方案</li>
+        </ul>
+      </div>
+
+      <h3>同时监控的反向指标</h3>
+      <p>每次收紧门限都要重测<strong>采集一次通过率</strong>。若为达到 90% 一致性必须把通过率压到 70% 以下，说明<span class="u">判据本身不够稳健</span>——回到 <a href="#s6">§06</a> 改判据，不要继续收门。这是本方案最重要的一条工程纪律。</p>
+    </div>
+  </section>
+
+  <section id="s10">
+    <div class="rail"><span class="rail-label">侧面</span><span class="rail-tick"></span></div>
+    <div class="col">
+      <h2>侧面照与 D 组</h2>
+      <p>付费层解锁。<strong>不做三维重建</strong>——侧貌轮廓直接给出深度信息，稳定性远高于任何从单图重建的网格。</p>
+
+      <div class="scroll wide">
+        <table>
+          <caption>D 组 · 八项</caption>
+          <thead><tr><th style="width:22%">指标</th><th style="width:34%">定义</th><th>备注</th></tr></thead>
+          <tbody>
+            <tr><td class="k">侧貌凸度</td><td>glabella–subnasale–pogonion 三点夹角</td><td>整体凸/直/凹的主判据</td></tr>
+            <tr><td class="k">鼻背高度</td><td>鼻背最高点到 nasion–pronasale 连线的垂距 / 鼻长</td><td>无量纲</td></tr>
+            <tr><td class="k">鼻背直度</td><td>鼻背轮廓对其端点连线的最大偏离（带符号）</td><td>正=驼峰，负=凹陷</td></tr>
+            <tr><td class="k">鼻唇角</td><td>columella 切线与上唇切线夹角</td><td>经典软组织指标</td></tr>
+            <tr><td class="k">上唇突度</td><td>上唇最突点到审美线的距离 / 鼻长</td><td>参考区间而非理想值</td></tr>
+            <tr><td class="k">颏部位置</td><td>pogonion 到审美线的距离 / 鼻长</td><td>同上</td></tr>
+            <tr><td class="k">下颌平面角</td><td>下颌下缘切线与水平（自然头位）夹角</td><td>对头位敏感，门限须更严</td></tr>
+            <tr><td class="k">颈颏角</td><td>颏下缘切线与颈前缘切线夹角</td><td>受体位与年龄影响大，须标注</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="kill">
+        <span class="tag tag-c">措辞是硬约束，不是文案偏好</span>
+        <p>输出一律描述<strong>表面形态</strong>，不做解剖学断言。写「中面部表面饱满度」，不写「上颌骨饱满度」。</p>
+        <p>依据：软组织形状并不紧密跟随骨性结构，中面部尤弱——上唇与上颌之间的形状预测力仅约 <span class="mono">9.6%</span>，且骨性越不足者该区软组织往往越厚，两者互相抵消。<span class="u">这不影响造型用途</span>（造型响应的是可见形态），但它决定了报告能写什么。报告应显式包含一句：「中面部的骨性投影需要影像检查，本报告只描述表面形态。」</p>
+      </div>
+
+      <div class="warn">
+        <span class="tag tag-s">侧面照的姿态门必须更严</span>
+        <p>侧貌角度对头位极敏感——偏转几度，所有角度量全变。约束手段：</p>
+        <ul>
+          <li>自然头位提示 + 屏幕参考线（耳屏与眶下缘连线水平）</li>
+          <li>要求耳廓完整可见（作为「确实是正侧位」的几何证据）</li>
+          <li>检测到对侧眼可见 → 判为斜位，拒收</li>
+        </ul>
+        <p><strong>降级方案</strong>：若侧面重复性达不到要求，退回只用正面 + 只做类型学，不发布侧貌数值。付费层改以造型策略深度作为价值主张。这是可控降级，不是全案失败。</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="s11">
+    <div class="rail"><span class="rail-label">数据</span><span class="rail-tick"></span></div>
+    <div class="col">
+      <h2>数据与隐私</h2>
+
+      <div class="scroll wide">
+        <table>
+          <caption>数据分级与留存</caption>
+          <thead><tr><th style="width:18%">数据</th><th style="width:16%">存在位置</th><th style="width:16%">留存</th><th>说明</th></tr></thead>
+          <tbody>
+            <tr><td class="k">原始照片（小程序）</td><td class="num">云函数内存</td><td class="num"><strong>不落盘</strong></td><td>压缩后上传，推理完成即释放；不写磁盘、不入对象存储、不留备份、不进日志</td></tr>
+            <tr><td class="k">原始照片（App 版）</td><td class="num">仅设备内存</td><td class="num">不落盘</td><td>端侧推理，不上传</td></tr>
+            <tr><td class="k">468 关键点</td><td class="num">内存内中间量</td><td class="num">不持久化</td><td>属生物识别信息，计算完即弃，不入库</td></tr>
+            <tr><td class="k">指标向量 ~40 float</td><td class="num">云数据库</td><td class="num">随账号</td><td><span class="u">无法反推面部图像</span>；粘滞判定与报告生成所需</td></tr>
+            <tr><td class="k">类型结果 + calibVersion</td><td class="num">云数据库</td><td class="num">随账号</td><td>粘滞判定与报告锁定所需</td></tr>
+            <tr><td class="k">原始照片（AI 造型图）</td><td class="num">对象存储</td><td class="num">短时限删除</td><td>独立加购、独立同意；出图后按策略删除</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="verdict">
+        <span class="tag tag-a">改走服务端推理后，隐私叙事怎么写</span>
+        <p><strong>不能再说「我们看不到你的脸」——那句话在小程序路径上不成立。</strong>但仍有一句真话，而且几乎一样强：</p>
+        <p class="lede">照片在内存里算完就丢，从不落盘；我们存下来的只有 40 个还原不出人脸的数字。</p>
+        <p>这比对标站的「原图 2 小时内删除」更进一步（它意味着原图确实写过盘）。可直接写进产品页。<span class="u">合规做成卖点，而不是做成负担</span>——但前提是这句话必须真，所以「不写磁盘、不进日志、不留备份」是<strong>代码级要求</strong>，要在 code review 里逐条确认，不能只写在隐私政策里。</p>
+        <p>App 版则可以恢复完整的「照片不离开设备」表述——这也是 App 版存在的主要理由。</p>
+      </div>
+
+      <div class="check-list card">
+        <h4>合规要点</h4>
+        <ul>
+          <li>人脸信息属敏感个人信息，需<strong>单独同意</strong>——不能混在通用用户协议里勾选</li>
+          <li>提供<strong>一键删除</strong>全部数据的入口，且真实执行</li>
+          <li>产品与协议层<strong>明确面向成年人</strong>，主动排除未成年人（不满十四周岁的个人信息另有专门处理规则，solo 阶段不承担）</li>
+          <li>上传前必须明确告知「照片将用于本次计算，计算完成立即丢弃，不作留存」并取得<strong>单独同意</strong></li>
+          <li>AI 造型图分支是唯一留存原图的链路，必须<strong>再次单独同意</strong>，不可与上一条合并</li>
+          <li>报告与文案层：不打分、不给「与理想值的差距」、不做解剖学断言、不承诺效果、不推荐医美项目</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="s12">
+    <div class="rail"><span class="rail-label">实现</span><span class="rail-tick"></span></div>
+    <div class="col">
+      <h2>工程实现</h2>
+
+      <div class="scroll wide">
+        <table>
+          <thead><tr><th style="width:18%">模块</th><th style="width:26%">选型</th><th>要点</th></tr></thead>
+          <tbody>
+            <tr><td class="k">载体</td><td>微信小程序</td><td>无审核周期、无下载门槛、分享原生、支付现成</td></tr>
+            <tr><td class="k">关键点检测</td><td>Face Mesh 468 点<br>云函数（Python / Node）</td><td>服务端推理，单次 10–30 ms。<strong>不赌小程序端侧 ML 的机型覆盖</strong></td></tr>
+            <tr><td class="k">端侧压缩</td><td>Canvas 缩放 + JPEG 编码</td><td>长边 1024 px、q≈0.85。<strong>硬性要求</strong>，直接决定带宽成本与延迟</td></tr>
+            <tr><td class="k">姿态求解</td><td>PnP</td><td>小规模数值问题；与特征计算同处一个纯函数模块</td></tr>
+            <tr><td class="k">几何计算</td><td><strong>宿主无关纯函数模块</strong></td><td>shoelace 面积、离散曲率、二次拟合。<span class="u">必须可在云函数与 App 端复用同一份实现</span>，配共享测试向量</td></tr>
+            <tr><td class="k">App 版（后续）</td><td>端侧推理</td><td>复用同一纯函数模块；差异化卖点＝照片不离开设备</td></tr>
+            <tr><td class="k">分类</td><td>规则引擎（端侧）+ 常量表</td><td>阈值表随版本下发，支持 A/B 与热更；<strong>天然可解释</strong></td></tr>
+            <tr><td class="k">类型卡</td><td>Canvas 端侧绘制</td><td>六型六套配色，直接生成可分享图</td></tr>
+            <tr><td class="k">后端</td><td>微信云开发 Serverless</td><td>免运维；只做「数字 → 文案」映射</td></tr>
+            <tr><td class="k">报告 / PDF</td><td>云函数：模板槽位 → HTML → PDF</td><td>纯确定性组装，无 ML</td></tr>
+            <tr><td class="k">支付</td><td>微信支付</td><td>需主体资质（个体工商户即可）</td></tr>
+            <tr><td class="k">AI 造型图</td><td>图像 API 按量</td><td>唯一可变成本，单独计价</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="card">
+        <h4>运行成本（目标规模：月 28,000 次扫描）</h4>
+        <pre>推理计算 ≈ 28,000 × 0.3 s × 0.5 GB ≈ 4,200 GBs    <span class="c">// 多在免费额度内</span>
+上行带宽 ≈ 28,000 × 300 KB       ≈ 8.4 GB
+报告 / PDF 生成                    <span class="c">// 纯文本组装，可忽略</span>
+AI 造型图                          <span class="c">// 唯一按量成本，已单独计价</span>
+────────────────────────────────
+合计 ≈ 数十元至低百元 / 月</pre>
+        <p>相对月收入 1.5–5 万可忽略。<strong>但这个数字完全依赖端侧压缩</strong>：若上传未压缩原图（3–8 MB），带宽与解码成本上升一个量级，延迟也会不可接受。</p>
+      </div>
+
+      <h3>报告组装</h3>
+      <pre><span class="c">// 纯规则映射，无生成模型</span>
+report =
+    typeSection(mainType)                  <span class="c">// 六选一，固定文案</span>
+  + variantNote(proportionBand)            <span class="c">// 凝/舒</span>
+  + readings(A, B, C, D, E)                <span class="c">// 数值 + 人群参考区间</span>
+  + balanceAdvice(balanceType, lineConflict)   <span class="c">// F 组 → 具体建议</span>
+  + stylingStrategy(mainType, D_flags)     <span class="c">// 发型/眼镜/领型/妆容</span>
+  + avoidList(mainType, balanceType)       <span class="c">// 「避开什么」清单</span>
+  + fourWeekPlan(优先级排序)
+  + disclaimer()                           <span class="c">// 表面形态声明</span></pre>
+
+      <div class="warn">
+        <span class="tag tag-s">建议库是内容工作，不是代码工作</span>
+        <p>6 主型 × 若干场景 × F 组三种平衡态，组合出的建议条目数以百计。<strong>这部分工作量被严重低估</strong>——它不是写代码，是写内容，而且要写得专业到经得起懂行的人检验。</p>
+        <p>建议：<span class="u">W9–10 与付费版开发并行推进</span>，先做 6 主型 × 4 个核心场景（发型 / 眼镜 / 领型 / 妆容）的骨架，上线后按用户反馈加密。</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="s13">
+    <div class="rail"><span class="rail-label">测试</span><span class="rail-tick"></span></div>
+    <div class="col">
+      <h2>测试计划</h2>
+
+      <div class="scroll wide">
+        <table>
+          <thead><tr><th style="width:16%">层</th><th style="width:26%">对象</th><th>方法与判据</th></tr></thead>
+          <tbody>
+            <tr><td class="k">单元</td><td>几何函数</td><td>合成图形验证：已知正多边形的 shoelace 面积、已知圆弧的离散曲率、已知旋转角的 roll 校正</td></tr>
+            <tr><td class="k">单元</td><td>姿态求解</td><td>用 canonical model 做已知角度的合成投影，反解误差 &lt; 1°</td></tr>
+            <tr><td class="k">集成</td><td>全管线不变性</td><td><strong>同一张图做缩放 / 平移 / 小角度旋转，所有指标应不变</strong>（容差内）。这是最有价值的一个测试——它直接验证「无量纲」这个核心假设是否真的成立</td></tr>
+            <tr><td class="k">集成</td><td>门限行为</td><td>构造超限样本（大 yaw、张口、强侧光），验证全部被拒收</td></tr>
+            <tr><td class="k">系统</td><td>重测一致性</td><td><a href="#s9">§09</a> 协议，30 人 × 3 次；分轴统计</td></tr>
+            <tr><td class="k">系统</td><td>性能</td><td>中端安卓端到端 ≤ 2.5 s；首次加载增量 ≤ 4 MB</td></tr>
+            <tr><td class="k">系统</td><td>机型覆盖</td><td>端侧推理可用率；不可用机型的降级路径是否正确触发并弹出同意</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="verdict">
+        <span class="tag tag-a">不变性测试是第一优先级</span>
+        <p>缩放 / 平移 / 旋转不变性如果不成立，整套「所有指标都是比值」的设计前提就是假的，后面所有标定都白做。<strong>这个测试应该在写第一个指标函数的同时就写。</strong></p>
+      </div>
+    </div>
+  </section>
+
+  <section id="s14">
+    <div class="rail"><span class="rail-label">风险</span><span class="rail-tick"></span></div>
+    <div class="col">
+      <h2>风险与未决项</h2>
+
+      <div class="scroll wide">
+        <table>
+          <thead><tr><th style="width:20%">项</th><th style="width:11%">等级</th><th style="width:30%">风险</th><th>处置</th></tr></thead>
+          <tbody>
+            <tr>
+              <td class="k">端侧推理可用性</td><td><span class="pill p-lo">已决</span></td>
+              <td>小程序端侧 ML 机型覆盖不可依赖</td>
+              <td><strong>不赌。</strong>小程序直接走服务端推理；需要端侧闭环的走 App 版。风险转为「双轨实现一致性」，见下一行</td>
+            </tr>
+            <tr>
+              <td class="k">双轨结果不一致</td><td><span class="pill p-hi">高</span></td>
+              <td>云函数与 App 端各实现一遍 → 同一张脸两个类型，比任何精度问题都致命</td>
+              <td>特征与分类写成<strong>宿主无关纯函数模块</strong>；黄金样本输入输出对作为共享测试向量，两轨必须逐位一致</td>
+            </tr>
+            <tr>
+              <td class="k">原图留存泄漏</td><td><span class="pill p-hi">高</span></td>
+              <td>「不落盘」若被日志、临时文件、异常堆栈或 CDN 缓存破坏，隐私承诺即成虚假陈述</td>
+              <td><strong>代码级审查项</strong>：禁写磁盘、禁入日志、禁对象存储、异常路径同样释放。上线前专项走查一遍</td>
+            </tr>
+            <tr>
+              <td class="k">关键点索引</td><td><span class="pill p-hi">高</span></td>
+              <td>轮廓链索引若取错，曲率计算全错且错得不明显</td>
+              <td>W5 可视化逐点核对，钉进常量表，加入回归测试</td>
+            </tr>
+            <tr>
+              <td class="k">pitch 估计精度</td><td><span class="pill p-hi">高</span></td>
+              <td>单目对俯仰最不敏感，而它直接污染比例轴</td>
+              <td>PnP 精算 + 物理引导（参考线、等高提示）；仍不行则执行 12→6 型降级</td>
+            </tr>
+            <tr>
+              <td class="k">B3 骨点显露度</td><td><span class="pill p-md">中</span></td>
+              <td>2D 代理弱且对光照敏感，可能是纯噪声源</td>
+              <td>标定时检验其与人工标签的相关性，弱则降权或归零</td>
+            </tr>
+            <tr>
+              <td class="k">标定样本代表性</td><td><span class="pill p-md">中</span></td>
+              <td>分布若偏离真实用户，阈值系统性偏移</td>
+              <td>优先用自有内容账号招募（同分布、可控采集、可复访）；合成人脸只填中段。S4 线上重标，报告锁定 calibVersion 不回溯</td>
+            </tr>
+            <tr>
+              <td class="k">建议库工作量</td><td><span class="pill p-md">中</span></td>
+              <td>数百条建议是内容工作，容易被低估而拖垮付费版排期</td>
+              <td>W9–10 与开发并行；先做 6×4 骨架，上线后加密</td>
+            </tr>
+            <tr>
+              <td class="k">妆容干扰</td><td><span class="pill p-lo">已决</span></td>
+              <td>浓妆改变眉形、唇峰、眼型 → 污染线条轴</td>
+              <td><strong>提醒不拦截。</strong>采集页静态提示 + 结果页条件注记 + L 轴自适应加权（浓妆时侧重下颌轮廓，它对妆容免疫）。影响量级仍需 S1 对照组测定</td>
+            </tr>
+            <tr>
+              <td class="k">胖瘦与年龄漂移</td><td><span class="pill p-lo">低</span></td>
+              <td>体重变化改变量感，长期重测会变型</td>
+              <td>产品层：类型本就允许随时间变化；不承诺终身不变</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="kill">
+        <span class="tag tag-c">三个必须在写代码前定的未决项</span>
+        <ol>
+          <li><strong>纯函数模块的边界怎么切</strong>——它决定双轨能否一致。切之前不要写第一个特征函数：模块只接收 468 点坐标数组与图像宽高，<span class="u">不得依赖任何宿主 API</span>（相机、文件、网络、Canvas）。</li>
+          <li><strong>「不落盘」的代码级落实清单</strong>——列出所有可能写盘的路径（临时文件、日志、异常堆栈、监控采样、CDN），逐条封堵并写进 code review checklist。这句话进了产品页就是对外承诺。</li>
+          <li><strong>招募启动时点</strong>——标定集靠自有账号招募，而账号在 W1–2 才开。<strong>W3 必须发出第一条招募</strong>，否则 S2 会卡住整个 W5–7 的开发。这是全项目关键路径上最容易被忽略的一环。</li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <span>骨相工具技术方案 · V1.0</span>
+    <span>配套：骨相工具冷启动手册 V2.0（业务方案）</span>
+    <span>全部阈值待标定，本文不含设计值</span>
+    <span>V1.1 · 服务端推理 / 妆容提醒 / 招募标定</span>
+    <span>2026-08</span>
+  </footer>
+
+</div>

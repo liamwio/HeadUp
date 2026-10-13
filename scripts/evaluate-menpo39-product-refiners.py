@@ -1,0 +1,25 @@
+from __future__ import annotations
+import datetime,json,math,runpy,sys,time
+from pathlib import Path
+import cv2,numpy as np,onnxruntime as ort,torch
+BASE=runpy.run_path(str(Path(__file__).with_name('train-menpo39-normalized-multiscale-refiners.py')),run_name='headup_product_refiners');MULTI=BASE['BASE']
+CAL=runpy.run_path(str(Path(__file__).with_name('calibrate-menpo39-yunet-crop.py')),run_name='headup_product_crop')
+TRAIN=MULTI['TRAIN'];GEOMETRY=MULTI['GEOMETRY'];load_records=MULTI['load_records'];V1InitializedLocalRefiner=MULTI['V1InitializedLocalRefiner'];MultiScaleDataset=BASE['V1NormalizedMultiScaleDataset'];local_predict=MULTI['local_predict'];blend=MULTI['blend'];evaluate_geometry=MULTI['evaluate_geometry'];metric_distributions=MULTI['metric_distributions'];CONFIG=MULTI['CONFIG'];detect=CAL['detect'];crop_matrix=CAL['crop_matrix'];tensor_for=CAL['tensor_for'];restore=CAL['restore'];distribution=TRAIN['distribution']
+CROP={'left':(1.138812414528869,.03847504237478136,.11833929151974497),'right':(1.1504958141994608,-.03945996063163659,.12225221823707466)}
+def main():
+ if len(sys.argv)!=8:raise SystemExit('usage MENPO GLOBAL_ONNX SOURCE_PTH REFINER_PTH YUNET RESULT MARKER')
+ menpo,global_onnx,source_pth,refiner_pth,yunet,result_path,_=map(Path,sys.argv[1:]);records,_=load_records(menpo);holdout=[r for r in records if r.split=='holdout'];detector=ort.InferenceSession(str(yunet),providers=['CPUExecutionProvider']);session=ort.InferenceSession(str(global_onnx),providers=['CPUExecutionProvider']);eligible=[];predictions=[];ground=[];diagonals=[];orientations=[];rejections={};runtime=[]
+ for record in holdout:
+  image=cv2.imread(str(record.image_path));box,score=detect(detector,image)
+  if box is None or score<.85:rejections['yunet'] = rejections.get('yunet',0)+1;continue
+  matrix,inverse=crop_matrix(box,*CROP[record.orientation]);started=time.perf_counter();coords=session.run(['coordinates'],{'input':tensor_for(image,matrix)})[0][0];runtime.append((time.perf_counter()-started)*1000);prediction=restore(coords,inverse);direction=np.sign(prediction[19,0]-prediction[10,0]);expected=1 if record.orientation=='right' else -1
+  if direction!=expected:rejections['direction']=rejections.get('direction',0)+1;continue
+  eligible.append(record);predictions.append(prediction);ground.append(record.points);box_gt=TRAIN['face_box'](record.points);diagonals.append(max(1.,math.hypot(float(box_gt[2]),float(box_gt[3]))));orientations.append(0 if record.orientation=='left' else 1)
+ global_data={'predictions':np.asarray(predictions),'ground_truths':np.asarray(ground),'diagonals':np.asarray(diagonals),'orientations':np.asarray(orientations)};source=torch.load(source_pth,map_location='cpu',weights_only=False);payload=torch.load(refiner_pth,map_location='cpu',weights_only=False);models={}
+ for name,config in CONFIG.items():
+  model=V1InitializedLocalRefiner(source['stateDict'],config['indices']);model.load_state_dict(payload['stateDicts'][name]);model.eval();models[name]=model
+ local_outputs={}
+ for name,config in CONFIG.items():local_outputs[name]=local_predict(models[name],MultiScaleDataset(eligible,global_data['predictions'],name,augment=False),12 if int(config['inputSize'])==256 else 24)
+ candidate=blend(global_data,local_outputs,payload['alphas']);baseline_geometry=evaluate_geometry(global_data);candidate_geometry=evaluate_geometry(candidate);baseline_coordinates=metric_distributions(global_data);candidate_coordinates=metric_distributions(candidate);baseline_menton=baseline_coordinates['criticalPointNme']['menton'];candidate_menton=candidate_coordinates['criticalPointNme']['menton'];gates={'evaluatedAtLeast280':len(eligible)>=280,'candidateMentonMedianAtMost3Percent':candidate_menton['median']<=.03,'candidateMentonP95AtMost8Percent':candidate_menton['p95']<=.08,'candidateMentonP95ImprovesAtLeast5Percent':candidate_menton['p95']<=baseline_menton['p95']*.95,'fullMarkupMedianAtMost3Point2Percent':candidate_coordinates['fullMarkupRmsNme']['median']<=.032,'fullMarkupP95AtMost8Percent':candidate_coordinates['fullMarkupRmsNme']['p95']<=.08}
+ result={'testedAt':datetime.datetime.now(datetime.timezone.utc).isoformat(),'policyVersion':'HEADUP-MENPO39-PRODUCT-REFINER-EVAL-1.0','source':{'holdout':len(holdout),'imagesRetained':False},'productEligible':len(eligible),'rejected':rejections,'alphas':payload['alphas'],'baseline':{'menton':baseline_menton,'coordinates':baseline_coordinates['fullMarkupRmsNme'],'geometry':baseline_geometry['metrics']},'candidate':{'menton':candidate_menton,'coordinates':candidate_coordinates['fullMarkupRmsNme'],'geometry':candidate_geometry['metrics']},'runtimeGlobalMs':distribution(runtime),'gates':gates,'passes':all(gates.values()),'retention':{'imagesRetained':False,'individualPredictionsRetained':False}};result_path.write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n',encoding='utf8');print(json.dumps({'eligible':len(eligible),'baselineMenton':baseline_menton,'candidateMenton':candidate_menton,'coordinate':candidate_coordinates['fullMarkupRmsNme'],'gates':gates,'passes':result['passes']},ensure_ascii=False,indent=2))
+if __name__=='__main__':main()

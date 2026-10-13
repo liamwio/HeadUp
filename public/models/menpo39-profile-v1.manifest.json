@@ -1,0 +1,84 @@
+{
+  "policyVersion": "HEADUP-MENPO39-ONNX-1.0",
+  "createdAt": "2026-08-21T09:03:50.596364+00:00",
+  "model": {
+    "path": "models/menpo39-profile-v1.onnx",
+    "sha256": "f52d3b65abe992232433f3f45740777469fd04fafecffd14b24837c232b56351",
+    "bytes": 7127591,
+    "architecture": "MobileNetV3-Small + 39 heatmaps + temperature-10 soft-argmax",
+    "input": {
+      "name": "input",
+      "shape": [
+        1,
+        3,
+        224,
+        224
+      ],
+      "dtype": "float32",
+      "color": "RGB"
+    },
+    "output": {
+      "coordinates": {
+        "name": "coordinates",
+        "shape": [
+          1,
+          39,
+          2
+        ],
+        "range": "normalized crop coordinates"
+      },
+      "confidence": {
+        "name": "confidence",
+        "shape": [
+          1,
+          39
+        ],
+        "range": "softmax peak 0..1"
+      }
+    },
+    "normalization": {
+      "mean": [
+        0.485,
+        0.456,
+        0.406
+      ],
+      "std": [
+        0.229,
+        0.224,
+        0.225
+      ]
+    },
+    "opset": 17
+  },
+  "sourceCheckpoint": {
+    "sha256": "8e4d322881647a408ab05d98b0b9191d6e1b16695e06a493a227af5b01aa14dc",
+    "retainedOutsidePublicAssets": true
+  },
+  "cropContract": {
+    "policyVersion": "HEADUP-MENPO39-PROFILE-RUNTIME-1.0",
+    "inputSize": 224,
+    "minimumYuNetScore": 0.85,
+    "minimumConfidenceP10": 0,
+    "maximumGeometryDisagreement": null,
+    "byOrientation": {
+      "left": {
+        "type": "constant",
+        "factor": 1.138812414528869,
+        "shiftX": 0.03847504237478136,
+        "shiftY": 0.11833929151974497
+      },
+      "right": {
+        "type": "constant",
+        "factor": 1.1504958141994608,
+        "shiftX": -0.03945996063163659,
+        "shiftY": 0.12225221823707466
+      }
+    },
+    "deployed": true
+  },
+  "limitations": [
+    "The model predicts native Menpo39 visible soft-tissue landmarks.",
+    "Browser packaging does not itself validate geometry or external-source generalization.",
+    "Neck landmarks are absent, so cervicomental angle remains unavailable."
+  ]
+}

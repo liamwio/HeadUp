@@ -1,0 +1,22 @@
+{
+  "policyVersion": "HEADUP-NECK-AESTHETIC-RUNTIME-1.0",
+  "sourceCalibrationPolicyVersion": "HEADUP-NECK-AESTHETIC-CALIBRATION-1.2",
+  "enabled": true,
+  "mode": "accepted_observed_range",
+  "preferenceBand": null,
+  "acceptedObservedRange": {
+    "minimum": 14.511587057289777,
+    "maximum": 51.03961722974777
+  },
+  "angleUncertaintyP95Degrees": 14.35448815624138,
+  "labels": {
+    "inside": "落入人工全部接受的观察范围",
+    "outside": "超出当前人工接受样本范围",
+    "overlap": "误差区间与范围边界重叠，本张照片无法区分"
+  },
+  "limitations": [
+    "30 ratings from one completed blind review; all scores were 4.",
+    "No low-rated controls, no significant angle-score relationship, and no better/worse ranking.",
+    "Use as an accepted observed range only unless preference-band gates pass."
+  ]
+}

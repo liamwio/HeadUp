@@ -1,0 +1,30 @@
+{
+  "policyVersion": "HEADUP-MENPO39-PROFILE-RUNTIME-1.0",
+  "status": "deployed_visible_soft_tissue_candidate",
+  "landmarkModel": "models/menpo39-profile-v1.onnx",
+  "geometryModel": "models/menpo39-profile-geometry-v1.onnx",
+  "localRefiners": [
+    { "name": "nasalLabial", "path": "models/menpo39-nasalLabial-refiner-v1.onnx", "sha256": "9f767b37abfa1172df9a006740d633620071cd8c9423a743197870f43d3661fd", "alpha": 0.5 },
+    { "name": "mentolabial", "path": "models/menpo39-mentolabial-refiner-v1.onnx", "sha256": "c8b9ed97b6a451a53b858b27d88b6ca6b343325baa88f14c92d89ad190390803", "alpha": 0.5 },
+    { "name": "mandibularBorder", "path": "models/menpo39-mandibularBorder-refiner-v1.onnx", "sha256": "7b033bceb14347ee0f1696e4ebd7a6d5c4174baebeadd467b46eb433051ff7a2", "alpha": 0.5 }
+  ],
+  "crop": {
+    "minimumYuNetScore": 0.85,
+    "maximumGeometryDisagreement": null,
+    "left": { "type": "constant", "factor": 1.138812414528869, "shiftX": 0.03847504237478136, "shiftY": 0.11833929151974497 },
+    "right": { "type": "constant", "factor": 1.1504958141994608, "shiftX": -0.03945996063163659, "shiftY": 0.12225221823707466 }
+  },
+  "menpoHoldoutSnapshot": {
+    "evaluated": 315,
+    "broadImageCoverage": 0.7,
+    "productEligibleCoverage": 0.7155555555555555,
+    "fullMarkupRmsNme": { "median": 0.030559, "p95": 0.057206 },
+    "mentonNme": { "median": 0.027189, "p95": 0.082652 },
+    "directionAccuracy": 0.9782608695652174
+  },
+  "notDeployed": [
+    "YuNet 0.75 plus geometry-disagreement candidate",
+    "geometry fusion ridge calibrators",
+    "cervicomental angle"
+  ]
+}

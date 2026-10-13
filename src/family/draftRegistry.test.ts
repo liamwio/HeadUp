@@ -1,0 +1,4 @@
+import {it,expect} from 'vitest'
+import {DraftRegistry} from './draftRegistry'
+it('keeps an event protected when the independent record metadata editor saves or closes',()=>{const drafts=new DraftRegistry();drafts.set('record-metadata',true);drafts.set('family-event',true);drafts.set('record-metadata',false);expect(drafts.hasDraft()).toBe(true);drafts.set('photo-editor',false);expect(drafts.hasDraft()).toBe(true);drafts.set('family-event',false);expect(drafts.hasDraft()).toBe(false)})
+it('clears discarded editors when switching context and tracks newly opened editors independently',()=>{const drafts=new DraftRegistry();drafts.set('profile-a',true);drafts.clear();expect(drafts.hasDraft()).toBe(false);drafts.set('profile-b',true);drafts.set('profile-a',false);expect(drafts.hasDraft()).toBe(true)})

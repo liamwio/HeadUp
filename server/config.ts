@@ -1,0 +1,2 @@
+export function apiPort(env:NodeJS.ProcessEnv=process.env){const port=Number(env.HEADUP_API_PORT??5191);if(!Number.isInteger(port)||port<1||port>65535)throw new Error('HEADUP_API_PORT必须是1–65535的端口');return port}
+export function appOrigins(env:NodeJS.ProcessEnv=process.env){const port=apiPort(env);return(env.HEADUP_APP_ORIGINS??`http://127.0.0.1:${port},http://localhost:${port},http://127.0.0.1:5190,http://localhost:5190,http://127.0.0.1:5173,http://localhost:5173`).split(',').map(value=>value.trim())}

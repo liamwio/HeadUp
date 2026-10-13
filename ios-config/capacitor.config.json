@@ -1,0 +1,20 @@
+{
+  "appId": "com.headup.growth",
+  "appName": "HeadUp 成长记录",
+  "webDir": "../dist-ios",
+  "ios": {
+    "path": "../ios",
+    "contentInset": "never",
+    "loggingBehavior": "none"
+  },
+  "server": {
+    "hostname": "localhost",
+    "iosScheme": "capacitor"
+  },
+  "plugins": {
+    "CapacitorHttp": {
+      "enabled": false
+    }
+  },
+  "appendUserAgent": "HeadUpiOS/1.1"
+}

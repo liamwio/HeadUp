@@ -1,0 +1,45 @@
+{
+  "policyVersion": "HEADUP-MENPO39-DIRECT-GEOMETRY-ONNX-1.0",
+  "createdAt": "2026-08-21T10:34:41.275883+00:00",
+  "model": {
+    "path": "models/menpo39-profile-geometry-v1.onnx",
+    "sha256": "188044bd36e8a693ad7ff25f19d7460f7ecce95c0191d1795c13b5e4badfdeab",
+    "bytes": 6129478,
+    "input": {
+      "shape": [
+        1,
+        3,
+        224,
+        224
+      ],
+      "normalization": "ImageNet RGB"
+    },
+    "output": {
+      "name": "geometry",
+      "shape": [
+        1,
+        9
+      ],
+      "names": [
+        "softTissueConvexityAngle",
+        "eLineUpper",
+        "eLineLower",
+        "nasolabialAngle",
+        "mentolabialAngle",
+        "softTissueChinProjection",
+        "mandibularPlaneInclinationProxy",
+        "verticalMidface",
+        "verticalLowerFace"
+      ],
+      "angleScales": {
+        "softTissueConvexityAngle": 180,
+        "nasolabialAngle": 180,
+        "mentolabialAngle": 180,
+        "mandibularPlaneInclinationProxy": 90
+      }
+    }
+  },
+  "sourceCheckpoint": {
+    "sha256": "403ab7cf39ca811cfb78b25ef9b75922bb6a9af9563017336845736d1d8e3f49"
+  }
+}

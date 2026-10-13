@@ -1,0 +1,65 @@
+/* Result-first presentation: observed shapes, proportions and angles. */
+.report-v2 .result-symbols { display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px; }
+.report-v2 .result-symbol-card { min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:8px;padding:24px 16px;border:1px solid #e8e1e5;border-radius:18px;background:#fff;color:#29252a;text-align:center; }
+.report-v2 .result-symbol-card:hover { background:#fbf5f7;border-color:#cdb1bd; }
+.result-symbol-picture { display:grid;place-items:center;width:88px;height:88px;margin-bottom:4px;color:#782d3e; }
+.result-symbol-picture>svg { width:100%;height:100%; }
+.result-symbol-label { font-size:14px;line-height:1.5;color:#6c6067; }
+.result-symbol-card>strong { font-size:clamp(22px,2.6vw,34px);font-weight:600;line-height:1.4;letter-spacing:-.025em;overflow-wrap:anywhere; }
+.result-symbol-card>small { font-size:13px;line-height:1.5;color:#7d7077; }
+.result-symbol-track { fill:none;stroke:#f0e7eb;stroke-width:8; }
+.result-symbol-fill { fill:none;stroke:currentColor;stroke-width:8;stroke-linecap:round; }
+.result-symbol-ray { fill:none;stroke:currentColor;stroke-width:3;stroke-linecap:round;stroke-linejoin:round; }
+.result-symbol-arc { fill:none;stroke:#bb91a1;stroke-width:2; }
+.result-symbol-face { fill:#f8f0f4;stroke:currentColor;stroke-width:2;vector-effect:non-scaling-stroke;stroke-linejoin:round; }
+.result-symbol-category { fill:#f8f0f4;stroke:currentColor;stroke-width:2.5; }
+.v2-report-shell>#v2-summary { margin-top:0; }
+.v2-report-shell>.v2-quick-nav { margin-top:20px; }
+.visual-alert { padding:10px 14px;border:1px solid #eadbc6;border-radius:10px;background:#fffaf1;margin-top:16px; }
+.visual-alert>summary { cursor:pointer;font-size:13px;color:#815f3f;line-height:1.7; }
+.visual-alert>summary svg { display:inline-block;vertical-align:middle;margin-right:6px; }
+.visual-alert p { font-size:13px;line-height:1.75;margin:10px 0 0; }
+.visual-demo-tag { display:block;text-align:center;font-size:12px;color:#8d6876;padding:6px; }
+.report-v2 #v2-photos>.v2-section-heading { justify-content:flex-end;margin-bottom:12px; }
+.v2-photo figcaption { font-weight:600; }
+.report-v2 .v2-photo-stage { border-radius:12px; }
+.report-v2 .v2-detection { padding:6px 8px 0; }
+.report-v2 .v2-detection>summary { font-size:12px; }
+.report-v2 .v2-reading { border-radius:14px; }
+.visual-reading-top { display:flex;align-items:center;gap:12px;margin-bottom:12px; }
+.visual-reading-symbol { display:grid;place-items:center;width:44px;height:44px;color:#986071;flex-shrink:0; }
+.visual-reading-symbol>svg { width:100%;height:100%; }
+.report-v2 .visual-reading-top>h3 { font-size:16px;line-height:1.5;margin:0;color:#62555d; }
+.report-v2 .v2-value { font-size:34px;line-height:1.4;margin-bottom:4px; }
+.report-v2 .v2-value--long { font-size:23px; }
+.visual-uncertainty { display:block;font-size:13px!important;line-height:1.7;color:#8c7e85; }
+.visual-position { display:flex;gap:8px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-top:12px;font-size:13px; }
+.visual-position>span { color:#62555d; }
+.visual-position>small { font-size:12px;padding:3px 8px;border-radius:999px;color:#8d6734;background:#faf2df; }
+.report-v2 .v2-comparison { margin-top:16px; }
+.report-v2 .v2-range-caption,.report-v2 .v2-interval { font-size:12px;line-height:1.65; }
+.report-v2 .v2-reading>details { padding:10px 20px; }
+.report-v2 .v2-reading>details>summary { font-size:13px;min-height:24px;color:#836572; }
+.report-v2 .v2-reading-main { padding:20px 24px; }
+.report-v2 .v2-next { margin-top:20px;padding:8px 0;border:0;background:transparent;justify-content:flex-end; }
+.report-v2 .v2-next>div { margin-left:auto; }
+@media(max-width:640px){
+  .report-v2 .result-symbols { gap:8px; }
+  .report-v2 .result-symbol-card { padding:16px 6px;border-radius:12px;gap:6px; }
+  .result-symbol-picture { width:60px;height:60px; }
+  .result-symbol-label { font-size:12px; }
+  .result-symbol-card>strong { font-size:18px;line-height:1.4; }
+  .result-symbol-card>small { font-size:11px;line-height:1.4; }
+  .report-v2 .v2-reading-main { padding:20px; }
+  .report-v2 .v2-value { font-size:30px; }
+  .report-v2 .v2-value--long { font-size:22px; }
+  .report-v2 .v2-photos { grid-template-columns:1fr;gap:20px; }
+  .report-v2 .v2-photo figcaption { font-size:13px; }
+  .report-v2 .v2-photo figcaption span { font-size:11px; }
+  .report-v2 .v2-photo-stage { min-height:0; }
+  .report-v2 .v2-photo-empty { padding:12px;gap:6px; }
+  .report-v2 .v2-photo-empty strong { font-size:13px; }
+  .report-v2 .v2-photo-empty p { display:none; }
+  .report-v2 .v2-photo-empty button { min-height:36px;padding:6px;font-size:12px; }
+}
+@media print { .result-symbol-card { break-inside:avoid; } }

@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HeadUp · 本地侧面照片人工测试</title>
+    <style>
+      *{box-sizing:border-box}body{margin:0;background:#eef2ef;color:#17352d;font-family:"Segoe UI","Microsoft YaHei",sans-serif}button,select,textarea{font:inherit}main{width:min(1500px,calc(100% - 28px));margin:auto;padding:28px 0 52px}.hero{display:grid;grid-template-columns:1fr auto;gap:24px;align-items:end;padding:25px 28px;border-radius:20px;background:#173d36;color:#fff}.eyebrow{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#a8c9be}.hero h1{margin:8px 0;font-size:clamp(25px,3vw,43px);line-height:1.08}.hero p{max-width:850px;margin:0;color:#d1e2dc;font-size:13px;line-height:1.75}.hero a{display:inline-flex;padding:11px 15px;border-radius:10px;background:#eef6f2;color:#173d36;text-decoration:none;font-weight:800}.toolbar{position:sticky;top:0;z-index:10;display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:15px 0;padding:12px;border:1px solid #d7e0dc;border-radius:14px;background:#f9fbfaeF;backdrop-filter:blur(10px)}.toolbar button{border:1px solid #bdcbc5;border-radius:9px;background:#fff;padding:8px 11px;cursor:pointer}.toolbar button.active{border-color:#173d36;background:#173d36;color:#fff}.toolbar .export{margin-left:auto;border-color:#b77b2f;background:#b77b2f;color:#fff;font-weight:800}.status{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}.status span{padding:8px 11px;border-radius:9px;background:#fff;font-size:12px;font-weight:800}.notice{margin-bottom:15px;padding:13px 15px;border:1px solid #dec38d;border-radius:12px;background:#fff8e8;color:#695126;font-size:12px;line-height:1.65}.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.card{overflow:hidden;border:2px solid #d0dad6;border-radius:15px;background:#fff;box-shadow:0 8px 24px #163c3210}.card.reviewed{border-color:#6c9d88}.photo{display:grid;place-items:center;height:360px;background:#dce4e0}.photo img{width:100%;height:100%;object-fit:contain}.body{padding:13px}.head{display:flex;gap:10px;align-items:flex-start;justify-content:space-between}.head h2{margin:0;font-size:13px;line-height:1.45;word-break:break-word}.badge{flex:none;padding:5px 7px;border-radius:7px;background:#eef3f1;font-size:9px}.meta,.source{margin:8px 0;color:#66766f;font-size:10px;line-height:1.55}.source a{color:#236b59}.decisions{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}.decision{min-height:42px;border:1px solid #bdcbc5;border-radius:8px;background:#fff;cursor:pointer;font-size:11px}.decision.standard.active{border-color:#267a56;background:#267a56;color:#fff}.decision.retake.active{border-color:#b77b2f;background:#b77b2f;color:#fff}.decision.exclude.active{border-color:#9c3c35;background:#9c3c35;color:#fff}.fields{display:grid;gap:7px;margin-top:8px}.fields select,.fields textarea{width:100%;border:1px solid #c6d1cc;border-radius:8px;background:#fff;padding:8px;font-size:11px}.fields textarea{min-height:58px;resize:vertical}.hidden{display:none!important}footer{padding-top:18px;color:#6d7c76;font-size:11px;line-height:1.7}@media(max-width:980px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.hero{grid-template-columns:1fr}}@media(max-width:640px){main{width:min(100% - 18px,1500px)}.grid{grid-template-columns:1fr}.toolbar .export{margin-left:0}.photo{height:420px}}
+    </style>
+  </head>
+  <body>
+    <main>
+      <section class="hero">
+        <div><div class="eyebrow">Local manual validation · 20 paired subjects · 40 profiles</div><h1>标准侧面照片人工测试 V2</h1><p>已改用受控拍摄的高清中性侧面：20 人，每人左、右侧各一张。左右方向均可，只判断是否接近 90°且额头—鼻—唇—颏—下颌轮廓清晰完整。</p></div>
+        <a href="/" target="_blank">打开 HeadUp 主应用</a>
+      </section>
+      <section class="toolbar">
+        <button class="active" data-filter="all">全部</button><button data-filter="left_profile">左侧面</button><button data-filter="right_profile">右侧面</button><button data-filter="unreviewed">未审核</button><button data-filter="standard_profile">标准侧面</button><button data-filter="retake">需重拍</button><button data-filter="exclude">排除</button><button id="export" class="export">导出审核 JSON</button>
+      </section>
+      <div id="status" class="status"><span>加载本地图片…</span></div>
+      <section class="notice"><strong>人工标准：</strong>左、右侧均可，不因朝向拒绝。接近 90°、平视、闭口自然表情，额头—鼻尖—嘴唇—下巴和下颌缘完整无遮挡即可选“标准侧面”；斜侧、低头/抬头、张口、遮挡或不清晰时选“需重拍”。</section>
+      <section id="grid" class="grid"></section>
+      <footer>40 张原图保存在 <code>D:\AICodex\HeadUp\data\face-db-real-research\images\face-research-lab-london-v5</code>，清单位于 <code>data\manual-test\standard-profile-manual-v2\manifest.json</code>。CC BY 4.0，仅用于本地研究，不进入 public、生产构建或商业安装包。</footer>
+    </main>
+    <script type="module" src="/research/wikimedia-profile-manual-review.ts"></script>
+  </body>
+</html>

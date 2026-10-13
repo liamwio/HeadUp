@@ -1,0 +1,20 @@
+import {sideSession} from './captureViews'
+import { useState,useRef } from 'react'
+import { ArrowLeft, Info } from 'lucide-react'
+import { compareSessions, type FamilySession } from './model'
+import {ImageComparison} from './ImageComparison'
+import {compareReadings} from './readingComparison'
+import {comparisonViewLabel} from './comparisonLabels'
+import {ComparisonEvidence,ComparisonEvidenceDrawer,comparisonTitle} from './ComparisonEvidence'
+
+export function CompareView({a:sourceA,b:sourceB,onBack,onRecord,initialView='front'}:{initialView?:'front'|'profile'|'right_profile';a:FamilySession;b:FamilySession;onBack:()=>void;onRecord:()=>void}) {
+  const [view,setView]=useState<'front'|'profile'|'right_profile'>(initialView==='profile'&&sourceA.captures.find(c=>c.id==='profile')?.poseValidation?.estimatedPose==='right_profile'?'right_profile':initialView),a=view==='front'?sourceA:sideSession(sourceA,view==='right_profile'?'right_profile':'left_profile'),b=view==='front'?sourceB:sideSession(sourceB,view==='right_profile'?'right_profile':'left_profile'),analysisView=view==='front'?'front':'profile',comparison=compareSessions(a,b,analysisView)
+  const [evidenceOpen,setEvidenceOpen]=useState(false),evidenceButton=useRef<HTMLButtonElement>(null),contextRef=useRef<HTMLDivElement>(null)
+  const closeEvidence=()=>{setEvidenceOpen(false);requestAnimationFrame(()=>{const target=evidenceButton.current?.offsetParent?evidenceButton.current:contextRef.current;target?.focus({preventScroll:true})})}
+  const readings=compareReadings(a,b,analysisView)
+  return <section className="family-compare-page"><button className="family-back" onClick={onBack}><ArrowLeft size={17}/>返回时间线</button><div className="family-page-heading"><div><span className="family-eyebrow">两期对照</span><h1>先确认可比，再看变化</h1></div><button onClick={onRecord}>补拍标准照片</button></div><div ref={contextRef} tabIndex={-1} className="family-comparison-context"><div className="family-comparison-dates" aria-label="当前比较的两次记录">{[a,b].map((s,i)=><div key={s.id+':'+i}><span>{i===0?'前次':'后次'} · {comparisonViewLabel(s,analysisView)}</span><strong>{s.recordedOn}</strong></div>)}</div><div className="family-tabs" aria-label="对照视角"><button aria-pressed={view==='front'} onClick={()=>setView('front')}>正面</button><button aria-pressed={view==='profile'} onClick={()=>setView('profile')}>左侧</button><button aria-pressed={view==='right_profile'} onClick={()=>setView('right_profile')}>右侧</button></div><div className="family-comparison-brief"><p role="status">{comparisonTitle(comparison.status)}</p><button ref={evidenceButton} className="family-evidence-open" aria-haspopup="dialog" onClick={()=>setEvidenceOpen(true)}>查看比较依据<Info size={16}/></button></div></div>
+    <div className="family-comparison-layout"><ImageComparison key={[view,a.id,a.updatedAt,b.id,b.updatedAt].join(':')} a={a} b={b} view={analysisView} allowOverlay={comparison.status!=='incompatible'}/><aside className="family-comparison-evidence"><Info size={22}/><ComparisonEvidence a={a} b={b} view={analysisView}/></aside></div>
+    {a.kind==='measurement'&&b.kind==='measurement'&&<details className="family-data-table"><summary>查看两次保存的读数与数值差（{readings.length}项）</summary><p>包含两期出现过的核心和扩展项目。只有拍摄条件记录接近时才计算受支持格式的算术差；数值差不能排除拍摄误差，不代表发育进展。±来自各次保存的误差证据，不是跨期变化阈值。</p><p>算法版本：{a.version.algorithm} / {b.version.algorithm}。误差依据版本：{a.version.norm} / {b.version.norm}。</p>{comparison.status==='incompatible'&&<p>所选视角不兼容，以下仅各自列出原记录，不计算差值。</p>}<div className="family-reading-scroll" role="region" aria-label="两期完整读数表" tabIndex={0}><table><thead><tr><th scope="col">项目</th><th scope="col">{a.recordedOn}</th><th scope="col">{b.recordedOn}</th><th scope="col">后次减前次 · 非进展结论</th></tr></thead><tbody>{readings.map(r=><tr key={r.code}><th scope="row">{r.label}{r.extended&&<small> · 扩展</small>}{r.experimental&&<small> · 实验读数</small>}</th><td>{r.before}</td><td>{r.after}</td><td>{r.difference}</td></tr>)}</tbody></table></div>{!readings.length&&<p>这两次还没有保存该视角的读数。</p>}</details>}
+    {evidenceOpen&&<ComparisonEvidenceDrawer a={a} b={b} view={analysisView} onClose={closeEvidence}/>}
+  </section>
+}

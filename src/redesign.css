@@ -1,0 +1,284 @@
+/*
+ * HeadUp main-app redesign imported from ce59c50d-8dc4-453c-96d0-14c9c5cf60a2.html.
+ * Source logic remains in App.tsx; this file contains the selected visual layer only.
+ */
+
+:root{
+  --ink:#4b1f28;--ink-2:#67313b;--cream:#fff8f5;--paper:#fffdfb;
+  --sage:#f2ddd8;--sage-2:#dfb9b6;--mint:#faefec;--gold:#b66a71;
+  --muted:#7d686c;--line:#7c23302b;--danger:#a34650;
+}
+html{scroll-behavior:smooth}
+body{
+  color:var(--ink);
+  background:radial-gradient(circle at 76% 8%,rgba(224,184,178,.28),transparent 29rem),linear-gradient(180deg,#fffaf7 0%,#fffdfb 48%,#fff8f5 100%);
+  font-family:Inter,"PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+}
+button,a{font-family:inherit}
+.topbar{
+  height:76px;padding-inline:max(26px,calc((100vw - 1180px)/2));color:#53232c;
+  background:rgba(255,250,247,.9);border-bottom:1px solid rgba(124,35,48,.12);
+  box-shadow:0 8px 28px rgba(75,31,40,.05);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+  position:sticky;top:0;z-index:50;
+}
+.brand{gap:11px;color:#4b1f28}
+.brand__mark{width:32px;height:32px;color:#fff;background:#7c2330;border-radius:50%;box-shadow:0 7px 18px rgba(124,35,48,.2)}
+.nav{gap:4px}
+.nav button{color:#6f4650;border-radius:999px;padding:10px 14px;transition:background .2s,color .2s,transform .2s}
+.nav button:hover,.nav button.is-active{color:#7c2330;background:#f3e1de}
+.nav__divider{background:rgba(124,35,48,.16)}
+.nav__start{color:#fff!important;background:#7c2330!important;border:1px solid #7c2330!important;padding-inline:20px!important;box-shadow:0 8px 22px rgba(124,35,48,.2)}
+.nav__start:hover{transform:translateY(-1px);background:#651b27!important}
+.hero{grid-template-columns:minmax(0,.92fr) minmax(460px,1.08fr);gap:clamp(42px,6vw,90px);min-height:calc(100vh - 76px);padding-block:clamp(72px,8vw,118px) clamp(70px,8vw,112px)}
+.hero__copy{padding-left:0}
+.eyebrow{color:#9d5963;letter-spacing:.18em;font-size:10px;font-weight:700}
+.hero__copy h1,.section-heading h2,.process-copy h2,.boundary-grid h2{color:#4b1f28;font-family:Georgia,"Noto Serif SC","Songti SC",serif;font-weight:500;letter-spacing:-.045em}
+.hero__copy h1{max-width:650px;margin:18px 0 24px;font-size:clamp(54px,5.1vw,70px);line-height:1.1}
+.hero__copy h1 em{color:#a4535f;font-style:normal}
+.hero__lead{color:#755c62;max-width:610px;font-size:14px;line-height:2}
+.hero__actions{gap:14px;margin-top:36px}
+.button{min-height:50px;border-radius:999px;padding-inline:23px;font-size:11px;letter-spacing:.02em;transition:transform .2s,box-shadow .2s,background .2s}
+.button:hover{transform:translateY(-2px)}
+.button--primary{color:#fff;background:#7c2330;border-color:#7c2330;box-shadow:0 12px 26px rgba(124,35,48,.18)}
+.button--primary:hover{background:#641a25;box-shadow:0 16px 30px rgba(124,35,48,.24)}
+.button--secondary{color:#6a3640;background:rgba(255,255,255,.42);border-color:rgba(124,35,48,.28)}
+.microcopy{color:#927b80;margin-top:18px}
+.hero__visual{height:min(650px,70vh);min-height:540px;isolation:isolate;border:1px solid rgba(124,35,48,.12);border-radius:32px 32px 140px 32px;background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(75,31,40,.07)),url("/assets/headup-front-profile-hero.webp") center/cover no-repeat;box-shadow:0 30px 80px rgba(91,44,52,.13);overflow:hidden}
+.hero__visual:before{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(90deg,rgba(255,250,247,.25),transparent 30%),linear-gradient(180deg,transparent 64%,rgba(58,19,28,.14));pointer-events:none}
+.hero__orb{display:none}
+.hero__visual .face-blueprint{opacity:.42;z-index:2;width:76%;height:84%;right:2%;left:auto;filter:sepia(.5) hue-rotate(305deg) saturate(1.25)}
+.hero__visual .face-fill{fill:transparent!important}
+.hero__visual .face-line{opacity:.3}
+.hero__visual .measure-line,.hero__visual .blueprint-axis{stroke:#fff!important;opacity:.64}
+.hero__visual .landmark{fill:#fff!important;stroke:#7c2330!important}
+.hero__visual .blueprint-label{fill:#fff!important}
+.hero__visual>div,.floating-card{z-index:4}
+.floating-card{color:#4b1f28;background:rgba(255,253,251,.92);border:1px solid rgba(124,35,48,.15);border-radius:14px;box-shadow:0 14px 38px rgba(75,31,40,.16);backdrop-filter:blur(12px)}
+.floating-card--top{top:36px;right:26px}.floating-card--bottom{left:26px;bottom:26px}.mini-chart{color:#9d4d59}
+.trust-strip{width:min(1180px,calc(100% - 48px));height:auto;min-height:72px;margin:-36px auto 0;padding:20px 28px;color:#6f4650;background:#f3e1de;border:1px solid rgba(124,35,48,.1);border-radius:18px;box-shadow:0 18px 40px rgba(75,31,40,.08);position:relative;z-index:6}
+.trust-strip svg{color:#9c4b58}
+.section{padding:clamp(92px,10vw,142px) 0}.section--cream{background:transparent}
+.section-heading{grid-template-columns:minmax(0,1.15fr) minmax(280px,.55fr);align-items:end;gap:70px;margin-bottom:52px}
+.section-heading h2{font-size:clamp(42px,5vw,66px);line-height:1.14}
+.section-heading>p:last-child{color:#7c686c;font-size:13px;line-height:1.9}
+.feature-grid{background:transparent;border:0;gap:18px}
+.feature-card{min-height:400px;padding:30px;border:1px solid rgba(124,35,48,.13);border-radius:22px;box-shadow:0 12px 38px rgba(75,31,40,.06);overflow:hidden}
+.feature-card:nth-child(1){background:#7c2330;color:#fff}.feature-card:nth-child(2){background:#f0d8d4;color:#4b1f28}.feature-card:nth-child(3){background:#fffdfb;color:#4b1f28}
+.feature-card--dark{background:#f0d8d4!important;color:#4b1f28!important}
+.feature-card:first-child.feature-card--dark{background:#7c2330!important;color:#fff!important}
+.feature-card__index{color:inherit;opacity:.72;border-color:currentColor}
+.feature-card h3{font-family:Georgia,"Noto Serif SC","Songti SC",serif;font-size:27px;font-weight:500}
+.feature-card p{font-size:12px;line-height:1.9;opacity:.78}.feature-card:first-child p{color:#f7e7e4}
+.feature-card svg{color:#a75460}.feature-card:first-child svg{color:#f3c9c6}
+.probability,.trend-line{filter:sepia(.7) hue-rotate(305deg) saturate(1.15)}
+.process-section{background:#f5e3df;gap:clamp(58px,8vw,110px);padding-block:clamp(96px,10vw,140px)}
+.process-visual{border:1px solid rgba(124,35,48,.14);border-radius:24px;background:#7c2330;box-shadow:0 26px 60px rgba(75,31,40,.16);overflow:hidden}
+.process-visual{background:linear-gradient(90deg,rgba(124,35,48,.74),rgba(75,31,40,.22)),url("/assets/headup-front-profile-hero.webp") 82% center/cover no-repeat}
+.process-visual img[alt="纯外轮廓右侧面参考"]{opacity:0}
+.process-visual .profile-reference-art{filter:sepia(.4) hue-rotate(300deg) saturate(1.1)}
+.process-visual .profile-reference-line--forehead{stroke:#f5a9a7}.process-visual .profile-reference-line--nasal{stroke:#ffcf98}.process-visual .profile-reference-line--maxilla{stroke:#e5b8d4}.process-visual .profile-reference-line--mandible{stroke:#f6e5d2}
+.profile-demo-kicker,.profile-demo-metrics,.profile-demo-legend{color:#fff;background:rgba(56,18,27,.78);border-color:rgba(255,255,255,.18);backdrop-filter:blur(10px)}
+.process-copy h2{font-size:clamp(42px,5vw,64px);line-height:1.15}.process-copy>p{color:#7a6469;line-height:1.9}
+.step-list li{border-color:rgba(124,35,48,.14)}
+.step-list span{color:#fff;background:#a7515d;border-color:#a7515d}.step-list strong{color:#4b1f28}.step-list p{color:#7c686c}.text-button{color:#7c2330}
+.process-copy .button--secondary{color:#fff;background:#7c2330;border-color:#7c2330;box-shadow:0 12px 26px rgba(124,35,48,.16)}
+.boundary-section{color:#fff8f5;background:radial-gradient(circle at 80% 20%,rgba(209,132,139,.22),transparent 28rem),#4b1f28}
+.boundary-grid h2{color:#fff8f5}.boundary-grid h2 em{color:#dba8ad}.eyebrow--light{color:#dda8ac}
+.boundary-columns article{border-color:rgba(255,255,255,.16);background:rgba(255,255,255,.035);border-radius:18px;padding:28px}
+.boundary-columns h3{color:#fff}.boundary-columns li{color:#dfc8cc;border-color:rgba(255,255,255,.12)}
+.boundary-icon--yes{color:#f1bdbe}.boundary-icon:not(.boundary-icon--yes){color:#d79aa1}
+.footer{color:#7d686c;border-color:rgba(124,35,48,.14)}.footer .brand{color:#4b1f28}.footer .brand__mark{background:#7c2330;color:#fff}.footer button{color:#6f4650}
+@media (max-width:980px){
+  .hero{grid-template-columns:1fr;min-height:0;padding-top:70px}.hero__copy{text-align:left}.hero__lead{margin-inline:0}.hero__actions,.microcopy{justify-content:flex-start}.hero__visual{height:570px;min-height:0}.section-heading{grid-template-columns:1fr;gap:24px}
+}
+@media (max-width:760px){
+  .topbar{height:66px}.hero{padding-top:52px;gap:46px}.hero__copy h1{font-size:48px}.hero__actions{align-items:stretch}.hero__actions .button{width:100%}
+  .hero__visual{height:440px;border-radius:24px 24px 84px 24px;background-position:57% center}.hero__visual .face-blueprint{width:92%;right:-8%}
+  .floating-card--top{top:18px;right:14px}.floating-card--bottom{left:14px;bottom:16px}
+  .trust-strip{width:min(100% - 34px,1180px);margin-top:-14px;border-radius:14px}
+  .section{padding-block:86px}.section-heading h2,.process-copy h2,.boundary-grid h2{font-size:40px}.feature-card{min-height:330px}.process-section{padding-block:86px}.boundary-columns article{padding:22px}
+}
+
+
+
+/* HeadUp 报告页 · 紧凑版式补丁
+   用法：在 index.html 里，紧跟现有 <style id="headup-index-redesign"> 之后加入
+   <link rel="stylesheet" href="./headup-report-compact.css" />
+   或整段拷进一个 <style id="headup-report-compact"> 块。
+   只改字阶与间距，不动配色、圆角、组件结构。
+
+   字阶：26 / 19 / 15 / 13 / 12 / 10.5(mono)
+   原页面正文 10–11px、标题 28–34px，比例失衡（差 3 倍以上）；
+   现在正文抬到 12–13px、标题压到 19–26px，层级靠字重与位置区分。 */
+
+/* ── 页头 ───────────────────────────────────────────── */
+.report-hero {
+  min-height: 0;
+  gap: 32px;
+  padding: 30px max(24px, 50% - 590px);
+}
+.report-hero h1 {
+  margin: 8px 0;
+  font-size: clamp(26px, 2.6vw, 34px);
+  line-height: 1.16;
+}
+.report-hero > div > p:last-child {
+  font-size: 13px;
+  line-height: 1.62;
+}
+.report-meta { gap: 22px; }
+.report-meta span { font-size: 10.5px; }
+.report-meta strong { font-size: 13px; }
+.report-meta button { min-height: 38px; padding: 0 13px; font-size: 12px; }
+
+/* ── 主体节奏 ───────────────────────────────────────── */
+.report-body { padding-block: 26px 48px; }
+.report-summary { gap: 12px; }
+.metric-section { margin-top: 36px; }
+
+.metric-heading { padding-bottom: 11px; }
+.metric-heading h2 { font-size: 22px; }
+.metric-heading > span { font-size: 11.5px; }
+.metric-grid { gap: 10px; margin-top: 14px; }
+
+/* ── 首屏两卡 ───────────────────────────────────────── */
+.score-card, .profile-card { min-height: 0; }
+.score-card { gap: 24px; padding: 22px; grid-template-columns: 128px 1fr; }
+.score-copy h2 { margin: 10px 0 7px; font-size: 19px; line-height: 1.34; }
+.score-copy p { font-size: 12.5px; line-height: 1.62; }
+
+.profile-card > div:last-child { padding: 22px; }
+.profile-card h2 { font-size: 19px; line-height: 1.3; }
+.profile-card > div:last-child > p { font-size: 12.5px; line-height: 1.62; }
+.profile-card__visual .face-blueprint { width: 210px; height: 282px; }
+
+.profile-result-count { gap: 3px; margin: 14px 0; padding: 10px 12px; }
+.profile-result-count span { font-size: 10.5px; }
+.profile-result-count strong { font-size: 15px; }
+.profile-result-count small { font-size: 11px; line-height: 1.55; }
+
+.report-section-nav { gap: 10px; margin-top: 16px; }
+.report-section-nav button { min-height: 60px; gap: 10px; padding: 12px 15px; }
+.report-section-nav span { gap: 3px; font-size: 11px; }
+.report-section-nav strong { font-size: 14px; }
+
+/* ── 指标卡：密度重灾区 ─────────────────────────────── */
+.metric-card { min-height: 0; padding: 15px 16px; }
+.metric-card > div:first-child { gap: 10px; font-size: 10.5px; }
+.metric-card h3 { margin: 11px 0 6px; font-size: 14.5px; line-height: 1.35; }
+/* 读数改等宽数字：Georgia 的比例数字在成列时宽度会抖 */
+.metric-card > strong {
+  font: 500 23px/1.1 ui-monospace, "SF Mono", Consolas, monospace;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -.02em;
+  white-space: nowrap;
+}
+.metric-card p { font-size: 12px; line-height: 1.6; }
+
+.metric-reading { gap: 8px; margin: 5px 0; }
+.metric-reading > strong {
+  font: 500 23px/1.1 ui-monospace, "SF Mono", Consolas, monospace !important;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -.02em;
+  white-space: nowrap;
+}
+.confidence-grade { margin-top: 2px; padding: 4px 7px; font-size: 9.5px; }
+
+.metric-error-evidence {
+  gap: 4px; margin-top: 9px; padding: 8px 10px;
+  font-size: 11px; line-height: 1.55;
+}
+.metric-error-evidence b { font-size: 11px; }
+
+.metric-card details { margin-top: 10px; padding-top: 9px; font-size: 11.5px; line-height: 1.6; }
+.metric-card details code { margin: 7px 0; padding: 7px; }
+.metric-card details span { margin-top: 5px; }
+
+/* ── 参考带 ─────────────────────────────────────────── */
+.reference-reading { margin: 11px 0 10px; padding: 9px 11px; }
+.reference-axis { height: 5px; margin-bottom: 16px; }
+.reference-reading p { gap: 7px; margin: 0 0 5px; }
+.reference-reading p strong { font-size: 12px; }
+.reference-reading p span { font-size: 11px; }
+.reference-reading small { font-size: 11px; line-height: 1.55; }
+
+.reference-disclosure { gap: 10px; margin-top: 12px; padding: 12px 15px; }
+.reference-disclosure p { font-size: 11.5px; line-height: 1.65; }
+
+/* ── 边界清单 ───────────────────────────────────────── */
+.limits-grid { gap: 40px; margin-top: 40px; padding: 28px 30px; }
+.limits-grid h2 { font-size: 24px; line-height: 1.28; }
+.limits-grid > div > p:last-child { font-size: 12.5px; line-height: 1.65; }
+.limits-grid li { gap: 9px; padding: 10px 0; font-size: 13px; }
+
+/* ── 收尾 ───────────────────────────────────────────── */
+.report-cta { margin-top: 36px; padding: 26px 30px; }
+.report-cta h2 { margin-bottom: 5px; font-size: 22px; }
+.report-cta p { font-size: 12.5px; }
+
+.privacy-note { gap: 11px; margin-top: 14px; padding: 14px 17px; }
+.privacy-note p { font-size: 11.5px; line-height: 1.65; }
+
+.report-bias-warning { gap: 10px; margin: 12px 0 0; padding: 12px 14px; }
+.report-bias-warning strong { font-size: 13px; }
+.report-bias-warning p { font-size: 11.5px; line-height: 1.6; }
+.report-bias-warning button { min-height: 34px; margin-top: 8px; padding: 0 11px; font-size: 11.5px; }
+
+/* ── 窄屏 ───────────────────────────────────────────── */
+@media (max-width: 860px) {
+  .report-hero { padding: 24px 20px; }
+  .report-body { padding-block: 20px 40px; }
+  .metric-section { margin-top: 28px; }
+  .limits-grid { gap: 24px; margin-top: 30px; padding: 22px; }
+  .report-cta { margin-top: 28px; padding: 22px; }
+}
+
+/* ── 打印 ───────────────────────────────────────────── */
+@media print {
+  .report-body { padding: 18px; }
+  .metric-section { margin-top: 24px; }
+  .metric-card { padding: 13px 14px; }
+  .limits-grid { margin-top: 26px; padding: 22px; }
+  /* 折叠的误差证据在 PDF 里应当可见 */
+  .metric-card details { display: block; }
+  .metric-card details > *:not(summary) { display: revert !important; }
+}
+
+
+
+.profile-card__visual{
+  background:
+    linear-gradient(90deg,rgba(240,221,216,.16),rgba(75,31,40,.08)),
+    url("/assets/headup-front-profile-hero.webp") 78% center/cover no-repeat;
+}
+.profile-card__visual img[alt="纯外轮廓右侧面参考"]{opacity:0}
+
+
+
+.hero{min-height:auto;padding-block:52px 64px}
+.hero__copy .eyebrow{margin-bottom:14px}
+.hero__copy h1{margin:10px 0 16px;line-height:1.04}
+.hero__lead{margin:0;line-height:1.65}
+.hero__actions{margin-top:22px}
+.microcopy{margin:12px 0 0}
+@media (max-width:980px){
+  .hero{padding-top:34px;padding-bottom:44px;gap:28px}
+}
+@media (max-width:760px){
+  .hero{padding-top:28px;padding-bottom:36px;gap:24px}
+  .hero__copy h1{margin-top:8px;margin-bottom:14px;line-height:1.04}
+  .hero__actions{margin-top:18px}
+  .microcopy{margin-top:10px}
+}
+
+
+
+/* 正面网格只覆盖正面人像，不再以整张双人照片为中心。 */
+.hero__visual .face-blueprint{
+  width:62%;
+  right:18%;
+  left:auto;
+}
+@media (max-width:760px){
+  .hero__visual .face-blueprint{width:64%;right:18%}
+}

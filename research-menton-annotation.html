@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#17251f" />
+    <meta name="description" content="HeadUp menton 双盲人工标注与一致性裁决工具" />
+    <link rel="icon" href="/favicon.svg" />
+    <title>HeadUp · Menton 双盲标注</title>
+    <style>
+      :root { font-family: Inter, "PingFang SC", "Microsoft YaHei", system-ui, sans-serif; color: #17251f; background: #f4f1e9; }
+      * { box-sizing: border-box; }
+      body { margin: 0; min-width: 320px; }
+      button, input, select { font: inherit; }
+      header, main { width: min(1180px, calc(100% - 32px)); margin-inline: auto; }
+      header { padding: 42px 0 22px; }
+      h1 { font-family: "Songti SC", SimSun, Georgia, serif; font-size: clamp(36px, 5vw, 58px); font-weight: 500; margin: 8px 0 14px; }
+      h2 { font-family: "Songti SC", SimSun, Georgia, serif; font-size: 26px; font-weight: 500; margin: 0 0 10px; }
+      p { margin-top: 0; }
+      .eyebrow { color: #637169; font-size: 11px; font-weight: 700; letter-spacing: .15em; }
+      .lead, .muted { color: #5f6d66; line-height: 1.75; }
+      .notice { padding: 18px 20px; border: 1px solid #b8c7b8; background: #eaf1e8; line-height: 1.7; font-size: 13px; margin-bottom: 22px; }
+      .tabs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 18px; }
+      .tabs button { background: transparent; color: #17251f; border: 1px solid rgba(23,37,31,.2); }
+      .tabs button.active { background: #17251f; color: white; }
+      .panel { display: none; border: 1px solid rgba(23,37,31,.14); background: #fbfaf6; padding: 24px; margin-bottom: 44px; }
+      .panel.active { display: block; }
+      .form-grid { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 14px; margin: 18px 0; }
+      label { display: grid; gap: 7px; font-size: 12px; font-weight: 700; }
+      input, select { min-height: 44px; border: 1px solid rgba(23,37,31,.18); background: white; padding: 8px 11px; }
+      input[type=file] { padding: 10px; }
+      .workspace { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 18px; align-items: start; margin-top: 20px; }
+      .canvas-shell { background: #111713; min-height: 360px; display: grid; place-items: center; overflow: auto; padding: 12px; }
+      canvas { display: block; max-width: 100%; height: auto; cursor: crosshair; }
+      .side { border-left: 1px solid rgba(23,37,31,.14); padding-left: 18px; }
+      .instruction { min-height: 72px; color: #5f6d66; line-height: 1.65; font-size: 13px; }
+      .definition { padding: 13px; background: #f2ead5; border-left: 3px solid #a47116; font-size: 12px; line-height: 1.65; }
+      .actions { display: flex; flex-wrap: wrap; gap: 9px; margin: 18px 0 8px; }
+      button { min-height: 42px; border: 0; border-radius: 4px; padding: 0 16px; cursor: pointer; font-weight: 700; }
+      button:disabled { opacity: .42; cursor: not-allowed; }
+      .primary { background: #17251f; color: white; }
+      .secondary { background: transparent; color: #17251f; border: 1px solid rgba(23,37,31,.22); }
+      .danger { background: #984b43; color: white; }
+      pre { white-space: pre-wrap; overflow-wrap: anywhere; border: 1px solid rgba(23,37,31,.14); background: white; min-height: 120px; padding: 16px; font-size: 12px; line-height: 1.65; }
+      .status { font-size: 12px; color: #637169; line-height: 1.65; }
+      .pass { color: #2f6d48; }
+      .reject { color: #a64f44; }
+      footer { width: min(1180px, calc(100% - 32px)); margin: 0 auto 42px; color: #7a817d; font-size: 11px; line-height: 1.7; }
+      @media (max-width: 860px) { .workspace, .form-grid { grid-template-columns: 1fr; } .side { border-left: 0; padding-left: 0; } }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="eyebrow">HEADUP · V14 CANONICAL MENTON</div>
+      <h1>Menton 双盲标注与裁决</h1>
+      <p class="lead">建立不依赖MERL、3DDFA或模型旧点的人工规范下颏最低点。A、B独立标注；分歧超过脸框对角线2%的图片由第三人重新盲标。</p>
+    </header>
+    <main>
+      <div class="notice"><strong>隐私与盲法：</strong>图片只由浏览器内存读取，不上传、不写入LocalStorage、IndexedDB或缓存，也不导出文件名。标注页永远不显示MERL、3DDFA、模型或另一名标注者的点。导出JSON只含内容SHA-256、尺寸、方向、归一化脸框与坐标。</div>
+      <nav class="tabs" aria-label="工具模式">
+        <button data-tab="annotate" class="active">1 · 独立盲标</button>
+        <button data-tab="compare">2 · A/B一致性</button>
+        <button data-tab="adjudicate">3 · 第三方盲裁决</button>
+      </nav>
+
+      <section id="panel-annotate" class="panel active">
+        <h2>独立盲标会话</h2>
+        <p class="muted">A、B必须由不同标注者分别完成，不能互看JSON。每张图依次点击脸框两个对角，再点击menton。</p>
+        <div class="form-grid">
+          <label>会话<select id="annotation-session"><option value="A">A</option><option value="B">B</option></select></label>
+          <label>标注者匿名口令<input id="annotation-code" type="password" autocomplete="off" placeholder="仅用于生成匿名哈希" /></label>
+          <label>选择侧貌图片<input id="annotation-files" type="file" accept="image/jpeg,image/png,image/webp" multiple /></label>
+        </div>
+        <div class="workspace">
+          <div class="canvas-shell"><canvas id="annotation-canvas" width="800" height="520" aria-label="menton盲标画布"></canvas></div>
+          <aside class="side">
+            <div class="definition"><strong>唯一目标定义：</strong>软组织下颏轮廓最低点。不是最前突点、颏唇沟点或下颌角。</div>
+            <label style="margin-top:14px">面部朝向<select id="annotation-direction"><option value="left">朝左</option><option value="right">朝右</option></select></label>
+            <p id="annotation-instruction" class="instruction">请先选择图片。</p>
+            <p id="annotation-progress" class="status">0 / 0</p>
+            <div class="actions">
+              <button id="annotation-reset-point" class="secondary">重画当前图</button>
+              <button id="annotation-save" class="primary" disabled>保存并下一张</button>
+              <button id="annotation-export" class="primary" disabled>导出会话JSON</button>
+              <button id="annotation-clear" class="danger">清空内存</button>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <section id="panel-compare" class="panel">
+        <h2>A/B一致性聚合</h2>
+        <p class="muted">导入两份独立会话JSON。页面只显示聚合分位数；导出的聚合报告不含图片哈希、文件名或逐图坐标。</p>
+        <div class="form-grid">
+          <label>A会话JSON<input id="compare-a" type="file" accept="application/json" /></label>
+          <label>B会话JSON<input id="compare-b" type="file" accept="application/json" /></label>
+          <div class="actions"><button id="compare-run" class="primary">计算一致性</button><button id="compare-export" class="secondary" disabled>导出聚合报告</button></div>
+        </div>
+        <pre id="compare-output">等待导入两份JSON。</pre>
+      </section>
+
+      <section id="panel-adjudicate" class="panel">
+        <h2>第三方盲裁决</h2>
+        <p class="muted">重新导入A/B JSON及原始图片。系统按内容SHA-256匹配，仅展示A/B分歧&gt;2%的图片；不会显示A/B点。第三人的盲点与A/B形成三点medoid，最终点始终来自真实人工标注。</p>
+        <div class="form-grid">
+          <label>A会话JSON<input id="adjudicate-a" type="file" accept="application/json" /></label>
+          <label>B会话JSON<input id="adjudicate-b" type="file" accept="application/json" /></label>
+          <label>裁决者匿名口令<input id="adjudicator-code" type="password" autocomplete="off" /></label>
+          <label>重新选择原始图片<input id="adjudicate-files" type="file" accept="image/jpeg,image/png,image/webp" multiple /></label>
+          <div class="actions"><button id="adjudicate-prepare" class="primary">准备盲裁决</button></div>
+        </div>
+        <div class="workspace">
+          <div class="canvas-shell"><canvas id="adjudication-canvas" width="800" height="520" aria-label="第三方盲裁决画布"></canvas></div>
+          <aside class="side">
+            <div class="definition"><strong>裁决者仍使用相同定义：</strong>软组织下颏轮廓最低点；页面不显示A/B位置。</div>
+            <p id="adjudication-instruction" class="instruction">导入A/B JSON、图片并准备。</p>
+            <p id="adjudication-progress" class="status">0 / 0</p>
+            <div class="actions">
+              <button id="adjudication-reset-point" class="secondary">重画当前图</button>
+              <button id="adjudication-save" class="primary" disabled>保存裁决并下一张</button>
+              <button id="adjudication-export" class="primary" disabled>导出canonical JSON</button>
+              <button id="adjudication-clear" class="danger">清空内存</button>
+            </div>
+          </aside>
+        </div>
+        <pre id="adjudication-output">尚未准备。</pre>
+      </section>
+    </main>
+    <footer>V14冻结合同：至少120张双人独立盲标开发图，左右各≥60；最终确认集至少60张且人物隔离。此工具建立标注数据合同，不代表算法或产品发布通过。</footer>
+    <script type="module" src="/src/researchMentonAnnotation.ts"></script>
+  </body>
+</html>
