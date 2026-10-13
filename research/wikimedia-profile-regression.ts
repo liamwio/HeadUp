@@ -1,0 +1,23 @@
+import{inspectCaptureFile}from'../src/lib/captureAnalysis'
+import{isPhotoQualityAcceptable}from'../src/lib/imageQuality'
+import{buildNativeProfilePresentation,profileSemanticPathD}from'../src/lib/nativeProfilePresentation'
+
+type RecordItem={fileName:string;path:string;title:string;descriptionUrl:string;license:string;licenseUrl:string;artist:string;sha256:string;width:number;height:number}
+type Manifest={policyVersion:string;records:RecordItem[]}
+const root='/@fs/D:/AICodex/HeadUp',candidateSet=new URL(location.href).searchParams.get('set')==='focused'?'focused':'general',manifestPath=candidateSet==='focused'?'data/face-db-real-research/wikimedia-profile-focused/manifest.json':'data/face-db-real-research/wikimedia-profile-candidates/manifest.json',manifest=await fetch(`${root}/${manifestPath}`).then(response=>response.json())as Manifest,status=document.querySelector<HTMLElement>('#status')!,summary=document.querySelector<HTMLElement>('#summary')!,grid=document.querySelector<HTMLElement>('#grid')!,resultNode=document.querySelector<HTMLElement>('#result')!
+const escape=value=>String(value??'').replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]!))
+const results=[]
+for(const[index,item]of manifest.records.entries()){
+  status.textContent=`分析 ${index+1}/${manifest.records.length} · ${item.fileName}`
+  let inspected:any=null,error:string|null=null
+  try{const blob=await fetch(`${root}/${item.path}`).then(response=>response.blob());inspected=await inspectCaptureFile('profile',new File([blob],item.fileName,{type:blob.type||'image/jpeg'}))}catch(reason){error=reason instanceof Error?reason.message:String(reason)}
+  const qualityAccepted=Boolean(inspected&&isPhotoQualityAcceptable(inspected.quality)),pose=inspected?.pose,native=pose?.nativeProfile,presentation=buildNativeProfilePresentation(native,inspected?.width,inspected?.height),passed=Boolean(!error&&qualityAccepted&&pose?.status==='pass'&&pose?.estimatedPose==='right_profile'&&native?.status==='measured'&&native.measuredMetricCount===7&&presentation?.regionReadings.length===4)
+  const flags=error||[...(inspected?.quality?.flags??[]),...(pose?.flags??[])].join('；')||'无阻断提示',record={fileName:item.fileName,title:item.title,license:item.license,descriptionUrl:item.descriptionUrl,qualityAccepted,qualityScore:inspected?.quality?.score??0,poseStatus:pose?.status??'error',estimatedPose:pose?.estimatedPose??'error',yaw:pose?.yaw??null,pitch:pose?.pitch??null,roll:pose?.roll??null,nativeStatus:native?.status??'not_run',nativeReason:native?.reason??null,metricCount:native?.measuredMetricCount??0,regionCount:presentation?.regionReadings.length??0,passed,error};results.push(record)
+  const overlay=presentation?`<svg viewBox="0 0 ${presentation.width} ${presentation.height}" preserveAspectRatio="none" aria-label="四组侧貌彩线">${presentation.paths.filter(path=>path.category==='region').map(path=>`<path class="line ${path.code}" d="${profileSemanticPathD(path.points)}"><title>${escape(path.label)}</title></path>`).join('')}</svg>`:''
+  grid.insertAdjacentHTML('beforeend',`<article class="card ${passed?'pass':'reject'}"><div class="photo" style="aspect-ratio:${inspected?.width||item.width}/${inspected?.height||item.height}"><img src="${root}/${item.path}" alt="${escape(item.fileName)}"/>${overlay}</div><div class="body"><h2>${escape(item.title)}</h2><div class="state">${passed?'通过新增侧面门':'未进入正式新增集'}</div><div class="meta"><span>质量 ${record.qualityScore}</span><span>${escape(record.estimatedPose)}</span><span>7项 ${record.metricCount}</span></div><p>${escape(flags)}</p><p>${escape(item.license)} · ${escape(item.artist)}</p><a href="${escape(item.descriptionUrl)}" target="_blank" rel="noreferrer">Commons文件页</a></div></article>`)
+}
+const passed=results.filter(item=>item.passed),output={testedAt:new Date().toISOString(),policyVersion:'HEADUP-WIKIMEDIA-PROFILE-REGRESSION-1.1',candidateSet,sourceManifestPath:manifestPath,sourceManifestPolicyVersion:manifest.policyVersion,runtime:navigator.userAgent,summary:{total:results.length,passed:passed.length,rejected:results.length-passed.length,analysisErrors:results.filter(item=>item.error).length},privacy:{imageBytesIncluded:false,landmarksIncluded:false},cases:results}
+status.textContent=`分析完成 · ${passed.length}/${results.length}通过新增侧面门 · 错误${output.summary.analysisErrors}`
+summary.innerHTML=`<span>候选 ${results.length}</span><span>通过 ${passed.length}</span><span>未通过 ${output.summary.rejected}</span><span>运行错误 ${output.summary.analysisErrors}</span>`
+resultNode.textContent=JSON.stringify(output,null,2)
+;(window as typeof window&{__HEADUP_WIKIMEDIA_PROFILE_RESULT__?:unknown}).__HEADUP_WIKIMEDIA_PROFILE_RESULT__=output
