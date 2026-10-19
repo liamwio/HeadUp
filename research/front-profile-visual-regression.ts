@@ -15,7 +15,7 @@ type Manifest = { policyVersion:string; counts:{subjects:number;images:number}; 
 type Result = Record<string, unknown> & { reviewId:string;subjectGroup:string;dataset:Dataset;view:View;outcome:'pass'|'expected_rejection'|'unexpected';qualityAccepted:boolean;poseStatus:string;estimatedPose:string;measurementCount:number;frontReferenceMappedCount:number;frontReferenceWithheldCount:number;frontReferenceDirectionalCount:number;profilePhotoMetricCount:number;nativeProfileMetricCount:number;nativeConfidenceComparable:number;nativeConfidenceRecordable:number;nativeConfidenceReferenceOnly:number;nativeConfidenceUnavailable:number;nativeConfidenceSummaryValid:boolean;nativeAestheticRegionCount:number;nativeProductOverlayPathCount:number;nativeRepeatabilityBandCount:number;nativeNeckPathCount:number }
 declare global { interface Window { __HEADUP_FRONT_PROFILE_VISUAL_RESULT__?: unknown } }
 
-const projectRoot='/@fs/D:/AICodex/HeadUp'
+const projectRoot=''
 async function imageDataFromBlob(blob:Blob){
   const bitmap=await createImageBitmap(blob),canvas=document.createElement('canvas');canvas.width=bitmap.width;canvas.height=bitmap.height
   const context=canvas.getContext('2d',{willReadFrequently:true});if(!context)throw new Error('2d_canvas_unavailable')

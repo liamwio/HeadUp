@@ -12,7 +12,7 @@ const resultPath = process.env.HEADUP_MUCT_RESULT_PATH
   : join(projectDir, 'data', 'face-benchmark', 'muct-front-geometry-v3-result.json')
 const manifestPath = join(projectDir, 'data', 'face-benchmark', '.staging', 'muct', 'sample-manifest.json')
 const port = 5199
-const pageFile = 'benchmark-muct.html'
+const pageFile = 'research/pages/benchmark-muct.html'
 const pageUrl = `http://127.0.0.1:${port}/${pageFile}`
 const chromeCandidates = [process.env.HEADUP_CHROME, 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe', 'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe', 'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe'].filter(Boolean)
 

@@ -3,7 +3,7 @@ import{profileGeometryDisagreementReviewMetrics}from'../src/lib/nativeProfilePre
 import type{NativeProfileGeometryDisagreement}from'../src/types'
 
 type Manifest={cases:Array<{reviewId:string;dataset:string;view:string;path:string}>}
-const projectRoot='/@fs/D:/AICodex/HeadUp',status=document.querySelector<HTMLElement>('#status')!,summary=document.querySelector<HTMLElement>('#summary')!,resultNode=document.querySelector<HTMLElement>('#result')!,queueNode=document.querySelector<HTMLElement>('#queue')!,queueSession=document.querySelector<HTMLSelectElement>('#queue-session')!
+const projectRoot='',status=document.querySelector<HTMLElement>('#status')!,summary=document.querySelector<HTMLElement>('#summary')!,resultNode=document.querySelector<HTMLElement>('#result')!,queueNode=document.querySelector<HTMLElement>('#queue')!,queueSession=document.querySelector<HTMLSelectElement>('#queue-session')!
 const manifest=await fetch(`${projectRoot}/data/manual-test/profile-region-truth-v1/manifest.json`).then(response=>response.json())as Manifest
 const cases=manifest.cases.filter(item=>item.dataset==='london_highres_confirmation'&&item.view==='right_profile')
 if(cases.length!==30)throw new Error(`Expected 30 right profiles, found ${cases.length}`)
@@ -25,7 +25,7 @@ const distribution=(input:readonly number[])=>({min:quantile(input,0),median:qua
 const output={testedAt:new Date().toISOString(),policyVersion:'HEADUP-PROFILE-GEOMETRY-SOURCE-CROSSCHECK-30-1.0',runtime:navigator.userAgent,scope:{images:30,measured,rejected,analysisErrors},disagreement:Object.fromEntries(keys.map(key=>[key,distribution(values[key])])),review:{images:reviewImages,withoutReview:measured-reviewImages,byMetric:reviewCounts},contract:{valueSource:'deployed direct geometry head',overlaySource:'deployed refined Menpo39 landmarks',reviewRule:'flag when same-image disagreement exceeds the current metric RSS',manualTruthClaim:false,coordinatorQueueSerialized:false,coordinatorQueryKeys:['case','session']},privacy:{imagesIncluded:false,caseIdsIncluded:false,individualValuesIncluded:false,modelLinesRendered:false}}
 summary.innerHTML=`<span>固定图片<strong>30</strong></span><span>完成测量<strong>${measured}</strong></span><span>需复核<strong>${reviewImages}</strong></span><span>运行错误<strong>${analysisErrors}</strong></span>`
 status.textContent=`分析完成 · ${measured}/30可测 · ${reviewImages}张模型层分歧越线 · 错误${analysisErrors}`
-const renderQueue=()=>{const session=queueSession.value;queueNode.innerHTML=reviewQueue.map((reviewId,index)=>`<a href="/research-profile-region-annotation.html?case=${encodeURIComponent(reviewId)}&session=${session}" aria-label="打开${session}会话优先盲标病例${index+1}">优先病例 ${String(index+1).padStart(2,'0')} · ${session}</a>`).join('')||'没有越线病例。'}
+const renderQueue=()=>{const session=queueSession.value;queueNode.innerHTML=reviewQueue.map((reviewId,index)=>`<a href="/research/pages/research-profile-region-annotation.html?case=${encodeURIComponent(reviewId)}&session=${session}" aria-label="打开${session}会话优先盲标病例${index+1}">优先病例 ${String(index+1).padStart(2,'0')} · ${session}</a>`).join('')||'没有越线病例。'}
 queueSession.addEventListener('change',renderQueue);renderQueue()
 resultNode.textContent=JSON.stringify(output,null,2)
 ;(window as typeof window&{__HEADUP_PROFILE_GEOMETRY_CROSSCHECK__?:unknown}).__HEADUP_PROFILE_GEOMETRY_CROSSCHECK__=output

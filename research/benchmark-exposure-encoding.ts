@@ -1,7 +1,7 @@
 import { inspectImage } from '../src/lib/imageQuality'
 type RecordEntry={relativePath:string;view:string}
 type Observation={sample:number;exposure:'original'|'strong';size:number;encoding:string;overexposed:boolean;clipping:number}
-const root='/@fs/D:/AICodex/HeadUp/data/face-db-real-research',status=document.querySelector<HTMLElement>('#status')!,summaryElement=document.querySelector<HTMLElement>('#summary')!,rowsElement=document.querySelector<HTMLElement>('#rows')!,gatesElement=document.querySelector<HTMLElement>('#gates')!,resultElement=document.querySelector<HTMLElement>('#result')!
+const root='/data/face-db-real-research',status=document.querySelector<HTMLElement>('#status')!,summaryElement=document.querySelector<HTMLElement>('#summary')!,rowsElement=document.querySelector<HTMLElement>('#rows')!,gatesElement=document.querySelector<HTMLElement>('#gates')!,resultElement=document.querySelector<HTMLElement>('#result')!
 window.addEventListener('unhandledrejection',event=>{const message=event.reason instanceof Error?event.reason.stack||event.reason.message:String(event.reason);resultElement.dataset.error=message;resultElement.textContent=message;status.textContent='失败'})
 const sizes=[1080,720,512],encodings=[{name:'png',type:'image/png',quality:undefined},{name:'jpeg95',type:'image/jpeg',quality:.95},{name:'jpeg75',type:'image/jpeg',quality:.75},{name:'webp90',type:'image/webp',quality:.9}]
 function loadImage(url:string){return new Promise<HTMLImageElement>((resolve,reject)=>{const image=new Image();image.onload=()=>resolve(image);image.onerror=()=>reject(new Error(`Unable to load ${url}`));image.src=url})}

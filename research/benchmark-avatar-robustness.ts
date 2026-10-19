@@ -14,7 +14,7 @@ type EnsembleCandidateName = 'ensembleCurrentVertical3Median'|'ensembleCurrentAx
 const sourceName = new URLSearchParams(location.search).get('source') || 'ffhq'
 if (!['ffhq','london'].includes(sourceName)) throw new Error(`非法来源标识: ${sourceName}`)
 const datasetId = sourceName==='london'?'london-authorized-front':'ffhq-highres'
-const projectRoot = '/@fs/D:/AICodex/HeadUp'
+const projectRoot = ''
 const manifestUrl = sourceName==='london'?`${projectRoot}/data/face-db-real-research/manifest.jsonl`:`${projectRoot}/data/face-db-real-research/avatar-smoke/${datasetId}/manifest.jsonl`
 const statusElement = document.querySelector<HTMLElement>('#status')!
 const resultElement = document.querySelector<HTMLElement>('#result')!

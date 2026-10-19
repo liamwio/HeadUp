@@ -3,7 +3,7 @@ import { inspectCaptureFile } from '../src/lib/captureAnalysis'
 type RecordEntry = { sampleId: string; orientation: number; relativePath: string }
 const status = document.querySelector<HTMLElement>('#status')!
 const resultElement = document.querySelector<HTMLElement>('#result')!
-const stagingRoot = '/@fs/D:/AICodex/HeadUp/data/face-benchmark/.staging/exif-orientation'
+const stagingRoot = '/data/face-benchmark/.staging/exif-orientation'
 function round(value: number, digits = 3) { return Number(value.toFixed(digits)) }
 function percentile(values: number[], fraction: number) { const ordered = [...values].sort((a, b) => a - b); return ordered[Math.round((ordered.length - 1) * fraction)] }
 function distribution(values: number[]) { return { min: round(Math.min(...values)), median: round(percentile(values, .5)), p95: round(percentile(values, .95)), max: round(Math.max(...values)) } }

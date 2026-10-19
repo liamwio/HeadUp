@@ -16,7 +16,7 @@ const resultPath = isFfhq
   ? join(avatarRoot, 'avatar-robustness-result.json')
   : join(projectDir, 'data', 'face-db-real-research', 'avatar-smoke', 'london-independent-lip-confirmation.json')
 const screenshotPath = join(projectDir, 'docs', 'assets', isFfhq ? 'avatar-smoke-ffhq-robustness.png' : 'avatar-smoke-london-lip-confirmation.png')
-const pageFile = 'benchmark-avatar-robustness.html'
+const pageFile = 'research/pages/benchmark-avatar-robustness.html'
 const port = isFfhq ? 5211 : 5212
 const pageUrl = `http://127.0.0.1:${port}/${pageFile}?source=${sourceName}`
 const expectedCandidates = isFfhq ? 60 : 102

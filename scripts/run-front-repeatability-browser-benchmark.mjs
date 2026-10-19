@@ -12,7 +12,7 @@ const defaultResultPath = join(projectDir, 'data', 'face-db-real-research', 'fro
 const resultPath = resultArgument ? resolve(projectDir, resultArgument) : defaultResultPath
 const manifestPath = join(projectDir, 'data', 'face-db-real-research', 'manifest.jsonl')
 const port = 5200
-const pageFile = 'benchmark-front.html'
+const pageFile = 'research/pages/benchmark-front.html'
 const pageUrl = `http://127.0.0.1:${port}/${pageFile}`
 const chromeCandidates = [process.env.HEADUP_CHROME, 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe', 'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe', 'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe'].filter(Boolean)
 

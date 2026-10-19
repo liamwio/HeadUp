@@ -4,7 +4,7 @@ type RecordEntry = { relativePath:string;ageGroup:string;gender:string }
 type Variant = { name:'original'|'brightness_130'|'brightness_200';label:string;filter:string }
 type Observation = { cell:string;variant:Variant['name'];accepted:boolean;flags:string[] }
 
-const root='/@fs/D:/AICodex/HeadUp/data/face-benchmark/.staging/demographic-coverage'
+const root='/data/face-benchmark/.staging/demographic-coverage'
 const status=document.querySelector<HTMLElement>('#status')!,summary=document.querySelector<HTMLElement>('#summary')!,overall=document.querySelector<HTMLElement>('#overall')!,cellsElement=document.querySelector<HTMLElement>('#cells')!,gatesElement=document.querySelector<HTMLElement>('#gates')!,resultElement=document.querySelector<HTMLElement>('#result')!
 window.addEventListener('unhandledrejection',event=>{const message=event.reason instanceof Error?event.reason.stack||event.reason.message:String(event.reason);resultElement.dataset.error=message;resultElement.textContent=message;status.textContent='失败'})
 const variants:Variant[]=[{name:'original',label:'原始JPEG',filter:'none'},{name:'brightness_130',label:'亮度130%',filter:'brightness(130%)'},{name:'brightness_200',label:'亮度200%',filter:'brightness(200%)'}]

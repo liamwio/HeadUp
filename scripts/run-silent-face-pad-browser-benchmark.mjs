@@ -10,7 +10,7 @@ const vitePath = join(projectDir, 'node_modules', 'vite', 'bin', 'vite.js')
 const resultPath = join(projectDir, 'data', 'face-benchmark', 'silent-face-pad-result.json')
 const manifestPath = join(projectDir, 'data', 'face-benchmark', '.staging', 'silent-face-pad', 'manifest.json')
 const port = 5195
-const pageFile = 'benchmark-silent-face-pad.html'
+const pageFile = 'research/pages/benchmark-silent-face-pad.html'
 const pageUrl = `http://127.0.0.1:${port}/${pageFile}`
 const chromeCandidates = [process.env.HEADUP_CHROME, 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe', 'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe', 'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe'].filter(Boolean)
 

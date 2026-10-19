@@ -10,7 +10,7 @@ const vitePath = join(projectDir, 'node_modules', 'vite', 'bin', 'vite.js')
 const resultPath = join(projectDir, 'data', 'face-benchmark', 'active-challenge-replay-result.json')
 const manifestPath = join(projectDir, 'data', 'face-benchmark', '.staging', 'active-challenge', 'manifest.json')
 const port = 5196
-const pageFile = 'benchmark-active-challenge.html'
+const pageFile = 'research/pages/benchmark-active-challenge.html'
 const pageUrl = `http://127.0.0.1:${port}/${pageFile}`
 const chromeCandidates = [process.env.HEADUP_CHROME, 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe', 'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe', 'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe'].filter(Boolean)
 

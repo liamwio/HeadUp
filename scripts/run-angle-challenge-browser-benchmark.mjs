@@ -10,7 +10,7 @@ const vitePath = join(projectDir, 'node_modules', 'vite', 'bin', 'vite.js')
 const resultPath = join(projectDir, 'data', 'face-benchmark', 'angle-challenge-result.json')
 const manifestPath = join(projectDir, 'data', 'face-benchmark', '.staging', 'angle-challenge', 'manifest.json')
 const port = 5197
-const pageFile = 'benchmark-angle-challenge.html'
+const pageFile = 'research/pages/benchmark-angle-challenge.html'
 const pageUrl = `http://127.0.0.1:${port}/${pageFile}`
 const chromeCandidates = [process.env.HEADUP_CHROME, 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe', 'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe', 'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe'].filter(Boolean)
 async function findChrome() { for (const path of chromeCandidates) { try { await access(path, constants.X_OK); return path } catch { /* next */ } } throw new Error('No Chromium browser found; set HEADUP_CHROME') }

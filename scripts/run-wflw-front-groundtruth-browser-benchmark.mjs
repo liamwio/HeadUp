@@ -34,7 +34,7 @@ const attributeNames = ['pose', 'expression', 'illumination', 'makeup', 'occlusi
 const categoryQuotas = { baseline: 300, pose: 150, expression: 150, illumination: 150, makeup: 150, occlusion: 150, blur: 150 }
 const sampleTarget = 1200
 const port = 5205
-const pageFile = contourMode ? 'benchmark-wflw-contour-calibration.html' : 'benchmark-wflw-front.html'
+const pageFile = contourMode ? 'research/pages/benchmark-wflw-contour-calibration.html' : 'research/pages/benchmark-wflw-front.html'
 const pageUrl = `http://127.0.0.1:${port}/${pageFile}`
 const chromeCandidates = [process.env.HEADUP_CHROME, 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe', 'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe', 'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe'].filter(Boolean)
 

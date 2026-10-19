@@ -17,7 +17,7 @@ type Evaluated = {
 
 const status = document.querySelector<HTMLParagraphElement>('#status')!
 const resultElement = document.querySelector<HTMLPreElement>('#result')!
-const stagingRoot = '/@fs/D:/AICodex/HeadUp/data/face-benchmark/.staging/silent-face-pad'
+const stagingRoot = '/data/face-benchmark/.staging/silent-face-pad'
 
 async function evaluateProduction(file: File) {
   const [quality, pose] = await Promise.all([inspectImage(file), inspectCapturePose('front', file)])

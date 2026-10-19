@@ -11,7 +11,7 @@ const highResolution = process.argv.includes('--highres')
 const resultPath = join(projectDir, 'data', 'face-benchmark', highResolution ? 'cew-eye-closure-highres-result.json' : 'cew-eye-closure-result.json')
 const manifestPath = join(projectDir, 'data', 'face-benchmark', '.staging', highResolution ? 'cew-eye-closure-highres' : 'cew-eye-closure', 'manifest.json')
 const port = highResolution ? 5192 : 5191
-const pageFile = highResolution ? 'benchmark-cew-eye-closure-highres.html' : 'benchmark-cew-eye-closure.html'
+const pageFile = highResolution ? 'research/pages/benchmark-cew-eye-closure-highres.html' : 'research/pages/benchmark-cew-eye-closure.html'
 const pageUrl = `http://127.0.0.1:${port}/${pageFile}`
 const chromeCandidates = [
   process.env.HEADUP_CHROME,

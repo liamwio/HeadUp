@@ -17,7 +17,7 @@ type Case = SampleRecord & { quality: PhotoQuality; pose: PoseValidation; pointE
 
 const status = document.querySelector<HTMLParagraphElement>('#status')!
 const resultElement = document.querySelector<HTMLPreElement>('#result')!
-const stagingRoot = '/@fs/D:/AICodex/HeadUp/data/face-benchmark/.staging/menpo-front-groundtruth'
+const stagingRoot = '/data/face-benchmark/.staging/menpo-front-groundtruth'
 const manifest = await fetch(`${stagingRoot}/sample-manifest.json`).then((response) => {
   if (!response.ok) throw new Error(`Menpo manifest unavailable: HTTP ${response.status}`)
   return response.json()

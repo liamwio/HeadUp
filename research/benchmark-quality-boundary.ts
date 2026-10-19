@@ -1,7 +1,7 @@
 import { inspectImage, isPhotoQualityAcceptable } from '../src/lib/imageQuality'
 type RecordEntry={id:string;relativePath:string;view:string}
 type Variant={name:string;label:string;category:'control'|'dark'|'bright'|'blur';make:(image:HTMLImageElement)=>HTMLCanvasElement}
-const root='/@fs/D:/AICodex/HeadUp/data/face-db-real-research';const status=document.querySelector<HTMLElement>('#status')!,summaryElement=document.querySelector<HTMLElement>('#summary')!,rows=document.querySelector<HTMLElement>('#rows')!,gatesElement=document.querySelector<HTMLElement>('#gates')!,cards=document.querySelector<HTMLElement>('#cards')!,resultElement=document.querySelector<HTMLElement>('#result')!
+const root='/data/face-db-real-research';const status=document.querySelector<HTMLElement>('#status')!,summaryElement=document.querySelector<HTMLElement>('#summary')!,rows=document.querySelector<HTMLElement>('#rows')!,gatesElement=document.querySelector<HTMLElement>('#gates')!,cards=document.querySelector<HTMLElement>('#cards')!,resultElement=document.querySelector<HTMLElement>('#result')!
 window.addEventListener('unhandledrejection',event=>{const message=event.reason instanceof Error?event.reason.stack||event.reason.message:String(event.reason);resultElement.dataset.error=message;resultElement.textContent=message;status.textContent='失败'})
 function canvas(){const value=document.createElement('canvas');value.width=1080;value.height=1080;return value}
 function filtered(image:HTMLImageElement,filter:string){const value=canvas(),context=value.getContext('2d')!;context.filter=filter;context.drawImage(image,0,0,1080,1080);return value}

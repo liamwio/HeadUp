@@ -73,7 +73,7 @@ const imageDir = join(avatarRoot, "images");
 const manifestPath = join(avatarRoot, "manifest.jsonl");
 const resultPath = join(avatarRoot, "avatar-smoke-headup-result.json");
 const casePath = join(avatarRoot, "avatar-smoke-headup-cases.jsonl");
-const htmlReportPath = join(projectDir, `avatar-smoke-${sourceConfig.outputId}-analysis.html`);
+const htmlReportPath = join(projectDir, '.local-archive', 'reports', `avatar-smoke-${sourceConfig.outputId}-analysis.html`);
 
 function sha256Buffer(buffer) {
   return createHash("sha256").update(buffer).digest("hex");
@@ -427,6 +427,7 @@ async function main() {
       <section class="scope"><strong>结论边界：</strong>本页验证网络下载、来源记录、图片解码和质量门。每人只有一张官方肖像；没有复制成侧貌，因此不验证左右侧貌、关键点或骨性倾向准确率。</section>
       <section class="grid">${cards}</section><footer>来源：NASA Image and Video Library。仅用于本地教育/信息性研究测试；NASA不认可或背书HeadUp。</footer>
     </main></body></html>`;
+  await mkdir(join(projectDir, '.local-archive', 'reports'), { recursive: true });
   await writeFile(htmlReportPath, reportHtml, "utf8");
   await writeFile(join(avatarRoot, "report.txt"), [
     `测试时间: ${summary.testedAt}`,

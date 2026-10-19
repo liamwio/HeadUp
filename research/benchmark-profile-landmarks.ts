@@ -17,7 +17,7 @@ type ProfileGeometry = {
 
 const status = document.querySelector<HTMLParagraphElement>('#status')!
 const resultElement = document.querySelector<HTMLPreElement>('#result')!
-const databaseRoot = '/@fs/D:/AICodex/HeadUp/data/face-db-real-research'
+const databaseRoot = '/data/face-db-real-research'
 const manifestResponse = await fetch(`${databaseRoot}/manifest.jsonl`)
 if (!manifestResponse.ok) throw new Error(`Unable to load research manifest: ${manifestResponse.status}`)
 const records = (await manifestResponse.text()).split(/\r?\n/).filter(Boolean)

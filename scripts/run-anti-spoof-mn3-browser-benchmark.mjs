@@ -10,7 +10,7 @@ const vitePath = join(projectDir, 'node_modules', 'vite', 'bin', 'vite.js')
 const resultPath = join(projectDir, 'data', 'face-benchmark', 'anti-spoof-mn3-result.json')
 const manifestPath = join(projectDir, 'data', 'face-benchmark', '.staging', 'anti-spoof-mn3', 'manifest.json')
 const port = 5194
-const pageFile = 'benchmark-anti-spoof-mn3.html'
+const pageFile = 'research/pages/benchmark-anti-spoof-mn3.html'
 const pageUrl = `http://127.0.0.1:${port}/${pageFile}`
 const chromeCandidates = [
   process.env.HEADUP_CHROME,

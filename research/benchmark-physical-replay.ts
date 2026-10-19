@@ -28,7 +28,7 @@ type FrameResult = {
 
 const status = document.querySelector<HTMLParagraphElement>('#status')!
 const resultElement = document.querySelector<HTMLPreElement>('#result')!
-const stagingRoot = '/@fs/D:/AICodex/HeadUp/data/face-benchmark/.staging/physical-replay'
+const stagingRoot = '/data/face-benchmark/.staging/physical-replay'
 const manifest = await fetch(`${stagingRoot}/manifest.json`).then(async (response) => {
   if (!response.ok) throw new Error(`Manifest load failed: ${response.status}`)
   return response.json() as Promise<Manifest>

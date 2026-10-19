@@ -7,7 +7,7 @@ type RecordEntry = { sampleId: string; relativePath: string }
 type Metric = Exclude<keyof FrontGeometry, 'midLowerFaceHeightRatio'>
 const metrics: Metric[] = ['mirrorResidual', 'visibleFaceLengthWidthRatio', 'pupilDistanceFaceWidthRatio', 'interEyeRatio', 'eyeCanthalTiltDegrees', 'jawWidthRatio', 'mouthWidthRatio', 'midfaceHeightRatio', 'lowerFaceHeightRatio', 'noseMouthWidthRatio', 'noseLengthFaceHeightRatio', 'lipHeightMouthWidthRatio']
 const stableMetrics = new Set<Metric>(['pupilDistanceFaceWidthRatio', 'jawWidthRatio'])
-const root = '/@fs/D:/AICodex/HeadUp/data/face-benchmark/.staging/front-mirror'
+const root = '/data/face-benchmark/.staging/front-mirror'
 const status = document.querySelector<HTMLElement>('#status')!
 const resultElement = document.querySelector<HTMLElement>('#result')!
 const round = (value: number, digits = 6) => Number(value.toFixed(digits))

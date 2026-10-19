@@ -19,7 +19,7 @@ type Review = { decision?: Decision; issue?: string; note?: string }
 
 declare global { interface Window { __HEADUP_STANDARD_PROFILE_MANUAL_REVIEW__?: unknown } }
 
-const projectRoot = '/@fs/D:/AICodex/HeadUp'
+const projectRoot = ''
 const manifestPath = 'data/manual-test/standard-profile-manual-v2/manifest.json'
 const manifest = await fetch(`${projectRoot}/${manifestPath}`, { cache: 'no-store' }).then((response) => response.json()) as Manifest
 if (manifest.policyVersion !== 'HEADUP-STANDARD-PROFILE-MANUAL-2.0' || manifest.records.length !== 40) throw new Error('标准侧面人工测试清单异常')

@@ -18,7 +18,7 @@ type Case = SampleRecord & {
 
 const status = document.querySelector<HTMLParagraphElement>('#status')!
 const resultElement = document.querySelector<HTMLPreElement>('#result')!
-const stagingRoot = '/@fs/D:/AICodex/HeadUp/data/face-benchmark/.staging/fairface'
+const stagingRoot = '/data/face-benchmark/.staging/fairface'
 const manifest = await fetch(`${stagingRoot}/sample-manifest.json`).then((response) => response.json()) as {
   policyVersion: string
   source: string

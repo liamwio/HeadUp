@@ -17,7 +17,7 @@ type Observation = {
   headupPose: Axis
 }
 
-const root = '/@fs/D:/AICodex/HeadUp/data/face-benchmark/.staging/demographic-coverage'
+const root = '/data/face-benchmark/.staging/demographic-coverage'
 const status = document.querySelector<HTMLElement>('#status')!
 const resultElement = document.querySelector<HTMLElement>('#result')!
 const round = (value: number, digits = 4) => Number(value.toFixed(digits))

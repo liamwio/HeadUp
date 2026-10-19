@@ -4,7 +4,7 @@ import { isPhotoQualityAcceptable } from '../src/lib/imageQuality'
 type RecordEntry = { sampleId: string; group: string; variant: string; relativePath: string }
 type Evaluated = Awaited<ReturnType<typeof inspectCaptureFile>>
 type Rendered = { analysis: Evaluated; pixels: Uint8ClampedArray }
-const root = '/@fs/D:/AICodex/HeadUp/data/face-benchmark/.staging/icc-color-encoding'
+const root = '/data/face-benchmark/.staging/icc-color-encoding'
 const status = document.querySelector<HTMLElement>('#status')!
 const resultElement = document.querySelector<HTMLElement>('#result')!
 const baselineVariant = 'srgb_baseline_444'

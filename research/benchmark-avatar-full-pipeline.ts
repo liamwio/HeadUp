@@ -14,7 +14,7 @@ type ManifestRecord = {
   externalAssetId?: string
 }
 
-const projectRoot = '/@fs/D:/AICodex/HeadUp'
+const projectRoot = ''
 const datasetId = new URLSearchParams(location.search).get('dataset') || 'nasa-highres'
 if (!/^[a-z0-9-]+$/.test(datasetId)) throw new Error(`非法数据集标识: ${datasetId}`)
 const manifestUrl = `${projectRoot}/data/face-db-real-research/avatar-smoke/${datasetId}/manifest.jsonl`

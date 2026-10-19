@@ -18,7 +18,7 @@ const expectedPolicyVersion = glassesMode ? 'HEADUP-OPENIMAGES-GLASSES-CONTROL-A
 const manifest = JSON.parse(await readFile(join(stagingDir, 'manifest.json'), 'utf8'))
 const expectedImages = manifest.selection.selectedImages
 const port = 5190
-const pageFile = glassesMode ? 'benchmark-openimages-glasses.html' : 'benchmark-openimages-sunglasses.html'
+const pageFile = glassesMode ? 'research/pages/benchmark-openimages-glasses.html' : 'research/pages/benchmark-openimages-sunglasses.html'
 const pageUrl = `http://127.0.0.1:${port}/${pageFile}`
 const chromeCandidates = [
   process.env.HEADUP_CHROME,

@@ -7,7 +7,7 @@ import { fileURLToPath } from 'node:url'
 
 const projectDir = fileURLToPath(new URL('../', import.meta.url)); const vitePath = join(projectDir, 'node_modules', 'vite', 'bin', 'vite.js')
 const resultPath = join(projectDir, 'data', 'face-benchmark', 'nuaa-print-attack-result.json'); const manifestPath = join(projectDir, 'data', 'face-benchmark', '.staging', 'nuaa-print-attack', 'manifest.json')
-const port = 5198; const pageFile = 'benchmark-nuaa-print-attack.html'; const pageUrl = `http://127.0.0.1:${port}/${pageFile}`
+const port = 5198; const pageFile = 'research/pages/benchmark-nuaa-print-attack.html'; const pageUrl = `http://127.0.0.1:${port}/${pageFile}`
 const chromeCandidates = [process.env.HEADUP_CHROME, 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe', 'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe', 'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe'].filter(Boolean)
 async function findChrome() { for (const path of chromeCandidates) { try { await access(path, constants.X_OK); return path } catch { /* next */ } } throw new Error('No Chromium browser found; set HEADUP_CHROME') }
 async function waitFor(check, timeoutMs, label) { const started = Date.now(); let lastError; while (Date.now() - started < timeoutMs) { try { const value = await check(); if (value) return value } catch (error) { lastError = error } await new Promise((resolve) => setTimeout(resolve, 250)) } throw new Error(`Timed out waiting for ${label}${lastError instanceof Error ? `: ${lastError.message}` : ''}`) }

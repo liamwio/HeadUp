@@ -35,7 +35,7 @@ type ImageResult = ManifestRecord & {
 
 const status = document.querySelector<HTMLParagraphElement>('#status')!
 const resultElement = document.querySelector<HTMLPreElement>('#result')!
-const stagingRoot = '/@fs/D:/AICodex/HeadUp/data/face-benchmark/.staging/openimages-sunglasses'
+const stagingRoot = '/data/face-benchmark/.staging/openimages-sunglasses'
 window.addEventListener('error', (event) => { resultElement.dataset.error = event.message })
 window.addEventListener('unhandledrejection', (event) => { resultElement.dataset.error = event.reason instanceof Error ? event.reason.message : String(event.reason) })
 const manifest = await fetch(`${stagingRoot}/manifest.json`).then(async (response) => {

@@ -1,7 +1,7 @@
 type Point={x:number;y:number}
 type ReferenceCase={reviewId:string;regions:{mandibularChin:{points:Point[]}};neckLine:{points:Point[]}}
 type Review={score?:number;confidence?:'high'|'medium'|'low';tags:Set<string>;note:string}
-const root='/@fs/D:/AICodex/HeadUp',manifest=await fetch(`${root}/data/manual-test/profile-region-truth-v1/manifest.json`).then(response=>response.json())as{cases:Array<{reviewId:string;path:string}>},reference=await fetch(`${root}/data/manual-test/profile-region-assisted-v1/human-corrected-reference.json`).then(response=>response.json())as{policyVersion:string;cases:ReferenceCase[]}
+const root='',manifest=await fetch(`${root}/data/manual-test/profile-region-truth-v1/manifest.json`).then(response=>response.json())as{cases:Array<{reviewId:string;path:string}>},reference=await fetch(`${root}/data/manual-test/profile-region-assisted-v1/human-corrected-reference.json`).then(response=>response.json())as{policyVersion:string;cases:ReferenceCase[]}
 if(reference.policyVersion!=='HEADUP-PROFILE-REGION-HUMAN-CORRECTED-REFERENCE-1.0'||reference.cases.length!==30)throw new Error('Unexpected profile reference')
 const paths=new Map(manifest.cases.map(item=>[item.reviewId,item.path])),grid=document.querySelector<HTMLElement>('#grid')!,status=document.querySelector<HTMLElement>('#status')!,exportButton=document.querySelector<HTMLButtonElement>('#export')!,reviews=new Map<string,Review>();let linesVisible=true,filter='all'
 const tags=[['jaw_blur','下颌线模糊'],['chin_transition','颏部衔接'],['neck_openness','颈线开合'],['soft_tissue','软组织覆盖'],['pose_uncertain','头位影响']]

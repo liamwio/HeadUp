@@ -18,7 +18,7 @@ type Manifest = {
 
 const statusElement = document.querySelector<HTMLElement>('#status')!
 const resultElement = document.querySelector<HTMLElement>('#result')!
-const manifestPath = '/@fs/D:/AICodex/HeadUp/data/face-benchmark/.staging/active-challenge/manifest.json'
+const manifestPath = '/data/face-benchmark/.staging/active-challenge/manifest.json'
 const orders: ActiveChallengeState['order'][] = ['positive_first', 'negative_first']
 
 function asFsUrl(path: string) { return `/@fs/${path.replaceAll('\\', '/')}` }

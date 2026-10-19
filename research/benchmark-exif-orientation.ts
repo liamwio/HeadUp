@@ -5,7 +5,7 @@ type RecordEntry = { sampleId: string; group: string; orientation: 1 | 3 | 6 | 8
 type Evaluated = RecordEntry & { displayWidth: number; displayHeight: number; quality: Awaited<ReturnType<typeof inspectCaptureFile>>['quality']; pose: Awaited<ReturnType<typeof inspectCaptureFile>>['pose']; bitmapDecodeCalls: number }
 const status = document.querySelector<HTMLElement>('#status')!
 const resultElement = document.querySelector<HTMLElement>('#result')!
-const stagingRoot = '/@fs/D:/AICodex/HeadUp/data/face-benchmark/.staging/exif-orientation'
+const stagingRoot = '/data/face-benchmark/.staging/exif-orientation'
 
 function round(value: number, digits = 4) { return Number(value.toFixed(digits)) }
 function percentile(values: number[], fraction: number) { const ordered = [...values].sort((a, b) => a - b); return ordered[Math.round((ordered.length - 1) * fraction)] }

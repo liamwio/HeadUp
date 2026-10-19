@@ -13,7 +13,7 @@ const stagingRoot = join(projectDir, 'data', 'face-benchmark', '.staging')
 const stagingDir = join(stagingRoot, 'active-challenge-fake-camera')
 const londonDir = join(projectDir, 'data', 'face-db-real-research', 'images', 'face-research-lab-london-v5')
 const port = 5199
-const pageUrl = `http://127.0.0.1:${port}/research-active-challenge.html`
+const pageUrl = `http://127.0.0.1:${port}/research/pages/research-active-challenge.html`
 const chromeCandidates = [process.env.HEADUP_CHROME, 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe', 'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe', 'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe'].filter(Boolean)
 const width = 640; const height = 480; const fps = 10; const framesPerPose = 10
 
@@ -97,7 +97,7 @@ try {
       ], { stdio: ['ignore', 'ignore', 'pipe'], windowsHide: true })
       chrome.stderr.on('data', (chunk) => { chromeError += chunk.toString() })
       const activePort = await waitFor(async () => { const content = await readFile(join(profileDir, 'DevToolsActivePort'), 'utf8'); return Number(content.trim().split(/\r?\n/)[0]) || undefined }, 30_000, 'Chromium DevTools port')
-      const page = await waitFor(async () => { const targets = await fetch(`http://127.0.0.1:${activePort}/json/list`).then((response) => response.json()); return targets.find((target) => target.type === 'page' && target.url.includes('research-active-challenge.html')) }, 30_000, 'fake-camera research page')
+      const page = await waitFor(async () => { const targets = await fetch(`http://127.0.0.1:${activePort}/json/list`).then((response) => response.json()); return targets.find((target) => target.type === 'page' && target.url.includes('research/pages/research-active-challenge.html')) }, 30_000, 'fake-camera research page')
       cdp = connectCdp(page.webSocketDebuggerUrl, (message) => {
         if (message.method === 'Runtime.exceptionThrown') process.stderr.write(`Browser exception: ${JSON.stringify(message.params.exceptionDetails)}\n`)
         if (message.method === 'Runtime.consoleAPICalled') process.stderr.write(`Browser console ${message.params.type}: ${message.params.args.map((item) => item.value ?? item.description ?? '').join(' ')}\n`)

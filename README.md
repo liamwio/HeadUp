@@ -25,7 +25,17 @@ corepack pnpm exec vitest run --maxWorkers=4
 corepack pnpm build
 ```
 
-网页产物位于 `dist/`。本机验证基线：117 个测试文件、729 项测试。研究页需要的外部数据集不在仓库内，相关基准命令不等同于默认单元测试。
+网页产物位于 `dist/`，仅包含正式应用入口。测试与研究页面另行构建：
+
+```sh
+corepack pnpm build:research
+corepack pnpm preview:research
+corepack pnpm check:pages
+```
+
+研究构建输出在 `dist-research/`；日常 `pnpm dev` 也可直接访问 `/tests/pages/…` 和 `/research/pages/…`。
+
+本机验证基线：117 个测试文件、729 项测试。研究页需要的外部数据集不在仓库内，相关基准命令不等同于默认单元测试。
 
 Android 构建前设置 `JAVA_HOME` 及 `ANDROID_HOME`（或 `ANDROID_SDK_ROOT`），指向自己的工具安装位置；也支持项目下 `.android-tools/` 本地工具目录，但该目录不会上传。
 
@@ -47,6 +57,8 @@ iOS 工程资源准备：`corepack pnpm ios:prepare`。完整编译需要上述 
 | `android/`、`ios/` | 原生工程 |
 | `server/` | 可选自托管服务；个人模式下家庭功能关闭 |
 | `public/models/`、`public/mediapipe/` | 本机推理资源及现有许可说明 |
+| `tests/pages/` | 浏览器验收入口 |
+| `research/pages/` | 研究、基准测试及人工复核入口 |
 | `research/`、`scripts/` | 研究工具、回归检查和构建脚本 |
 | `docs/` | 平台说明与源码维护说明 |
 
@@ -65,3 +77,5 @@ GitHub `main` 和 `app-only-photos` 初始均指向整理后的应用内保存�
 源码维护见 [开发说明](docs/DEVELOPMENT.md)，Android 分支说明见 [Android](docs/ANDROID.md)。仓库按私有项目管理，未新增开源授权；第三方组件和模型遵循各自许可，代码许可与模型权重许可需分别核对。
 
 照片中可见轮廓的测量不等于骨骼或健康诊断。自动提示和趋势读数仍受拍摄角度、距离、光线及模型误差影响。
+
+根目录仅保留 `index.html`。设计文档位于 `docs/design/`；自动生成的历史分析报告保留在本机 `.local-archive/reports/`，不再作为源码跟踪。详细映射见 [页面目录](docs/PAGES.md)。

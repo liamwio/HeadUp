@@ -7,7 +7,7 @@ import { fileURLToPath } from 'node:url'
 const projectDir = fileURLToPath(new URL('../', import.meta.url))
 const vitePath = join(projectDir, 'node_modules', 'vite', 'bin', 'vite.js')
 const resultPath = join(projectDir, 'data', 'face-benchmark', 'quality-upscale-browser-parity-result.json')
-const pageFile = 'benchmark-quality-upscale-browser.html'
+const pageFile = 'research/pages/benchmark-quality-upscale-browser.html'
 const port = 5193
 const pageUrl = `http://127.0.0.1:${port}/${pageFile}`
 const chromeCandidates = [

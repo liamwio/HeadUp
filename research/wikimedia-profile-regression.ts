@@ -4,7 +4,7 @@ import{buildNativeProfilePresentation,profileSemanticPathD}from'../src/lib/nativ
 
 type RecordItem={fileName:string;path:string;title:string;descriptionUrl:string;license:string;licenseUrl:string;artist:string;sha256:string;width:number;height:number}
 type Manifest={policyVersion:string;records:RecordItem[]}
-const root='/@fs/D:/AICodex/HeadUp',candidateSet=new URL(location.href).searchParams.get('set')==='focused'?'focused':'general',manifestPath=candidateSet==='focused'?'data/face-db-real-research/wikimedia-profile-focused/manifest.json':'data/face-db-real-research/wikimedia-profile-candidates/manifest.json',manifest=await fetch(`${root}/${manifestPath}`).then(response=>response.json())as Manifest,status=document.querySelector<HTMLElement>('#status')!,summary=document.querySelector<HTMLElement>('#summary')!,grid=document.querySelector<HTMLElement>('#grid')!,resultNode=document.querySelector<HTMLElement>('#result')!
+const root='',candidateSet=new URL(location.href).searchParams.get('set')==='focused'?'focused':'general',manifestPath=candidateSet==='focused'?'data/face-db-real-research/wikimedia-profile-focused/manifest.json':'data/face-db-real-research/wikimedia-profile-candidates/manifest.json',manifest=await fetch(`${root}/${manifestPath}`).then(response=>response.json())as Manifest,status=document.querySelector<HTMLElement>('#status')!,summary=document.querySelector<HTMLElement>('#summary')!,grid=document.querySelector<HTMLElement>('#grid')!,resultNode=document.querySelector<HTMLElement>('#result')!
 const escape=value=>String(value??'').replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]!))
 const results=[]
 for(const[index,item]of manifest.records.entries()){

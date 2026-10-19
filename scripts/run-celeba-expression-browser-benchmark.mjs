@@ -11,7 +11,7 @@ const v2 = process.argv.includes('--v2')
 const resultPath = join(projectDir, 'data', 'face-benchmark', v2 ? 'celeba-expression-v2-result.json' : 'celeba-expression-result.json')
 const manifestPath = join(projectDir, 'data', 'face-benchmark', '.staging', 'celeba-expression', 'manifest.json')
 const port = 5190
-const pageFile = 'benchmark-celeba-expression.html'
+const pageFile = 'research/pages/benchmark-celeba-expression.html'
 const pageUrl = `http://127.0.0.1:${port}/${pageFile}${v2 ? '?policy=v2' : ''}`
 const chromeCandidates = [
   process.env.HEADUP_CHROME,

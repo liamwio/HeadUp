@@ -5,7 +5,7 @@ import type{NormalizedAnnotationPoint,ProfileRegionAnnotationCase,ProfileRegionA
 
 type ManifestCase={reviewId:string;dataset:string;view:string;path:string;sourceResolution:string}
 type Manifest={cases:ManifestCase[]}
-const projectRoot='/@fs/D:/AICodex/HeadUp'
+const projectRoot=''
 const manifest=await fetch(`${projectRoot}/data/manual-test/profile-region-truth-v1/manifest.json`).then(response=>response.json())as Manifest
 const cases=manifest.cases.filter(item=>item.dataset==='london_highres_confirmation'&&item.view==='right_profile')
 if(cases.length!==30)throw new Error(`Expected 30 London right profiles, found ${cases.length}`)

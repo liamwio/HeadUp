@@ -14,7 +14,7 @@ const status = document.querySelector<HTMLParagraphElement>('#status')!
 const resultElement = document.querySelector<HTMLPreElement>('#result')!
 window.addEventListener('error', (event) => { resultElement.dataset.error = event.message })
 window.addEventListener('unhandledrejection', (event) => { resultElement.dataset.error = event.reason instanceof Error ? event.reason.message : String(event.reason) })
-const root = '/@fs/D:/AICodex/HeadUp/data/face-benchmark/.staging/openimages-glasses'
+const root = '/data/face-benchmark/.staging/openimages-glasses'
 const manifest = await fetch(`${root}/manifest.json`).then(async (response) => {
   if (!response.ok) throw new Error(`Manifest load failed: ${response.status}`)
   return response.json() as Promise<Manifest>

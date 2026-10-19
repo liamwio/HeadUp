@@ -7,7 +7,7 @@ type Variant = { name: string; make: (image: HTMLImageElement) => HTMLCanvasElem
 
 const status = document.querySelector<HTMLParagraphElement>('#status')!
 const resultElement = document.querySelector<HTMLPreElement>('#result')!
-const databaseRoot = '/@fs/D:/AICodex/HeadUp/data/face-db-real-research'
+const databaseRoot = '/data/face-db-real-research'
 const manifest = await fetch(`${databaseRoot}/manifest.jsonl`).then((response) => response.text())
 const frontRecords = manifest.split(/\r?\n/).filter(Boolean).map((line) => JSON.parse(line) as ManifestRecord).filter((record) => record.view === 'front')
 

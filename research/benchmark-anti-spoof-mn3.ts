@@ -29,7 +29,7 @@ type Evaluated = {
 
 const status = document.querySelector<HTMLParagraphElement>('#status')!
 const resultElement = document.querySelector<HTMLPreElement>('#result')!
-const stagingRoot = '/@fs/D:/AICodex/HeadUp/data/face-benchmark/.staging/anti-spoof-mn3'
+const stagingRoot = '/data/face-benchmark/.staging/anti-spoof-mn3'
 const YuNetMaxInputEdge = 320
 
 function softmaxPair(values: number[]) {

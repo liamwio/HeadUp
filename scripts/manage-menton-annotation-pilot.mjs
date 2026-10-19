@@ -258,7 +258,7 @@ async function prepare() {
     await writeFile(markerPath, `${JSON.stringify({ contract: markerContract, stagingRole: 'transient_annotation_pilot', createdAt }, null, 2)}\n`)
     await writeFile(join(stagingDir, 'README.txt'), [
       'HeadUp menton annotation workflow pilot — NOT TRAINING DATA',
-      `1. Open http://127.0.0.1:4175/research-menton-annotation.html`,
+      `1. Open http://127.0.0.1:4175/research/pages/research-menton-annotation.html`,
       `2. A and B independently select all JPG files in: ${batchDir}`,
       '3. Export both session JSON files, compare, and complete any blind adjudication.',
       '4. Run: pnpm research:cleanup-menton-annotation-pilot',

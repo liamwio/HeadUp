@@ -3,7 +3,7 @@ import { isPhotoQualityAcceptable } from '../src/lib/imageQuality'
 
 type RecordEntry = { group: string; variant: 'jpeg95' | 'avif90'; mimeType: string; relativePath: string }
 type Evaluated = Awaited<ReturnType<typeof inspectCaptureFile>>
-const root = '/@fs/D:/AICodex/HeadUp/data/face-benchmark/.staging/avif-format'
+const root = '/data/face-benchmark/.staging/avif-format'
 const status = document.querySelector<HTMLElement>('#status')!; const resultElement = document.querySelector<HTMLElement>('#result')!
 const round = (value: number, digits = 5) => Number(value.toFixed(digits))
 function percentile(values: number[], fraction: number) { const ordered = [...values].sort((a, b) => a - b); return ordered[Math.round((ordered.length - 1) * fraction)] }

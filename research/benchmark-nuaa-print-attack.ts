@@ -18,7 +18,7 @@ const statusElement = document.querySelector<HTMLElement>('#status')!
 const resultElement = document.querySelector<HTMLElement>('#result')!
 window.addEventListener('error', (event) => { resultElement.dataset.error = event.error instanceof Error ? event.error.stack ?? event.error.message : event.message })
 window.addEventListener('unhandledrejection', (event) => { resultElement.dataset.error = event.reason instanceof Error ? event.reason.stack ?? event.reason.message : String(event.reason) })
-const stagingRoot = '/@fs/D:/AICodex/HeadUp/data/face-benchmark/.staging/nuaa-print-attack'
+const stagingRoot = '/data/face-benchmark/.staging/nuaa-print-attack'
 const manifest = await fetch(`${stagingRoot}/manifest.json`).then(async (response) => {
   if (!response.ok) throw new Error(`Manifest load failed: ${response.status}`)
   return response.json() as Promise<Manifest>

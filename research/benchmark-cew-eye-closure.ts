@@ -40,8 +40,8 @@ const status = document.querySelector<HTMLParagraphElement>('#status')!
 const resultElement = document.querySelector<HTMLPreElement>('#result')!
 const highResolution = location.pathname.includes('highres')
 const stagingRoot = highResolution
-  ? '/@fs/D:/AICodex/HeadUp/data/face-benchmark/.staging/cew-eye-closure-highres'
-  : '/@fs/D:/AICodex/HeadUp/data/face-benchmark/.staging/cew-eye-closure'
+  ? '/data/face-benchmark/.staging/cew-eye-closure-highres'
+  : '/data/face-benchmark/.staging/cew-eye-closure'
 
 function round(value: number, digits = 4) {
   return Number(value.toFixed(digits))

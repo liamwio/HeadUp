@@ -12,10 +12,10 @@ const workDir = join(projectDir, '.tmp', 'single-file-build')
 const themeCss = await readFile(join(projectDir, 'scripts', 'single-file-theme.css'), 'utf8')
 
 const familyNames = {
-  'research-progress.html': 'RESEARCH EVIDENCE DASHBOARD',
-  'front-profile-visual-regression.html': 'VISUAL REGRESSION GALLERY',
-  'wikimedia-profile-regression.html': 'PROFILE VALIDATION',
-  'wikimedia-profile-manual-review.html': 'MANUAL PROFILE REVIEW',
+  'research/pages/research-progress.html': 'RESEARCH EVIDENCE DASHBOARD',
+  'research/pages/front-profile-visual-regression.html': 'VISUAL REGRESSION GALLERY',
+  'research/pages/wikimedia-profile-regression.html': 'PROFILE VALIDATION',
+  'research/pages/wikimedia-profile-manual-review.html': 'MANUAL PROFILE REVIEW',
 }
 
 async function listFiles(directory) {
@@ -78,6 +78,7 @@ for (const page of pages) {
 
   let html = await readFile(builtHtml, 'utf8')
   if (page !== 'index.html') html = decorateResearchPage(html, page)
+  await mkdir(dirname(join(outputDir, page)), { recursive: true })
   await writeFile(join(outputDir, page), html, 'utf8')
 
   for (const asset of builtFiles.filter((file) => !file.toLowerCase().endsWith('.html'))) {
@@ -87,7 +88,7 @@ for (const page of pages) {
     // Inlined ESM resolves `new URL(wasm, import.meta.url)` against the HTML URL.
     // Keep one root-level copy so ONNX Runtime can load it from every page shell.
     if (asset.toLowerCase().endsWith('.wasm')) {
-      await cp(asset, join(outputDir, basename(asset)), { force: true })
+      await cp(asset, join(dirname(join(outputDir, page)), basename(asset)), { force: true })
     }
   }
   const kb = Math.round((await stat(join(outputDir, page))).size / 1024)

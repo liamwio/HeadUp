@@ -4,7 +4,7 @@ import { profileRegionAnnotationDefinitions, type NormalizedAnnotationPoint, typ
 import { PROFILE_REGION_ASSISTED_POLICY, assistedRegionWasCorrected, jawNeckLineAngle, neckContourGeometryIssues, profileRegionAssistedCoverage, validateProfileRegionAssistedExport, type AssistedReviewCase, type AssistedRegionReview, type ProfileRegionAssistedExport } from './lib/profileRegionAssistedReview'
 
 type ManifestCase = { reviewId: string; dataset: string; view: string; path: string; sourceResolution: string }
-const root = '/@fs/D:/AICodex/HeadUp'
+const root = ''
 const manifest = await fetch(`${root}/data/manual-test/profile-region-truth-v1/manifest.json`).then((response) => response.json()) as { cases: ManifestCase[] }
 const cases = manifest.cases.filter((item) => item.dataset === 'london_highres_confirmation' && item.view === 'right_profile')
 if (cases.length !== 30) throw new Error(`Expected 30 profile cases, found ${cases.length}`)

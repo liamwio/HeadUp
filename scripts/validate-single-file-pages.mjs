@@ -15,7 +15,7 @@ for (const page of pages) {
   const externalStyles = [...html.matchAll(/<link\b[^>]*\brel\s*=\s*["']stylesheet["'][^>]*>/gi)]
   const hasInlineStyle = /<style\b[^>]*>[\s\S]*?<\/style>/i.test(html)
   const hasInlineScript = /<script\b(?![^>]*\bsrc=)[^>]*>[\s\S]+?<\/script>/i.test(html)
-  const needsScript = page !== 'research-progress.html'
+  const needsScript = page !== 'research/pages/research-progress.html'
   const valid = externalScripts.length === 0 && externalStyles.length === 0 && hasInlineStyle && (!needsScript || hasInlineScript)
   if (!valid) failures += 1
   const size = (await stat(path)).size

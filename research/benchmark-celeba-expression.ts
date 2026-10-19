@@ -41,7 +41,7 @@ type Thresholds = { smileBilateral: number; jawOpen: number }
 
 const status = document.querySelector<HTMLParagraphElement>('#status')!
 const resultElement = document.querySelector<HTMLPreElement>('#result')!
-const stagingRoot = '/@fs/D:/AICodex/HeadUp/data/face-benchmark/.staging/celeba-expression'
+const stagingRoot = '/data/face-benchmark/.staging/celeba-expression'
 const auditVariant = new URLSearchParams(window.location.search).get('policy') === 'v2' ? 'v2' : 'v1'
 
 function round(value: number, digits = 4) {

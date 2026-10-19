@@ -213,7 +213,10 @@
     "android:open": "cap open android",
     "ios:prepare": "node scripts/prepare-ios.mjs",
     "ios:build": "node scripts/build-ios.mjs",
-    "ios:open": "node scripts/prepare-ios.mjs --open"
+    "ios:open": "node scripts/prepare-ios.mjs --open",
+    "build:research": "tsc -b && vite build --mode research",
+    "preview:research": "vite preview --mode research --host 127.0.0.1",
+    "check:pages": "node scripts/check-page-layout.mjs"
   },
   "dependencies": {
     "@capacitor/android": "8.5.2",

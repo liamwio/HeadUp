@@ -1,6 +1,6 @@
 import { estimateWideHeadPoseFromBitmap } from '../src/lib/wideHeadPose'
 
-const root = '/@fs/D:/AICodex/HeadUp/data/manual-test/fei-front-profile-v1/extracted-source'
+const root = '/data/manual-test/fei-front-profile-v1/extracted-source'
 const status = document.querySelector<HTMLElement>('#status')!
 const cards = document.querySelector<HTMLElement>('#cards')!
 const resultNode = document.querySelector<HTMLElement>('#result')!

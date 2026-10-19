@@ -1,6 +1,6 @@
 import { inspectImage, isPhotoQualityAcceptable } from '../src/lib/imageQuality'
 type RecordEntry={relativePath:string;view:string}
-const root='/@fs/D:/AICodex/HeadUp/data/face-db-real-research',status=document.querySelector<HTMLElement>('#status')!,summaryElement=document.querySelector<HTMLElement>('#summary')!,rowsElement=document.querySelector<HTMLElement>('#rows')!,gatesElement=document.querySelector<HTMLElement>('#gates')!,resultElement=document.querySelector<HTMLElement>('#result')!
+const root='/data/face-db-real-research',status=document.querySelector<HTMLElement>('#status')!,summaryElement=document.querySelector<HTMLElement>('#summary')!,rowsElement=document.querySelector<HTMLElement>('#rows')!,gatesElement=document.querySelector<HTMLElement>('#gates')!,resultElement=document.querySelector<HTMLElement>('#result')!
 window.addEventListener('unhandledrejection',event=>{const message=event.reason instanceof Error?event.reason.stack||event.reason.message:String(event.reason);resultElement.dataset.error=message;resultElement.textContent=message;status.textContent='失败'})
 const positions=[{name:'center',label:'中心',x:-.1,y:-.1},{name:'left',label:'向左10%',x:-.2,y:-.1},{name:'right',label:'向右10%',x:0,y:-.1},{name:'up',label:'向上10%',x:-.1,y:-.2},{name:'down',label:'向下10%',x:-.1,y:0}]
 function loadImage(url:string){return new Promise<HTMLImageElement>((resolve,reject)=>{const image=new Image();image.onload=()=>resolve(image);image.onerror=()=>reject(new Error(`Unable to load ${url}`));image.src=url})}

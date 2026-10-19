@@ -29,7 +29,7 @@ type Case = SampleRecord & {
 
 const status = document.querySelector<HTMLParagraphElement>('#status')!
 const resultElement = document.querySelector<HTMLPreElement>('#result')!
-const stagingRoot = '/@fs/D:/AICodex/HeadUp/data/face-benchmark/.staging/wflw-groundtruth'
+const stagingRoot = '/data/face-benchmark/.staging/wflw-groundtruth'
 const manifest = await fetch(`${stagingRoot}/sample-manifest.json`).then((response) => {
   if (!response.ok) throw new Error(`WFLW manifest unavailable: HTTP ${response.status}`)
   return response.json()

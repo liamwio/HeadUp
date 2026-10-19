@@ -3,7 +3,7 @@ import { access, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
-const projectDir=fileURLToPath(new URL('../',import.meta.url)),vitePath=join(projectDir,'node_modules','vite','bin','vite.js'),resultPath=join(projectDir,'data','face-benchmark','quality-boundary-gradient-result.json'),screenshotPath=join(projectDir,'docs','assets','quality-boundary-gradient.png'),pageFile='benchmark-quality-boundary.html',port=5213,pageUrl=`http://127.0.0.1:${port}/${pageFile}`
+const projectDir=fileURLToPath(new URL('../',import.meta.url)),vitePath=join(projectDir,'node_modules','vite','bin','vite.js'),resultPath=join(projectDir,'data','face-benchmark','quality-boundary-gradient-result.json'),screenshotPath=join(projectDir,'docs','assets','quality-boundary-gradient.png'),pageFile='research/pages/benchmark-quality-boundary.html',port=5213,pageUrl=`http://127.0.0.1:${port}/${pageFile}`
 const candidates=[process.env.HEADUP_CHROME,'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe','C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe','C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe'].filter(Boolean)
 async function findChrome(){for(const path of candidates){try{await access(path);return path}catch{}}throw new Error('No Chromium browser found')}
 async function waitFor(check,timeout,label){const start=Date.now();let last;while(Date.now()-start<timeout){try{const value=await check();if(value)return value}catch(error){last=error}await new Promise(resolve=>setTimeout(resolve,200))}throw new Error(`Timeout ${label}${last instanceof Error?`: ${last.message}`:''}`)}

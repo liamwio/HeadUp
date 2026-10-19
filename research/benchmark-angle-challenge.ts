@@ -13,7 +13,7 @@ type Manifest = {
 
 const statusElement = document.querySelector<HTMLElement>('#status')!
 const resultElement = document.querySelector<HTMLElement>('#result')!
-const manifestUrl = '/@fs/D:/AICodex/HeadUp/data/face-benchmark/.staging/angle-challenge/manifest.json'
+const manifestUrl = '/data/face-benchmark/.staging/angle-challenge/manifest.json'
 const currentOrders: ActiveChallengeState['order'][] = ['positive_first', 'negative_first']
 const depthAngle: Record<AngleChallengeDepth, number> = { shallow: 30, medium: 45, deep: 60 }
 

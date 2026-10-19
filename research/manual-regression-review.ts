@@ -11,7 +11,7 @@ type Review = { decision?:Decision;issue?:string;note?:string;auto?:unknown }
 type AutoResult = {reviewId:string;caseId:string;view:string;group:string;selectionReason:string;transformation:string|null;analysisError:boolean;error?:string;qualityAccepted?:boolean;qualityScore?:number;qualityFlags?:string[];poseStatus?:string;estimatedPose?:string;yaw?:number;pitch?:number;roll?:number;detectedFaces?:number;poseFlags?:string[];landmarkCount?:number;measurementCount?:number;measurements?:Array<{code?:string;label:string;value:string}>}
 declare global { interface Window { __HEADUP_MANUAL_REVIEW__?: unknown; __HEADUP_MANUAL_AUTO_ANALYSIS__?: unknown } }
 
-const projectRoot='/@fs/D:/AICodex/HeadUp'
+const projectRoot=''
 const manifest=await fetch(`${projectRoot}/data/manual-test/headup-typical-v1/manifest.json`).then(response=>response.json()) as {policyVersion:string;records:RecordEntry[];counts:unknown;coverage:unknown}
 if(manifest.policyVersion!=='HEADUP-MANUAL-REGRESSION-1.2'||manifest.records.length!==58)throw new Error('Unexpected manual regression manifest')
 const grid=document.querySelector<HTMLElement>('#grid')!,status=document.querySelector<HTMLElement>('#status')!,progress=document.querySelector<HTMLElement>('#progress')!

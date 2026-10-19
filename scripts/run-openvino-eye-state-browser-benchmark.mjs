@@ -10,7 +10,7 @@ const vitePath = join(projectDir, 'node_modules', 'vite', 'bin', 'vite.js')
 const resultPath = join(projectDir, 'data', 'face-benchmark', 'openvino-eye-state-result.json')
 const manifestPath = join(projectDir, 'data', 'face-benchmark', '.staging', 'cew-eye-closure-highres', 'manifest.json')
 const port = 5193
-const pageFile = 'benchmark-openvino-eye-state.html'
+const pageFile = 'research/pages/benchmark-openvino-eye-state.html'
 const pageUrl = `http://127.0.0.1:${port}/${pageFile}`
 const chromeCandidates = [
   process.env.HEADUP_CHROME,

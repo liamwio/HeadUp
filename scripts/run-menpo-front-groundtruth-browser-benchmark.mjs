@@ -23,7 +23,7 @@ const menpoUrl = 'https://drive.usercontent.google.com/download?id=1CUqs0n135lye
 const expectedArchiveSha256 = '2b702bc178e88e1802506e1e7c4c5b78a07b86a4854b7918de3e040532723ea4'
 const sampleTargets = { engineering: 800, holdout: 400 }
 const port = 5203
-const pageFile = 'benchmark-menpo-front.html'
+const pageFile = 'research/pages/benchmark-menpo-front.html'
 const pageUrl = `http://127.0.0.1:${port}/${pageFile}`
 const chromeCandidates = [process.env.HEADUP_CHROME, 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe', 'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe', 'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe'].filter(Boolean)
 

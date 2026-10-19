@@ -20,7 +20,7 @@ type Landmark = { x: number; y: number }
 
 const status = document.querySelector<HTMLParagraphElement>('#status')!
 const resultElement = document.querySelector<HTMLPreElement>('#result')!
-const stagingRoot = '/@fs/D:/AICodex/HeadUp/data/face-benchmark/.staging/cew-eye-closure-highres'
+const stagingRoot = '/data/face-benchmark/.staging/cew-eye-closure-highres'
 
 function round(value: number, digits = 4) { return Number(value.toFixed(digits)) }
 function rate(numerator: number, denominator: number) { return denominator ? round(numerator / denominator) : null }
