@@ -3,7 +3,7 @@ import {existsSync,realpathSync,readdirSync,mkdirSync,copyFileSync,readFileSync,
 import {dirname,resolve,join} from 'node:path'
 import {fileURLToPath} from 'node:url'
 import {createHash} from 'node:crypto'
-const root=resolve(dirname(fileURLToPath(import.meta.url)),'..'),tools=realpathSync(join(root,'.android-tools'))
+const root=resolve(dirname(fileURLToPath(import.meta.url)),'..'),tools=existsSync(join(root,'.android-tools'))?realpathSync(join(root,'.android-tools')):join(root,'.android-tools')
 function run(command,args,cwd=root,env=process.env){const result=spawnSync(command,args,{cwd,env,stdio:'inherit',windowsHide:true});if(result.error||result.status!==0)throw new Error('构建未完成，请先处理上方错误；未发布新的APK。')}
 try{
   const localJava=join(tools,'java'),java=process.env.JAVA_HOME||(existsSync(localJava)?join(localJava,readdirSync(localJava).find(name=>name.startsWith('jdk-21'))??'missing'):''),sdk=process.env.ANDROID_HOME||process.env.ANDROID_SDK_ROOT||join(tools,'sdk')

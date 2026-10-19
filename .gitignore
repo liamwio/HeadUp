@@ -32,3 +32,29 @@ ios/App/build/
 releases/
 .tmp/
 *.tsbuildinfo
+
+# Local runtime records, research subjects, exports, and caches
+/data/
+/tmp/
+/.planning/
+/.qa*/
+/.pnpm-store/
+/coverage/
+*.log
+*.sqlite
+*.sqlite-*
+*.db
+*.db-*
+*.apk
+*.aab
+*.ipa
+*.jks
+*.keystore
+*.p12
+*.mobileprovision
+.DS_Store
+Thumbs.db
+# Generated Capacitor / IDE state
+android/.idea/
+ios/Pods/
+ios/**/xcuserdata/
