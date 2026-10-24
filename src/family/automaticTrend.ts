@@ -1,3 +1,4 @@
+import {trendPhotoRecords} from './trendAlignment'
 import {sortedSessions,compareSessions,photoFingerprint,type FamilySession} from './model'
 import {sideSession} from './captureViews'
 import {extractAiMetric,AI_METRICS} from './aiReadings'
@@ -48,7 +49,7 @@ export function buildAutomaticTrend(sessions:FamilySession[],profileId:string){
    const differences=comparable?points.at(-1)!.values.map((v,i)=>Number((v-points[0].values[i]).toFixed(precision))):null
    return {code,label:anchor.r.label,unit,parts:AI_METRICS[code].parts,points,comparable,reasons:[...reasons],differences,excluded:entries.length-selected.length}
   }):[]
-  return {view,label:viewNames[view],records:photos.slice(0,6).reverse(),series,missingDates:Math.max(0,3-new Set(candidates.map(s=>s.recordedOn)).size)}
+  return {view,label:viewNames[view],records:trendPhotoRecords(photos),series,missingDates:Math.max(0,3-new Set(candidates.map(s=>s.recordedOn)).size)}
  })
  const comparable=views.reduce((n,v)=>n+v.series.filter(s=>s.comparable).length,0)
  return {profileId,ready,recordCount:rows.length,dateCount,remaining:Math.max(0,3-rows.length),from:rows.at(-1)?.recordedOn,to:rows[0]?.recordedOn,views,comparable,rows,stamp:rows.map(s=>[s.id,s.updatedAt,s.recordedOn,s.kind,s.version.algorithm,s.version.norm].join(':')).join('|')}

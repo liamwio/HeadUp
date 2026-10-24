@@ -18,10 +18,10 @@ try{
   run(process.execPath,['node_modules/@capacitor/cli/bin/capacitor','sync','android'])
   if(process.platform==='win32')run('cmd.exe',['/d','/c','gradlew.bat','--no-daemon',...proxyArgs,':app:assembleDebug',':app:testDebugUnitTest',':app:lintDebug'],join(root,'android'),env)
   else run('./gradlew',['--no-daemon',...proxyArgs,':app:assembleDebug',':app:testDebugUnitTest',':app:lintDebug'],join(root,'android'),env)
-  const source=join(root,'android/app/build/outputs/apk/debug/app-debug.apk'),folder=join(root,'releases/android'),target=join(folder,'HeadUp-1.1.12-apponly-debug.apk')
+  const source=join(root,'android/app/build/outputs/apk/debug/app-debug.apk'),folder=join(root,'releases/android'),target=join(folder,'HeadUp-1.1.13-apponly-debug.apk')
   mkdirSync(folder,{recursive:true});copyFileSync(source,target)
   const apk=readFileSync(target),sha256=createHash('sha256').update(apk).digest('hex')
-  writeFileSync(join(folder,'HeadUp-1.1.12-apponly-debug.sha256'),sha256+'  HeadUp-1.1.12-apponly-debug.apk\n')
-  writeFileSync(join(folder,'build-info.json'),JSON.stringify({appId:'com.headup.growth',version:'1.1.12-apponly',build:'debug',builtAt:new Date().toISOString(),bytes:apk.length,sha256,minSdk:24,targetSdk:36},null,2))
+  writeFileSync(join(folder,'HeadUp-1.1.13-apponly-debug.sha256'),sha256+'  HeadUp-1.1.13-apponly-debug.apk\n')
+  writeFileSync(join(folder,'build-info.json'),JSON.stringify({appId:'com.headup.growth',version:'1.1.13-apponly',build:'debug',builtAt:new Date().toISOString(),bytes:apk.length,sha256,minSdk:24,targetSdk:36},null,2))
   console.log('\nAndroid测试安装包已生成：'+target+'\nSHA-256：'+sha256)
 }catch(error){console.error(error.message);process.exitCode=1}

@@ -1,8 +1,8 @@
-import {useMemo} from 'react'
+import {useMemo,useState} from 'react'
 import {ArrowRight,Camera,Info,TrendingUp} from 'lucide-react'
 import {buildAutomaticTrend,type TrendSeries} from './automaticTrend'
 import {PLAIN_LABELS,plainValue} from '../lib/plainResult'
-import {SessionThumb} from './Timeline'
+import {TrendPhotoCompare} from './TrendPhotoCompare'
 import type {FamilyProfile,FamilySession} from './model'
 const colors=['#782d3e','#176b72']
 function TrendChart({series}:{series:TrendSeries}){
@@ -23,11 +23,6 @@ export function trendDelta(series:TrendSeries){
  const suffix=series.unit==='percent'?' 个百分点':series.unit==='degrees'?'°':''
  return series.differences.map((n,i)=>{const digits=series.unit==='ratio'?2:1,abs=Math.abs(n).toFixed(digits),zero=Number(abs)===0;return (series.parts.length>1?series.parts[i]+' ':'')+(zero?'差值约为0':(n>0?'+':'−')+abs+suffix)}).join(' · ')
 }
-function largestChange(series:TrendSeries[]){
- let best:{series:TrendSeries;score:number}|null=null
- for(const item of series){if(!item.differences)continue;const first=Math.abs(item.points[0].values[0])||1,score=Math.abs(item.differences[0])/first;if(!best||score>best.score)best={series:item,score}}
- return best&&best.score>0?best.series:null
-}
 function Sparkline({series}:{series:TrendSeries}){
  const w=96,h=34,pad=4,rows=series.points.map(p=>({v:p.values[0],u:p.uncertainty[0]})),band=rows.every(r=>typeof r.u==='number')
  const lows=rows.map(r=>band?r.v-(r.u as number):r.v),highs=rows.map(r=>band?r.v+(r.u as number):r.v),min=Math.min(...lows),max=Math.max(...highs),span=max-min||1
@@ -43,14 +38,16 @@ function TrendRow({series,onOpen}:{series:TrendSeries;onOpen:(id:string)=>void})
 }
 export function AutomaticTrendReport({profile,sessions,onOpen,onRecord}:{profile:FamilyProfile;sessions:FamilySession[];onOpen:(id:string)=>void;onRecord:()=>void}){
  const report=useMemo(()=>buildAutomaticTrend(sessions,profile.id),[sessions,profile.id])
- const all=report.views.flatMap(v=>v.series),top=largestChange(all)
- const headline=!report.ready?'照片读数趋势':top?`读数差异最大：${seriesLabel(top)} ${trendDelta(top)}`:report.comparable?'各项读数与首次相同':'还不能对比变化'
+ const [activeView,setActiveView]=useState('front')
+ const chosenView=report.views.find(v=>v.view===activeView&&v.records.length)??report.views.find(v=>v.records.length)??report.views[0]
+ const headline=report.ready?'照片变化一览':'照片读数趋势'
  const intervalDays=report.from&&report.to?Math.round((Date.parse(report.to+'T12:00:00Z')-Date.parse(report.from+'T12:00:00Z'))/86400000):0
  const sub=!report.ready?`再记录 ${report.remaining} 次，自动整理读数`:report.comparable?`${report.from} → ${report.to} · ${report.comparable} 项可以对比`:'需要同样条件下拍的 3 个不同日期'
  return <section className="auto-trend-report"><div className="family-page-heading trend-heading"><div><span className="family-eyebrow">{profile.nickname} · {report.ready?`${report.recordCount} 次记录`:`${report.recordCount}/3 次记录`}</span><h1>{headline}</h1><p>{sub}</p></div><button className="family-primary" onClick={onRecord}><Camera size={18}/>继续记录</button></div>
  {report.dateCount>1&&intervalDays<30&&<p className="family-notice" role="status">间隔仅 {intervalDays} 天，读数差异可能来自拍摄条件。</p>}
  {!report.ready?<div className="family-empty"><TrendingUp size={36}/><h2>还需 {report.remaining} 次记录</h2><p>保存后自动生成。</p></div>:<>
- {report.views.map(view=><section key={view.view} className="auto-trend-view"><h2>{view.label}</h2>{view.records.length>0&&<div className="auto-trend-photos">{view.records.map(s=><button key={s.id} onClick={()=>onOpen(s.id)}><SessionThumb session={s} view={view.view==='front'?'front':'profile'}/><time>{s.recordedOn}</time></button>)}</div>}{!view.series.length?<p className="trend-empty"><span className="trend-chip trend-chip--na">暂不能比</span>还没有可用的测量</p>:<div className="trend-rows">{view.series.slice(0,3).map(series=><TrendRow key={series.code} series={series} onOpen={onOpen}/>)}{view.series.length>3&&<details className="trend-more"><summary>更多指标（{view.series.length-3}）</summary>{view.series.slice(3).map(series=><TrendRow key={series.code} series={series} onOpen={onOpen}/>)}</details>}</div>}</section>)}
+ <nav className="trend-view-tabs" aria-label="趋势照片视角">{report.views.map(v=><button key={v.view} aria-pressed={v.view===chosenView.view} disabled={!v.records.length} onClick={()=>setActiveView(v.view)}>{v.label}<small>{v.records.length?'有记录':'暂无照片'}</small></button>)}</nav>
+ {[chosenView].map(view=><section key={view.view} className="auto-trend-view"><h2>{view.label} · 首次与本次</h2><TrendPhotoCompare key={view.view+report.stamp} view={view} onOpen={onOpen}/><div className="trend-readings-heading"><h3>读数趋势</h3><span>差值不代表好坏</span></div>{!view.series.length?<p className="trend-empty"><span className="trend-chip trend-chip--na">暂不能比</span>还没有可用的测量</p>:<div className="trend-rows">{view.series.slice(0,3).map(series=><TrendRow key={series.code} series={series} onOpen={onOpen}/>)}{view.series.length>3&&<details className="trend-more"><summary>更多指标（{view.series.length-3}）</summary>{view.series.slice(3).map(series=><TrendRow key={series.code} series={series} onOpen={onOpen}/>)}</details>}</div>}</section>)}
  <p className="trend-note"><Info size={14}/>差值是照片读数直接相减，复拍误差尚未校准，不能据此确认真实生长变化。</p>
  <details className="auto-trend-rules"><summary>自动整理规则</summary><p>默认30天是暂定记录周期，不是真实变化的判定阈值。</p><p>同一条记录的修订只计一次；同一日期的同一项目取最新合格记录。按当前最新测量来源匹配，左右侧分开，重复照片排除。每项展示首次基准和最近11个日期；所有原始记录仍保留。用途为“其他”的照片保留在回看中，不进入数值趋势。新增、更正、删除记录后自动更新。</p></details></>}
  </section>
